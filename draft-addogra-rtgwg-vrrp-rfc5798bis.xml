@@ -141,9 +141,8 @@ please see http://xml.resource.org/authoring/README.html. -->
     </section>
     <section anchor="sect-1.1">
       <name>A Note on Terminology</name>
-
       <t>
-	This document discusses both IPv4 and IPv6 operation, and with
+	This document discusses both IPv4 and IPv6 operations, and with
         respect to the VRRP protocol, many of the descriptions and procedures
         are common.  In this document, it would be less verbose to be able to
         refer to "IP" to mean either "IPv4 or IPv6".  However, historically,
@@ -151,7 +150,12 @@ please see http://xml.resource.org/authoring/README.html. -->
         specification, the term "IPvX" (where X is 4 or 6) is introduced to
         mean either "IPv4" or "IPv6".  In this text, where the IP version
         matters, the appropriate term is used and the use of the term "IP" is
-      avoided.</t>
+        avoided.
+      </t>
+      <t>
+        The terms "Active" and "Backup" are concise terms for "Active VRRP Router"
+        and "Backup VRRP Router".
+      </t>
     </section>
     <section anchor="sect-1.2">
       <name>IPv4</name>
@@ -261,8 +265,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	<dd>
 	  <t>
 	    A router running the Virtual Router
-	  </t>
-	  <t>
 	    Redundancy Protocol.  It may participate as
             one or more virtual routers.
 	  </t>
@@ -271,8 +273,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	<dd>
 	  <t>
 	    An abstract object managed by VRRP that acts
-	  </t>
-	  <t>
 	    as a default router for hosts on a shared
             LAN.  It consists of a Virtual Router
             Identifier and either a set of associated
@@ -285,8 +285,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	<dd>
 	  <t>
 	    The VRRP router that has the virtual router's
-	  </t>
-	  <t>
 	    IPvX address(es) as real interface
             address(es).  This is the router that, when
             up, will respond to packets addressed to one
@@ -294,17 +292,15 @@ please see http://xml.resource.org/authoring/README.html. -->
             connections, etc.
 	  </t>
 	</dd>
-	<dt>Active IP Address</dt>
+	<dt>Primary IP Address</dt>
 	<dd>
 	  <t>
 	    In IPv4, an IPv4 address selected from the
-	  </t>
-	  <t>
 	    set of real interface addresses.  One
             possible selection algorithm is to always
             select the first address.  In IPv4 mode, VRRP
             advertisements are always sent using the
-            active IPv4 address as the source of the
+            primary IPv4 address as the source of the
             IPv4 packet.  In IPv6, the link-local address
             of the interface over which the packet is
             transmitted is used.
@@ -314,8 +310,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	<dd>
 	  <t>
 	    The VRRP router that is assuming the
-	  </t>
-	  <t>
 	    responsibility of forwarding packets sent to
             the IPvX address(es) associated with the
             virtual router, answering ARP requests
@@ -331,8 +325,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	<dd>
 	  <t>
 	    The set of VRRP routers available to assume
-	  </t>
-	  <t>
 	    forwarding responsibility for a virtual
             router should the current Active fail.
 	  </t>
@@ -691,7 +683,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <section anchor="sect-5.1.1.1">
 	    <name>Source Address</name>
 	    <t>
-	      This is the active IPv4 address of the interface the packet is being
+	      This is the primary IPv4 address of the interface the packet is being
             sent from.</t>
 	  </section>
 	  <section anchor="sect-5.1.1.2">
@@ -866,8 +858,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dd>
 	    <t>
 	      Virtual Router Identifier.  Configurable
-	    </t>
-	    <t>
 	      item in the range 1-255 (decimal).  There
               is no default.
 	    </t>
@@ -1007,8 +997,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dd>
 	    <t>
 	      The MAC address used for the source MAC
-	    </t>
-	    <t>
 	      address in VRRP advertisements and
               advertised in ARP responses as the MAC
               address to use for IP_Addresses.
@@ -1023,8 +1011,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dd>
 	    <t>
 	      Timer that fires when ADVERTISEMENT has not
-	    </t>
-	    <t>
 	      been heard for Active_Down_Interval.
 	    </t>
 	  </dd>
@@ -1032,8 +1018,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dd>
 	    <t>
 	      Timer that fires to trigger sending of
-	    </t>
-	    <t>
 	      ADVERTISEMENT based on
               Advertisement_Interval.
 	    </t>
@@ -1263,7 +1247,7 @@ contained in the ADVERTISEMENT</dd>
 (460) @ Reset the Active_Down_Timer to
 Active_Down_Interval
 
-(465) * else // preempt was true or priority was less
+(465) * else // preempt was true and priority was less
 
 (470) @ Discard the ADVERTISEMENT
 
@@ -1402,8 +1386,8 @@ than the local Priority,</dd>
   <dt/>
   <dd>
     (735) -* If the Priority in the ADVERTISEMENT is equal to
-    the local Priority and the active IPvX Address of the
-sender is greater than the local active IPvX Address, then:</dd>
+    the local Priority and the primary IPvX Address of the
+sender is greater than the local primary IPvX Address, then:</dd>
 </dl>
 <dl newline="false" spacing="normal" indent="12">
   <dt/>
@@ -1531,7 +1515,7 @@ router configuration state</dd>
 <t>If the protected address is an IPv4 address, then:</t>
 <ul spacing="normal">
 <li>Set the source MAC address to virtual router MAC Address</li>
-<li>Set the source IPv4 address to interface active IPv4 address</li>
+<li>Set the source IPv4 address to interface primary IPv4 address</li>
 </ul>
 </li>
 </ul>
@@ -1913,7 +1897,7 @@ agree on whether they're supporting VRRPv2 routers.</t>
     is deployed, VRRP is compatible with the "trust anchor" and "trust
     anchor or cga" modes of SEND <xref target="RFC3971"/>.  The SEND configuration needs
     to give the Active and Backup routers the same prefix delegation in
-    the certificates so that Master and Backup routers advertise the same
+    the certificates so that Active and Backup routers advertise the same
     set of subnet prefixes.  However, the Active and Backup routers
     should have their own key pairs to avoid private key sharing.
   </t>
