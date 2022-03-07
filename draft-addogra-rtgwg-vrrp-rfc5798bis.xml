@@ -9,7 +9,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-00"
+    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-01"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -1027,7 +1027,7 @@ please see http://xml.resource.org/authoring/README.html. -->
       <section anchor="sect-6.3">
 	<name>State Transition Diagram</name>
 	<artwork><![CDATA[
-        +---------------+
+                   +---------------+
         +--------->|               |<-------------+
         |          |  Initialize   |              |
         |   +------|               |----------+   |
@@ -1057,494 +1057,255 @@ please see http://xml.resource.org/authoring/README.html. -->
                 implementation-defined mechanism that initiates the protocol once it
                 has been configured.  The configuration mechanism is out of scope of
                 this specification.</t>
-		<dl newline="true" spacing="normal" indent="3">
-		  <dt>(100) If a Startup event is received, then:</dt>
-		  <dd>
-		    <t>
-		      (105) - If the Priority = 255 (i.e., the router owns the IPvX
-                      address associated with the virtual router), then:
-		    </t>
-		    <t>
-		      (110) + Send an ADVERTISEMENT
-		    </t>
-		    <dl newline="true" spacing="normal" indent="3">
-		      <dt>(115) + If the protected IPvX address is an IPv4 address, then:</dt>
-		      <dd>
-			(120) * Broadcast a gratuitous ARP request containing the
-                        virtual router MAC address for each IP address associated
-                        with the virtual router.
-		      </dd>
-		    </dl>
-		  </dd>
-		</dl>
-		<artwork><![CDATA[
-                (125) + else // IPv6
-                ]]></artwork>
-		<dl newline="false" spacing="normal" indent="9">
-		  <dt/>
-		  <dd>
-		    (130) * For each IPv6 address associated with the virtual
-                    router, send an unsolicited ND Neighbor Advertisement with
-                    the Router Flag (R) set, the Solicited Flag (S) unset, the
-                    Override flag (O) set, the target address set to the IPv6
-                    address of the virtual router, and the target link-layer
-address set to the virtual router MAC address.</dd>
-</dl>
 <artwork><![CDATA[
-(135) +endif // was protected addr IPv4?
+ (100) If a Startup event is received, then:
 
-(140) + Set the Adver_Timer to Advertisement_Interval
+      (105) - If the Priority = 255 (i.e., the router owns the IPvX
+      address associated with the virtual router), then:
 
-(145) + Transition to the {Active} state
+         (110) + Send an ADVERTISEMENT
 
-(150) - else // rtr does not own virt addr
+         (115) + If the protected IPvX address is an IPv4 address, then:
 
-(155) + Set Active_Adver_Interval to Advertisement_Interval
+            (120) * Broadcast a gratuitous ARP request containing the
+            virtual router MAC address for each IP address associated
+            with the virtual router.
 
-(160) + Set the Active_Down_Timer to Active_Down_Interval
+         (125) + else // IPv6
 
-(165) + Transition to the {Backup} state
+            (130) * For each IPv6 address associated with the virtual
+            router, send an unsolicited ND Neighbor Advertisement with
+            the Router Flag (R) set, the Solicited Flag (S) unset, the
+            Override flag (O) set, the target address set to the IPv6
+            address of the virtual router, and the target link-layer
+            address set to the virtual router MAC address.
 
-(170) -endif // priority was not 255
+         (135) +endif // was protected addr IPv4?
 
-(175) endif // startup event was recv
+         (140) + Set the Adver_Timer to Advertisement_Interval
+
+         (145) + Transition to the {Master} state
+
+      (150) - else // rtr does not own virt addr
+
+         (155) + Set Master_Adver_Interval to Advertisement_Interval
+
+         (160) + Set the Master_Down_Timer to Master_Down_Interval
+
+         (165) + Transition to the {Backup} state
+
+      (170) -endif // priority was not 255
+
+  (175) endif // startup event was recv
 ]]></artwork>
+</section>
 </section>
 <section anchor="sect-6.4.2">
 <name>Backup</name>
 <t>
   The purpose of the {Backup} state is to monitor the availability and
-state of the Active router.</t>
-<dl newline="true" spacing="normal" indent="3">
-<dt>(300) While in this state, a VRRP router MUST do the following:</dt>
-<dd>
-  <t>
-    (305) - If the protected IPvX address is an IPv4 address, then:
-</t>
-<t>
-  (310) + MUST NOT respond to ARP requests for the IPv4
-  address(es) associated with the virtual router.
-</t>
-</dd>
-</dl>
+  state of the Active router. The Solicited-Node multicast address
+  <xref target="RFC4291"/> is referenced in the psuedo-code below.
+  </t>
 <artwork><![CDATA[
-(315) - else // protected addr is IPv6
-]]></artwork>
-<dl newline="false" spacing="normal" indent="6">
-  <dt/>
-  <dd>
-    (320) + MUST NOT respond to ND Neighbor Solicitation messages
-for the IPv6 address(es) associated with the virtual router.</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="6">
-  <dt/>
-  <dd>
-    (325) + MUST NOT send ND Router Advertisement messages for the
-virtual router.</dd>
-</dl>
-<artwork><![CDATA[
-(330) -endif // was protected addr IPv4?
-]]></artwork>
-<dl newline="false" spacing="normal" indent="3">
-  <dt/>
-  <dd>
-    (335) - MUST discard packets with a destination link-layer MAC
-address equal to the virtual router MAC address.</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="3">
-  <dt/>
-  <dd>
-    (340) - MUST NOT accept packets addressed to the IPvX address(es)
-associated with the virtual router.</dd>
-</dl>
-<ul empty="true" spacing="normal">
-  <li>
-    <dl newline="true" spacing="normal" indent="3">
-<dt>(345) - If a Shutdown event is received, then:</dt>
-<dd>
-  <t>
-    (350) + Cancel the Active_Down_Timer
-</t>
-<t>
-  (355) + Transition to the {Initialize} state
-</t>
-</dd>
-</dl>
-</li>
-</ul>
-<artwork><![CDATA[
-(360) -endif // shutdown recv
+(300) While in this state, a VRRP router MUST do the following:
 
-(365) - If the Active_Down_Timer fires, then:
+      (305) - If the protected IPvX address is an IPv4 address, then:
 
-(370) + Send an ADVERTISEMENT
+         (310) + MUST NOT respond to ARP requests for the IPv4
+         address(es) associated with the virtual router.
 
-(375) + If the protected IPvX address is an IPv4 address, then:
-]]></artwork>
-<dl newline="false" spacing="normal" indent="9">
-  <dt/>
-  <dd>
-    (380) * Broadcast a gratuitous ARP request on that interface
-    containing the virtual router MAC address for each IPv4
-address associated with the virtual router.</dd>
-</dl>
-<artwork><![CDATA[
-(385) + else // ipv6
-]]></artwork>
-<dl newline="false" spacing="normal" indent="9">
-  <dt/>
-  <dd>
-    (390) * Compute and join the Solicited-Node multicast
-    address <xref target="RFC4291"/> for the IPv6 address(es) associated with
-the virtual router.</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="9">
-  <dt/>
-  <dd>
-    (395) * For each IPv6 address associated with the virtual
-    router, send an unsolicited ND Neighbor Advertisement with
-    the Router Flag (R) set, the Solicited Flag (S) unset, the
-    Override flag (O) set, the target address set to the IPv6
-    address of the virtual router, and the target link-layer
-address set to the virtual router MAC address.</dd>
-</dl>
-<artwork><![CDATA[
-(400) +endif // was protected addr ipv4?
+      (315) - else // protected addr is IPv6
 
-(405) + Set the Adver_Timer to Advertisement_Interval
+         (320) + MUST NOT respond to ND Neighbor Solicitation messages
+         for the IPv6 address(es) associated with the virtual router.
 
-(410) + Transition to the {Active} state
+         (325) + MUST NOT send ND Router Advertisement messages for the
+         virtual router.
 
-(415) -endif // Active_Down_Timer fired
+      (330) -endif // was protected addr IPv4?
 
-(420) - If an ADVERTISEMENT is received, then:
+      (335) - MUST discard packets with a destination link-layer MAC
+      address equal to the virtual router MAC address.
 
-(425) + If the Priority in the ADVERTISEMENT is zero, then:
-]]></artwork>
-<artwork><![CDATA[
-(430) * Set the Active_Down_Timer to Skew_Time
-(440) + else // priority non-zero
-]]></artwork>
-<dl newline="false" spacing="normal" indent="9">
-  <dt/>
-  <dd>
-    (445) * If Preempt_Mode is False, or if the Priority in the
-    ADVERTISEMENT is greater than or equal to the local
-Priority, then:</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="12">
-  <dt/>
-  <dd>
-    (450) @ Set Active_Adver_Interval to Adver Interval
-contained in the ADVERTISEMENT</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="12">
-  <dt/>
-  <dd>
-(455) @ Recompute the Active_Down_Interval</dd>
-</dl>
-<artwork><![CDATA[
-(460) @ Reset the Active_Down_Timer to
-Active_Down_Interval
+      (340) - MUST NOT accept packets addressed to the IPvX address(es)
+      associated with the virtual router.
 
-(465) * else // preempt was true and priority was less
+      (345) - If a Shutdown event is received, then:
 
-(470) @ Discard the ADVERTISEMENT
+         (350) + Cancel the Master_Down_Timer
 
-(475) *endif // preempt test
+         (355) + Transition to the {Initialize} state
 
-(480) +endif // was priority zero?
+      (360) -endif // shutdown recv
 
-(485) -endif // was advertisement recv?
+      (365) - If the Master_Down_Timer fires, then:
 
-(490) endwhile // Backup state
-]]></artwork>
+         (370) + Send an ADVERTISEMENT
+
+         (375) + If the protected IPvX address is an IPv4 address, then:
+
+            (380) * Broadcast a gratuitous ARP request on that interface
+            containing the virtual router MAC address for each IPv4
+            address associated with the virtual router.
+
+         (385) + else // ipv6
+
+            (390) * Compute and join the Solicited-Node multicast
+            address [RFC4291] for the IPv6 address(es) associated with
+            the virtual router.
+
+            (395) * For each IPv6 address associated with the virtual
+            router, send an unsolicited ND Neighbor Advertisement with
+            the Router Flag (R) set, the Solicited Flag (S) unset, the
+            Override flag (O) set, the target address set to the IPv6
+            address of the virtual router, and the target link-layer
+            address set to the virtual router MAC address.
+
+         (400) +endif // was protected addr ipv4?
+
+         (405) + Set the Adver_Timer to Advertisement_Interval
+
+         (410) + Transition to the {Master} state
+
+      (415) -endif // Master_Down_Timer fired
+
+      (420) - If an ADVERTISEMENT is received, then:
+
+         (425) + If the Priority in the ADVERTISEMENT is zero, then:
+
+            (430) * Set the Master_Down_Timer to Skew_Time
+
+         (440) + else // priority non-zero
+
+            (445) * If Preempt_Mode is False, or if the Priority in the
+            ADVERTISEMENT is greater than or equal to the local
+            Priority, then:
+
+               (450) @ Set Master_Adver_Interval to Adver Interval
+               contained in the ADVERTISEMENT
+
+               (455) @ Recompute the Master_Down_Interval
+
+               (460) @ Reset the Master_Down_Timer to
+               Master_Down_Interval
+
+            (465) * else // preempt was true and priority was less
+
+               (470) @ Discard the ADVERTISEMENT
+
+            (475) *endif // preempt test
+
+         (480) +endif // was priority zero?
+
+      (485) -endif // was advertisement recv?
+
+   (490) endwhile // Backup state
+   ]]></artwork>
 </section>
 <section anchor="sect-6.4.3">
-<name>Active</name>
+  <name>Active</name>
 <t>
   While in the {Active} state, the router functions as the forwarding
 router for the IPvX address(es) associated with the virtual router.</t>
 <t>
   Note that in the Active state, the Preempt_Mode Flag is not
 considered.</t>
-<dl newline="true" spacing="normal" indent="3">
-<dt>(600) While in this state, a VRRP router MUST do the following:</dt>
-<dd>
-  <t>
-    (605) - If the protected IPvX address is an IPv4 address, then:
-</t>
-<t>
-  (610) + MUST respond to ARP requests for the IPv4 address(es)
-  associated with the virtual router.
-</t>
-</dd>
-</dl>
 <artwork><![CDATA[
-(615) - else // ipv6
+(600) While in this state, a VRRP router MUST do the following:
+
+      (605) - If the protected IPvX address is an IPv4 address, then:
+
+         (610) + MUST respond to ARP requests for the IPv4 address(es)
+         associated with the virtual router.
+
+      (615) - else // ipv6
+
+         (620) + MUST be a member of the Solicited-Node multicast
+         address for the IPv6 address(es) associated with the virtual
+         router.
+
+         (625) + MUST respond to ND Neighbor Solicitation message for
+         the IPv6 address(es) associated with the virtual router.
+
+         (630) + MUST send ND Router Advertisements for the virtual
+         router.
+
+         (635) + If Accept_Mode is False:  MUST NOT drop IPv6 Neighbor
+         Solicitations and Neighbor Advertisements.
+
+      (640) +-endif // ipv4?
+
+      (645) - MUST forward packets with a destination link-layer MAC
+      address equal to the virtual router MAC address.
+
+      (650) - MUST accept packets addressed to the IPvX address(es)
+      associated with the virtual router if it is the IPvX address owner
+      or if Accept_Mode is True.  Otherwise, MUST NOT accept these
+      packets.
+
+      (655) - If a Shutdown event is received, then:
+
+         (660) + Cancel the Adver_Timer
+
+         (665) + Send an ADVERTISEMENT with Priority = 0
+
+         (670) + Transition to the {Initialize} state
+
+      (675) -endif // shutdown recv
+
+      (680) - If the Adver_Timer fires, then:
+
+         (685) + Send an ADVERTISEMENT
+
+         (690) + Reset the Adver_Timer to Advertisement_Interval
+
+      (695) -endif // advertisement timer fired
+
+      (700) - If an ADVERTISEMENT is received, then:
+
+         (705) + If the Priority in the ADVERTISEMENT is zero, then:
+
+            (710) * Send an ADVERTISEMENT
+
+            (715) * Reset the Adver_Timer to Advertisement_Interval
+
+         (720) + else // priority was non-zero
+
+            (725) * If the Priority in the ADVERTISEMENT is greater
+            than the local Priority,
+
+            (730) * or
+
+            (735) * If the Priority in the ADVERTISEMENT is equal to
+            the local Priority and the primary IPvX Address of the
+            sender is greater than the local primary IPvX Address, then:
+
+               (740) @ Cancel Adver_Timer
+
+               (745) @ Set Master_Adver_Interval to Adver Interval
+               contained in the ADVERTISEMENT
+
+               (750) @ Recompute the Skew_Time
+
+               (755) @ Recompute the Master_Down_Interval
+
+               (760) @ Set Master_Down_Timer to Master_Down_Interval
+
+               (765) @ Transition to the {Backup} state
+
+            (770) * else // new Master logic
+
+               (775) @ Discard ADVERTISEMENT
+
+            (780) *endif // new Master detected
+
+         (785) +endif // was priority zero?
+
+      (790) -endif // advert recv
+
+   (795) endwhile // in Master
 ]]></artwork>
-<dl newline="false" spacing="normal" indent="6">
-  <dt/>
-  <dd>
-    (620) + MUST be a member of the Solicited-Node multicast
-    address for the IPv6 address(es) associated with the virtual
-router.</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="6">
-  <dt/>
-  <dd>
-    (625) + MUST respond to ND Neighbor Solicitation message for
-the IPv6 address(es) associated with the virtual router.</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="6">
-  <dt/>
-  <dd>
-    (630) + MUST send ND Router Advertisements for the virtual
-router.</dd>
-</dl>
-<ul empty="true" spacing="normal">
-  <li>
-    <dl newline="false" spacing="normal" indent="41">
-<dt>(635) + If Accept_Mode is False:</dt>
-<dd>
-  <t>
-    MUST NOT drop IPv6 Neighbor
-</t>
-<t>
-  Solicitations and Neighbor Advertisements.
-</t>
-</dd>
-</dl>
-</li>
-</ul>
-<artwork><![CDATA[
-(640) +-endif // ipv4?
-]]></artwork>
-<dl newline="false" spacing="normal" indent="3">
-  <dt/>
-  <dd>
-    (645) - MUST forward packets with a destination link-layer MAC
-address equal to the virtual router MAC address.</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="3">
-  <dt/>
-  <dd>
-    (650) - MUST accept packets addressed to the IPvX address(es)
-    associated with the virtual router if it is the IPvX address owner
-    or if Accept_Mode is True.  Otherwise, MUST NOT accept these
-packets.</dd>
-</dl>
-<ul empty="true" spacing="normal">
-  <li>
-    <dl newline="true" spacing="normal" indent="3">
-<dt>(655) - If a Shutdown event is received, then:</dt>
-<dd>
-  <t>
-    (660) + Cancel the Adver_Timer
-</t>
-<t>
-  (665) + Send an ADVERTISEMENT with Priority = 0
-</t>
-<t>
-  (670) + Transition to the {Initialize} state
-</t>
-</dd>
-</dl>
-</li>
-</ul>
-<artwork><![CDATA[
-(675) -endif // shutdown recv
-
-(680) - If the Adver_Timer fires, then:
-
-(685) + Send an ADVERTISEMENT
-
-(690) + Reset the Adver_Timer to Advertisement_Interval
-
-(695) -endif // advertisement timer fired
-
-(700) - If an ADVERTISEMENT is received, then:
-
-(705) + If the Priority in the ADVERTISEMENT is zero, then:
-
-   (710) * Send an ADVERTISEMENT
-
-    (715) * Reset the Adver_Timer to Advertisement_Interval
-
-(720) + else // priority was non-zero
-]]></artwork>
-<dl newline="false" spacing="normal" indent="9">
-  <dt/>
-  <dd>
-    (725) * If the Priority in the ADVERTISEMENT is greater
-than the local Priority,</dd>
-</dl>
-<artwork><![CDATA[
-(730) -* or
-]]></artwork>
-<dl newline="false" spacing="normal" indent="9">
-  <dt/>
-  <dd>
-    (735) * If the Priority in the ADVERTISEMENT is equal to
-    the local Priority and the primary IPvX Address of the
-sender is greater than the local primary IPvX Address, then:</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="12">
-  <dt/>
-  <dd>
-(740) @ Cancel Adver_Timer</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="12">
-  <dt/>
-  <dd>
-    (745) @ Set Active_Adver_Interval to Adver Interval
-contained in the ADVERTISEMENT</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="12">
-  <dt/>
-  <dd>
-(750) @ Recompute the Skew_Time</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="12">
-  <dt/>
-  <dd>
-(755) @ Recompute the Active_Down_Interval</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="12">
-  <dt/>
-  <dd>
-(760) @ Set Active_Down_Timer to Active_Down_Interval</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="12">
-  <dt/>
-  <dd>
-(765) @ Transition to the {Backup} state</dd>
-</dl>
-<artwork><![CDATA[
-(770) * else // new Active logic
-
-(775) @ Discard ADVERTISEMENT
-
-(780) *endif // new Active detected
-
-(785) +endif // was priority zero?
-
-(790) -endif // advert recv
-
-(795) endwhile // in Active
-]]></artwork>
-</section>
-</section>
-</section>
-<section anchor="sect-7">
-<name>Sending and Receiving VRRP Packets</name>
-<section anchor="sect-7.1">
-<name>Receiving VRRP Packets</name>
-<dl newline="true" spacing="normal" indent="3">
-<dt>The following functions are performed when a VRRP packet is received:</dt>
-<dd>
-  <ul spacing="normal">
-    <li>
-<t>If the received packet is an IPv4 packet, then:</t>
-<ul spacing="normal">
-<li>MUST verify that the IPv4 TTL is 255.</li>
-</ul>
-</li>
-</ul>
-</dd>
-</dl>
-<artwork><![CDATA[
-- else // ipv6 recv
-
-+ MUST verify that the IPv6 Hop Limit is 255.
-
--endif
-
-- MUST verify that the VRRP version is 3.
-]]></artwork>
-<dl newline="false" spacing="normal" indent="3">
-  <dt/>
-  <dd>
-    - MUST verify that the received packet contains the complete VRRP
-packet (including fixed fields, and IPvX address).</dd>
-</dl>
-<ul empty="true" spacing="normal">
-  <li>
-    <ul spacing="normal">
-<li>MUST verify the VRRP checksum.</li>
-</ul>
-</li>
-</ul>
-<dl newline="false" spacing="normal" indent="3">
-  <dt/>
-  <dd>
-    - MUST verify that the VRID is configured on the receiving
-    interface and the local router is not the IPvX address owner
-(Priority = 255 (decimal)).</dd>
-</dl>
-<t>
-  If any one of the above checks fails, the receiver MUST discard the
-  packet, SHOULD log the event, and MAY indicate via network management
-that an error occurred.</t>
-<dl newline="false" spacing="normal" indent="3">
-  <dt/>
-  <dd>
-    - MAY verify that "Count IPvX Addrs" and the list of IPvX
-address(es) match the IPvX Address(es) configured for the VRID.</dd>
-</dl>
-<t>
-  If the above check fails, the receiver SHOULD log the event and MAY
-indicate via network management that a misconfiguration was detected.</t>
-</section>
-<section anchor="sect-7.2">
-<name>Transmitting VRRP Packets</name>
-<t>
-  The following operations MUST be performed when transmitting a VRRP
-packet:</t>
-<dl newline="false" spacing="normal" indent="3">
-  <dt/>
-  <dd>
-    - Fill in the VRRP packet fields with the appropriate virtual
-router configuration state</dd>
-</dl>
-<ul empty="true" spacing="normal">
-  <li>
-    <ul spacing="normal">
-<li>Compute the VRRP checksum</li>
-<li>
-<t>If the protected address is an IPv4 address, then:</t>
-<ul spacing="normal">
-<li>Set the source MAC address to virtual router MAC Address</li>
-<li>Set the source IPv4 address to interface primary IPv4 address</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<artwork><![CDATA[
-- else // ipv6
-
-+ Set the source MAC address to virtual router MAC Address
-]]></artwork>
-<dl newline="false" spacing="normal" indent="6">
-  <dt/>
-  <dd>
-    + Set the source IPv6 address to interface link-local IPv6
-address</dd>
-</dl>
-<dl newline="false" spacing="normal" indent="6">
-  <dt/>
-  <dd>
--endif</dd>
-</dl>
-<ul empty="true" spacing="normal">
-  <li>
-    <ul spacing="normal">
-<li>Set the IPvX protocol to VRRP</li>
-<li>Send the VRRP packet to the VRRP IPvX multicast group</li>
-</ul>
-</li>
-</ul>
 <t>
   Note: VRRP packets are transmitted with the virtual router MAC
   address as the source MAC address to ensure that learning bridges
