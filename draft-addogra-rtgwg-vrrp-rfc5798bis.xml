@@ -9,7 +9,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-01"
+    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-03"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -67,10 +67,10 @@ please see http://xml.resource.org/authoring/README.html. -->
       </address>
     </author>
     <author initials="S." surname="Nadas" fullname="Stephen Nadas">
-      <organization>Boston University</organization>
+      <organization>Computer Science, Boston University</organization>
       <address>
 	<postal>
-	  <street>Greater Boston Area</street>
+	  <street>111 Cummington Mall</street>
 	  <city>Boston</city>
 	  <region>MA</region>
 	  <code>02215</code>
@@ -313,8 +313,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	    responsibility of forwarding packets sent to
             the IPvX address(es) associated with the
             virtual router, answering ARP requests
-	  </t>
-	  <t>
 	    for the IPv4 address(es), and answering ND
             requests for the IPv6 address(es).  Note that
             if the IPvX address owner is available, then
@@ -488,33 +486,35 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  The following figure shows a simple network with two VRRP routers
         implementing one virtual router.</t>
 	<artwork><![CDATA[
+
         +-----------+ +-----------+
         |   Rtr1    | |   Rtr2    |
-        |(MR VRID=1)| |(BR VRID=1)|
+        |(AR VRID=1)| |(BR VRID=1)|
         |           | |           |
-        VRID=1  +-----------+ +-----------+
-        IPvX A--------->*            *<---------IPvX B
-        |            |
-        |            |
-        ----------------+------------+-----+----------+----------+----------+--
-        ^          ^          ^          ^
-        |          |          |          |
-        default rtr IPvX addrs-------> (IPvX A)   (IPvX A)   (IPvX A)   (IPvX A)
-        |          |          |          |
-        IPvX H1->* IpvX H2->* IPvX H3->* IpvX H4->*
-        +--+--+    +--+--+    +--+--+    +--+--+
-        |  H1 |    |  H2 |    |  H3 |    |  H4 |
-        +-----+    +-----+    +--+--+    +--+--+
-        Legend:
-        --+---+---+-- = Ethernet, Token Ring, or FDDI
-        H = Host computer
-        MR = Active Router
-        BR = Backup Router
-        *  =  IPvX Address; X is 4 everywhere in IPv4 case
-        X is 6 everywhere in IPv6 case
-        (IPvX) = default router for hosts
-        Eliminating all mention of VRRP (VRID=1) from the figure above leaves
-        it as a typical deployment.
+VRID=1  +-----------+ +-----------+
+IPvX A--------->*            *<---------IPvX B
+                |            |
+                |            |
+----------------+------------+-----+----------+----------+----------+--
+                                   ^          ^          ^          ^
+                                   |          |          |          |
+default rtr IPvX addrs-------> (IPvX A)   (IPvX A)   (IPvX A)   (IPvX A)
+                                   |          |          |          |
+                          IPvX H1->* IpvX H2->* IPvX H3->* IpvX H4->*
+                                +--+--+    +--+--+    +--+--+    +--+--+
+                                |  H1 |    |  H2 |    |  H3 |    |  H4 |
+                                +-----+    +-----+    +--+--+    +--+--+
+   Legend:
+         --+---+---+-- = Ethernet, Token Ring, or FDDI
+                     H = Host computer
+                    AR = Active Router
+                    BR = Backup Router
+                    *  =  IPvX Address; X is 4 everywhere in IPv4 case
+                                        X is 6 everywhere in IPv6 case
+                    (IPvX) = default router for hosts
+
+
+
         ]]></artwork>
 	<t>
 	  In the IPv4 case (that is, IPvX is IPv4 everywhere in the figure),
@@ -582,29 +582,31 @@ please see http://xml.resource.org/authoring/README.html. -->
 	<artwork><![CDATA[
         +-----------+      +-----------+
         |   Rtr1    |      |   Rtr2    |
-        |(MR VRID=1)|      |(BR VRID=1)|
-        |(BR VRID=2)|      |(MR VRID=2)|
-        VRID=1  +-----------+      +-----------+  VRID=2
-        IPvX A -------->*            *<---------- IPvX B
-        |            |
-        |            |
-        ----------------+------------+-----+----------+----------+----------+--
-        ^          ^          ^          ^
-        |          |          |          |
-        default rtr IPvX addrs -----> (IPvX A)   (IPvX A)   (IPvX B)   (IPvX B)
-        |          |          |          |
-        IPvX H1->* IpvX H2->* IPvX H3->* IpvX H4->*
-        +--+--+    +--+--+    +--+--+    +--+--+
-        |  H1 |    |  H2 |    |  H3 |    |  H4 |
-        +-----+    +-----+    +--+--+    +--+--+
-        Legend:
+        |(AR VRID=1)|      |(BR VRID=1)|
+        |(BR VRID=2)|      |(AR VRID=2)|
+VRID=1  +-----------+      +-----------+  VRID=2
+IPvX A -------->*            *<---------- IPvX B
+                |            |
+                |            |
+----------------+------------+-----+----------+----------+----------+--
+                                   ^          ^          ^          ^
+                                   |          |          |          |
+default rtr IPvX addrs -----> (IPvX A)   (IPvX A)   (IPvX B)   (IPvX B)
+                                   |          |          |          |
+                          IPvX H1->* IpvX H2->* IPvX H3->* IpvX H4->*
+                                +--+--+    +--+--+    +--+--+    +--+--+
+                                |  H1 |    |  H2 |    |  H3 |    |  H4 |
+                                +-----+    +-----+    +--+--+    +--+--+
+   Legend:
         ---+---+---+--  =  Ethernet, Token Ring, or FDDI
-        H  =  Host computer
-        MR  =  Active Router
-        BR  =  Backup Router
-        *  =  IPvX Address; X is 4 everywhere in IPv4 case
-        X is 6 everywhere in IPv6 case
-        (IPvX)  =  default router for hosts
+                     H  =  Host computer
+                    AR  =  Active Router
+                    BR  =  Backup Router
+                     *  =  IPvX Address; X is 4 everywhere in IPv4 case
+                                         X is 6 everywhere in IPv6 case
+                (IPvX)  =  default router for hosts
+
+ 
         ]]></artwork>
 	<t>
 	  In the IPv4 example above (that is, IPvX is IPv4 everywhere in the
@@ -866,8 +868,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dd>
 	    <t>
 	      Priority value to be used by this VRRP
-	    </t>
-	    <t>
 	      router in Active election for this
               virtual router.  The value of 255
               (decimal) is reserved for the router that
@@ -886,8 +886,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dd>
 	    <t>
 	      One or more IPv4 addresses associated
-	    </t>
-	    <t>
 	      with this virtual router.  Configured
               item with no default.
 	    </t>
@@ -896,8 +894,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dd>
 	    <t>
 	      One or more IPv6 addresses associated
-	    </t>
-	    <t>
 	      with this virtual router.  Configured
               item with no default.  The first address
               must be the Link-Local address associated
@@ -908,8 +904,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dd>
 	    <t>
 	      Time interval between ADVERTISEMENTS
-	    </t>
-	    <t>
 	      (centiseconds).  Default is 100
               centiseconds (1 second).
 	    </t>
@@ -918,8 +912,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dd>
 	    <t>
 	      Advertisement interval contained in
-	    </t>
-	    <t>
 	      ADVERTISEMENTS received from the Active
               (centiseconds).  This value is saved by
               virtual routers in the Backup state and
@@ -932,11 +924,9 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dd>
 	    <t>
 	      Time to skew Active_Down_Interval in
-	    </t>
-	    <t>
-	      centiseconds.  Calculated as
-	    </t>
-	    <t>
+	      centiseconds.  Calculated as:
+            </t>
+            <t>
 	      (((256 - priority) * Active_Adver_Interval) / 256)
 	    </t>
 	  </dd>
@@ -944,12 +934,10 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dd>
 	    <t>
 	      Time interval for Backup to declare
-	    </t>
-	    <t>
 	      Active down (centiseconds).
-              Calculated as
-	    </t>
-	    <t>
+              Calculated as:
+            </t>
+            <t>
 	      (3 * Active_Adver_Interval) + Skew_time
 	    </t>
 	  </dd>
@@ -957,8 +945,6 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dd>
 	    <t>
 	      Controls whether a (starting or
-	    </t>
-	    <t>
 	      restarting) higher-priority Backup router
               preempts a lower-priority Active router.
               Values are True to allow preemption and
@@ -1061,36 +1047,37 @@ please see http://xml.resource.org/authoring/README.html. -->
  (100) If a Startup event is received, then:
 
       (105) - If the Priority = 255 (i.e., the router owns the IPvX
-      address associated with the virtual router), then:
+              address associated with the virtual router), then:
 
          (110) + Send an ADVERTISEMENT
 
          (115) + If the protected IPvX address is an IPv4 address, then:
 
             (120) * Broadcast a gratuitous ARP request containing the
-            virtual router MAC address for each IP address associated
-            with the virtual router.
+                    virtual router MAC address for each IP address
+                    associated with the virtual router.
 
          (125) + else // IPv6
 
             (130) * For each IPv6 address associated with the virtual
-            router, send an unsolicited ND Neighbor Advertisement with
-            the Router Flag (R) set, the Solicited Flag (S) unset, the
-            Override flag (O) set, the target address set to the IPv6
-            address of the virtual router, and the target link-layer
-            address set to the virtual router MAC address.
+                    router, send an unsolicited ND Neighbor
+                    Advertisement with the Router Flag (R) set, the
+                    Solicited Flag (S) unset, the Override flag (O) set,
+                    the target address set to the IPv6 address of the
+                    virtual router, and the target link-layer address
+                    set to the virtual router MAC address.
 
          (135) +endif // was protected addr IPv4?
 
          (140) + Set the Adver_Timer to Advertisement_Interval
 
-         (145) + Transition to the {Master} state
+         (145) + Transition to the {Active} state
 
       (150) - else // rtr does not own virt addr
 
-         (155) + Set Master_Adver_Interval to Advertisement_Interval
+         (155) + Set Active_Adver_Interval to Advertisement_Interval
 
-         (160) + Set the Master_Down_Timer to Master_Down_Interval
+         (160) + Set the Active_Down_Timer to Active_Down_Interval
 
          (165) + Transition to the {Backup} state
 
@@ -1113,82 +1100,84 @@ please see http://xml.resource.org/authoring/README.html. -->
       (305) - If the protected IPvX address is an IPv4 address, then:
 
          (310) + MUST NOT respond to ARP requests for the IPv4
-         address(es) associated with the virtual router.
+                 address(es) associated with the virtual router.
 
       (315) - else // protected addr is IPv6
 
          (320) + MUST NOT respond to ND Neighbor Solicitation messages
-         for the IPv6 address(es) associated with the virtual router.
+                 for the IPv6 address(es) associated with the virtual
+                 router.
 
          (325) + MUST NOT send ND Router Advertisement messages for the
-         virtual router.
+                 virtual router.
 
       (330) -endif // was protected addr IPv4?
 
       (335) - MUST discard packets with a destination link-layer MAC
-      address equal to the virtual router MAC address.
+              address equal to the virtual router MAC address.
 
       (340) - MUST NOT accept packets addressed to the IPvX address(es)
-      associated with the virtual router.
+              associated with the virtual router.
 
       (345) - If a Shutdown event is received, then:
 
-         (350) + Cancel the Master_Down_Timer
+         (350) + Cancel the Active_Down_Timer
 
          (355) + Transition to the {Initialize} state
 
       (360) -endif // shutdown recv
 
-      (365) - If the Master_Down_Timer fires, then:
+      (365) - If the Active_Down_Timer fires, then:
 
          (370) + Send an ADVERTISEMENT
 
          (375) + If the protected IPvX address is an IPv4 address, then:
 
             (380) * Broadcast a gratuitous ARP request on that interface
-            containing the virtual router MAC address for each IPv4
-            address associated with the virtual router.
+                    containing the virtual router MAC address for each
+                    IPv4 address associated with the virtual router.
 
          (385) + else // ipv6
 
             (390) * Compute and join the Solicited-Node multicast
-            address [RFC4291] for the IPv6 address(es) associated with
-            the virtual router.
+                    address [RFC4291] for the IPv6 address(es)
+                    associated with the virtual router.
 
             (395) * For each IPv6 address associated with the virtual
-            router, send an unsolicited ND Neighbor Advertisement with
-            the Router Flag (R) set, the Solicited Flag (S) unset, the
-            Override flag (O) set, the target address set to the IPv6
-            address of the virtual router, and the target link-layer
-            address set to the virtual router MAC address.
+                    router, send an unsolicited ND Neighbor
+                    Advertisement with the Router Flag (R) set, the
+                    Solicited Flag (S) unset, the Override flag (O)
+                    set, the target address set to the IPv6 address
+                    of the virtual router, and the target link-layer
+                    address set to the virtual router MAC address.
 
          (400) +endif // was protected addr ipv4?
 
          (405) + Set the Adver_Timer to Advertisement_Interval
 
-         (410) + Transition to the {Master} state
+         (410) + Transition to the {Active} state
 
-      (415) -endif // Master_Down_Timer fired
+      (415) -endif // Active_Down_Timer fired
 
       (420) - If an ADVERTISEMENT is received, then:
 
          (425) + If the Priority in the ADVERTISEMENT is zero, then:
 
-            (430) * Set the Master_Down_Timer to Skew_Time
+            (430) * Set the Active_Down_Timer to Skew_Time
 
          (440) + else // priority non-zero
 
             (445) * If Preempt_Mode is False, or if the Priority in the
-            ADVERTISEMENT is greater than or equal to the local
-            Priority, then:
+                    ADVERTISEMENT is greater than or equal to the local
+                    Priority, then:
 
-               (450) @ Set Master_Adver_Interval to Adver Interval
-               contained in the ADVERTISEMENT
+               (450) @ Set Active_Adver_Interval to Adver Interval
+                       contained in the ADVERTISEMENT
 
-               (455) @ Recompute the Master_Down_Interval
+               (455) @ Recompute the Active_Down_Interval
 
-               (460) @ Reset the Master_Down_Timer to
-               Master_Down_Interval
+               (460) @ Reset the Active_Down_Timer to
+                       Master_Down_Interval
 
             (465) * else // preempt was true and priority was less
 
@@ -1217,32 +1206,33 @@ considered.</t>
       (605) - If the protected IPvX address is an IPv4 address, then:
 
          (610) + MUST respond to ARP requests for the IPv4 address(es)
-         associated with the virtual router.
+                 associated with the virtual router.
 
       (615) - else // ipv6
 
          (620) + MUST be a member of the Solicited-Node multicast
-         address for the IPv6 address(es) associated with the virtual
-         router.
+                 address for the IPv6 address(es) associated with the
+                 virtual router.
 
          (625) + MUST respond to ND Neighbor Solicitation message for
-         the IPv6 address(es) associated with the virtual router.
+                 the IPv6 address(es) associated with the virtual
+                 router.
 
          (630) + MUST send ND Router Advertisements for the virtual
-         router.
+                 router.
 
          (635) + If Accept_Mode is False:  MUST NOT drop IPv6 Neighbor
-         Solicitations and Neighbor Advertisements.
+                 Solicitations and Neighbor Advertisements.
 
       (640) +-endif // ipv4?
 
       (645) - MUST forward packets with a destination link-layer MAC
-      address equal to the virtual router MAC address.
+              address equal to the virtual router MAC address.
 
       (650) - MUST accept packets addressed to the IPvX address(es)
-      associated with the virtual router if it is the IPvX address owner
-      or if Accept_Mode is True.  Otherwise, MUST NOT accept these
-      packets.
+              associated with the virtual router if it is the IPvX
+              address owner or if Accept_Mode is True.  Otherwise,
+              MUST NOT accept these packets.
 
       (655) - If a Shutdown event is received, then:
 
@@ -1273,38 +1263,39 @@ considered.</t>
          (720) + else // priority was non-zero
 
             (725) * If the Priority in the ADVERTISEMENT is greater
-            than the local Priority,
+                    than the local Priority,
 
             (730) * or
 
             (735) * If the Priority in the ADVERTISEMENT is equal to
-            the local Priority and the primary IPvX Address of the
-            sender is greater than the local primary IPvX Address, then:
+                    the local Priority and the primary IPvX Address of
+                    the sender is greater than the local primary IPvX
+                    Address, then:
 
                (740) @ Cancel Adver_Timer
 
-               (745) @ Set Master_Adver_Interval to Adver Interval
-               contained in the ADVERTISEMENT
+               (745) @ Set Active_Adver_Interval to Adver Interval
+                       contained in the ADVERTISEMENT
 
                (750) @ Recompute the Skew_Time
 
-               (755) @ Recompute the Master_Down_Interval
+               (755) @ Recompute the Active_Down_Interval
 
-               (760) @ Set Master_Down_Timer to Master_Down_Interval
+               (760) @ Set Active_Down_Timer to Active_Down_Interval
 
                (765) @ Transition to the {Backup} state
 
-            (770) * else // new Master logic
+            (770) * else // new Active logic
 
                (775) @ Discard ADVERTISEMENT
 
-            (780) *endif // new Master detected
+            (780) *endif // new Active detected
 
          (785) +endif // was priority zero?
 
       (790) -endif // advert recv
 
-   (795) endwhile // in Master
+   (795) endwhile // in Active
 ]]></artwork>
 <t>
   Note: VRRP packets are transmitted with the virtual router MAC
