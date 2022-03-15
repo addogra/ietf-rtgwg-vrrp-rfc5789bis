@@ -1177,7 +1177,7 @@ default rtr IPvX addrs -----> (IPvX A)   (IPvX A)   (IPvX B)   (IPvX B)
                (455) @ Recompute the Active_Down_Interval
 
                (460) @ Reset the Active_Down_Timer to
-                       Master_Down_Interval
+                       Active_Down_Interval
 
             (465) * else // preempt was true and priority was less
 
