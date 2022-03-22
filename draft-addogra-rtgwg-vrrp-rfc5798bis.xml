@@ -98,7 +98,7 @@ please see http://xml.resource.org/authoring/README.html. -->
         transport protocol.  Within a VRRP router, the virtual routers in
         each of the IPv4 and IPv6 address families are a domain unto
         themselves and do not overlap.  The election process provides dynamic
-        failover in the forwarding responsibility should the Active become
+        failover in the forwarding responsibility should the Active router become
         unavailable.  For IPv4, the advantage gained from using VRRP is a
         higher-availability default path without requiring configuration of
         dynamic routing or router discovery protocols on every end-host.  For
@@ -131,7 +131,7 @@ please see http://xml.resource.org/authoring/README.html. -->
         VRRP router, the virtual routers in each of the IPv4 and IPv6 address
         families are a domain unto themselves and do not overlap.  The
         election process provides dynamic failover in the forwarding
-        responsibility should the Active become unavailable.
+        responsibility should the Active router become unavailable.
       </t>
       <t>
         VRRP provides a function similar to the proprietary protocols "Hot Standby Router Protocol (HSRP)"
@@ -150,10 +150,6 @@ please see http://xml.resource.org/authoring/README.html. -->
         mean either "IPv4" or "IPv6".  In this text, where the IP version
         matters, the appropriate term is used and the use of the term "IP" is
         avoided.
-      </t>
-      <t>
-        The terms "Active" and "Backup" are concise terms for "Active VRRP Router"
-        and "Backup VRRP Router".
       </t>
     </section>
     <section anchor="sect-1.2">
@@ -191,10 +187,10 @@ please see http://xml.resource.org/authoring/README.html. -->
         routed environment.  VRRP specifies an election protocol that
         dynamically assigns responsibility for a virtual router to one of the
         VRRP routers on a LAN.  The VRRP router controlling the IPv4
-        address(es) associated with a virtual router is called the Active and
+        address(es) associated with a virtual router is called the Active router and
         forwards packets sent to these IPv4 addresses.  The election process
         provides dynamic failover in the forwarding responsibility should the
-        Active become unavailable.  Any of the virtual router's IPv4
+        Active router become unavailable.  Any of the virtual router's IPv4
       addresses on a LAN can then be used as the default first hop</t>
       <t>
 	router by end-hosts.  The advantage gained from using VRRP is a
@@ -315,7 +311,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 	    for the IPv4 address(es), and answering ND
             requests for the IPv6 address(es).  Note that
             if the IPvX address owner is available, then
-            it will always become the Active.
+            it will always become the Active router.
 	  </t>
 	</dd>
 	<dt>Virtual Router Backup</dt>
@@ -323,7 +319,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <t>
 	    The set of VRRP routers available to assume
 	    forwarding responsibility for a virtual
-            router should the current Active fail.
+            router should the current Active router fail.
 	  </t>
 	</dd>
       </dl>
@@ -355,14 +351,14 @@ please see http://xml.resource.org/authoring/README.html. -->
 	<t>
 	  A simple model of Active election among a set of redundant routers is
           to treat each router with equal preference and claim victory after
-          converging to any router as Active.  However, there are likely to be
+          converging to any router as Active router.  However, there are likely to be
           many environments where there is a distinct preference (or range of
           preferences) among the set of redundant routers.  For example, this
           preference may be based upon access link cost or speed, router
           performance or reliability, or other policy considerations.  The
           protocol should allow the expression of this relative path preference
-          in an intuitive manner and guarantee Active convergence to the most
-        preferential router currently available.</t>
+          in an intuitive manner and guarantee Active router convergence to the most
+          preferential router currently available.</t>
       </section>
       <section anchor="sect-2.3">
 	<name>Minimization of Unnecessary Service Disruptions</name>
@@ -371,11 +367,11 @@ please see http://xml.resource.org/authoring/README.html. -->
           between Active and Backup routers can result in a disruption in
           service.  The protocol should ensure after Active election that no
           state transition is triggered by any Backup router of equal or lower
-        preference as long as the Active continues to function properly.</t>
+        preference as long as the Active router continues to function properly.</t>
 	<t>
 	  Some environments may find it beneficial to avoid the state
           transition triggered when a router that is preferred over the current
-          Active becomes available.  It may be useful to support an override of
+          Active router becomes available.  It may be useful to support an override of
         the immediate convergence to the preferred path.</t>
       </section>
       <section anchor="sect-2.4">
@@ -391,15 +387,15 @@ please see http://xml.resource.org/authoring/README.html. -->
           resulting in flooding of all packets sent to the virtual router.  To
           improve the efficiency in this environment, the protocol should:
           1) use the virtual router MAC address as the source in a packet sent
-          by the Active to trigger station learning; 2) trigger a message
-          immediately after transitioning to the Active to update the station
-          learning; and 3) trigger periodic messages from the Active to
-        maintain the station learning cache.</t>
+          by the Active router to trigger station learning; 2) trigger a message
+          immediately after transitioning to the Active router to update the station
+          learning; and 3) trigger periodic messages from the Active router to
+          maintain the station learning cache.</t>
       </section>
       <section anchor="sect-2.5">
 	<name>Sub-Second Operation for IPv4 and IPv6</name>
 	<t>
-	  Sub-second detection of Active VRRP router failure is needed in both
+	  Sub-second detection of Active router failure is needed in both
           IPv4 and IPv6 environments.  Earlier work proposed that sub-second
           operation was for IPv6; this specification leverages that earlier
         approach for IPv4 and IPv6.</t>
@@ -411,14 +407,14 @@ please see http://xml.resource.org/authoring/README.html. -->
           transmitted onto the VRRP-protected LAN could see larger queueing
           delay than the smallest VRRP Advertisement_Interval.  In this case,
           the Active_Down_Interval will be small enough so that normal queuing
-          delays might cause a VRRP Backup to conclude that the Active is down,
-          and therefore promote itself to Active.  Very shortly afterwards, the
-          delayed VRRP packets from the Active cause a switch back to Backup
+          delays might cause a VRRP Backup to conclude that the Active router is down,
+          and therefore promote itself to Active status.  Very shortly afterwards, the
+          delayed VRRP packets from the Active router cause a switch back to Backup
           status.  Furthermore, this process can repeat many times per second,
           causing significant disruption to traffic.  To mitigate this problem,
           priority forwarding of VRRP packets should be considered.  It should
-          be possible for a VRRP Active to observe that this situation is
-        occurring frequently and at least log the problem.</t>
+          be possible for an Active router to observe that this situation is
+          occurring frequently and at least log the problem.</t>
       </section>
     </section>
     <section anchor="sect-3">
@@ -449,22 +445,22 @@ please see http://xml.resource.org/authoring/README.html. -->
         using the same VRID number for a set of IPv4 addresses and a set of
       IPv6 addresses; however, these are two different virtual routers.</t>
       <t>
-	To minimize network traffic, only the Active for each virtual router
+	To minimize network traffic, only the Active router for each virtual router
         sends periodic VRRP Advertisement messages.  A Backup router will not
-        attempt to preempt the Active unless it has higher priority.  This
+        attempt to preempt the Active router unless it has higher priority.  This
         eliminates service disruption unless a more preferred path becomes
         available.  It's also possible to administratively prohibit all
         preemption attempts.  The only exception is that a VRRP router will
         always become Active of any virtual router associated with addresses
-        it owns.  If the Active becomes unavailable, then the highest-
-        priority Backup will transition to Active after a short delay,
+        it owns.  If the Active router becomes unavailable, then the highest-
+        priority Backup router will transition to Active status after a short delay,
         providing a controlled transition of the virtual router
-      responsibility with minimal service interruption.</t>
+        responsibility with minimal service interruption.</t>
       <t>
 	The VRRP protocol design provides rapid transition from Backup to
-        Active to minimize service interruption and incorporates
+        Active router to minimize service interruption and incorporates
         optimizations that reduce protocol complexity while guaranteeing
-        controlled Active transition for typical operational scenarios.  The
+        controlled Active router transition for typical operational scenarios.  The
         optimizations result in an election protocol with minimal runtime
         state requirements, minimal active protocol states, and a single
         message type and sender.  The typical operational scenarios are
@@ -475,7 +471,9 @@ please see http://xml.resource.org/authoring/README.html. -->
         Active election.  However, the typical scenario assumptions are
         likely to cover the vast majority of deployments, loss of the Active
         router is infrequent, and the expected duration in Active election
-      convergence is quite small ( &lt;&lt; 1 second ).  Thus, the VRRP optimizations represent significant simplifications in the protocol design while incurring an insignificant probability of brief network degradation.</t>
+        convergence is quite small ( &lt;&lt; 1 second ).  Thus, the VRRP optimizations
+        represent significant simplifications in the protocol design while incurring
+        an insignificant probability of brief network degradation.</t>
     </section>
     <section anchor="sect-4">
       <name>Sample Configurations</name>
@@ -548,7 +546,7 @@ Legend:
 	<t>
 	  The IPv4 example above shows a virtual router configured to cover the
           IPv4 address owned by Rtr1 (VRID=1, IPv4_Address=A).  When VRRP is
-          enabled on Rtr1 for VRID=1, it will assert itself as Active, with
+          enabled on Rtr1 for VRID=1, it will assert itself as Active router, with
           priority = 255, since it is the IP address owner for the virtual
           router IP address.  When VRRP is enabled on Rtr2 for VRID=1, it will
           transition to Backup, with priority = 100 (the default priority is
@@ -581,7 +579,7 @@ Legend:
         with the hosts splitting their traffic between them.</t>
 	<artwork><![CDATA[
         +-----------+   +-----------+
-        |  Router 1 |   | Router 2  | 
+        |  Router 1 |   | Router 2  |
         |(AR VRID=1)|   |(BR VRID=1)|
         |(BR VRID=2)|   |(AR VRID=2)|
 VRID=1  +-----------+   +-----------+  VRID=2
@@ -608,7 +606,7 @@ IPvX A -------->*          *<---------- IPvX B
                                        X is 6 everywhere in IPv6 case
               (IPvX)  =  Default Router for hosts
 
- 
+
         ]]></artwork>
 	<t>
 	  In the IPv4 example above (that is, IPvX is IPv4 everywhere in the
@@ -617,7 +615,7 @@ IPvX A -------->*          *<---------- IPvX B
           of virtual router VRID=1 is exactly the same as in the first example
           (see <xref target="sect-4.1"/>), and a second virtual router has been added to
           cover the IPv4 address owned by Rtr2 (VRID=2, IPv4_Address=B).  In
-          this case, Rtr2 will assert itself as Active for VRID=2 while Rtr1
+          this case, Rtr2 will assert itself as Active router for VRID=2 while Rtr1
           will act as a Backup.  This scenario demonstrates a deployment
           providing load splitting when both routers are available, while
         providing full redundancy for robustness.</t>
@@ -628,7 +626,7 @@ IPvX A -------->*          *<---------- IPvX B
           of virtual router VRID=1 is exactly the same as in the first example
           (see <xref target="sect-4.1"/>), and a second virtual router has been added to
           cover the IPv6 address owned by Rtr2 (VRID=2, IPv6_Address=B).  In
-          this case, Rtr2 will assert itself as Active for VRID=2 while Rtr1
+          this case, Rtr2 will assert itself as Active router for VRID=2 while Rtr1
           will act as a Backup.  This scenario demonstrates a deployment
           providing load splitting when both routers are available, while
         providing full redundancy for robustness.</t>
@@ -788,9 +786,9 @@ IPvX A -------->*          *<---------- IPvX B
           backing up a virtual router is 100 (decimal).</t>
 	  <t>
 	    The priority value zero (0) has special meaning, indicating that the
-            current Active has stopped participating in VRRP.  This is used to
-            trigger Backup routers to quickly transition to Active without having
-          to wait for the current Active to time out.</t>
+            current Active router has stopped participating in VRRP.  This is used to
+            trigger Backup routers to quickly transition to Active status without having
+            to wait for the current Active router to time out.</t>
 	</section>
 	<section anchor="sect-5.2.5">
 	  <name>Count IPvX Addr</name>
@@ -814,10 +812,10 @@ IPvX A -------->*          *<---------- IPvX B
 	    Note that higher-priority Active routers with slower transmission
             rates than their Backup routers are unstable.  This is because low-
             priority nodes configured to faster rates could come online and
-            decide they should be Actives before they have heard anything from
-            the higher-priority Active with a slower rate.  When this happens, it
-            is temporary: once the lower-priority node does hear from the higher-
-          priority Active, it will relinquish Activeship.</t>
+            decide they should be Active routers before they have heard anything from
+            the higher-priority Active router with a slower rate.  When this happens, it
+            is temporary: once the lower-priority node does hear from the higher-priority
+            Active router, it will relinquish Active status.</t>
 	</section>
 	<section anchor="sect-5.2.8">
 	  <name>Checksum</name>
@@ -915,7 +913,7 @@ IPvX A -------->*          *<---------- IPvX B
 	    <t>
 	      Advertisement interval contained in
 	      ADVERTISEMENTS received from the Active
-              (centiseconds).  This value is saved by
+              router (centiseconds).  This value is saved by
               virtual routers in the Backup state and
               used to compute Skew_Time and
               Active_Down_Interval.  The initial value
@@ -935,8 +933,8 @@ IPvX A -------->*          *<---------- IPvX B
 	  <dt>Active_Down_Interval</dt>
 	  <dd>
 	    <t>
-	      Time interval for Backup to declare
-	      Active down (centiseconds).
+	      Time interval for the Backup router to declare
+	      Active router down (centiseconds).
               Calculated as:
             </t>
             <t>
@@ -1291,17 +1289,17 @@ considered.</t>
 
                (765) @ Transition to the {Backup} state
 
-            (770) * else // new Active logic
+            (770) * else // new Active router logic
 
                (775) @ Discard ADVERTISEMENT
 
-            (780) *endif // new Active detected
+            (780) *endif // new Active router detected
 
          (785) +endif // was priority zero?
 
       (790) -endif // advert recv
 
-   (795) endwhile // in Active
+   (795) endwhile // in Active state
 ]]></artwork>
 <t>
   Note: VRRP packets are transmitted with the virtual router MAC
@@ -1419,7 +1417,7 @@ routers do not connect to the same destinations).</t>
 <t>
   The IPv6 source address of an ICMPv6 redirect should be the address
   that the end-host used when making its next-hop routing decision.  If
-  a VRRP router is acting as Active for virtual router(s) containing
+  a VRRP router is acting as Active router for virtual router(s) containing
   addresses it does not own, then it must determine which virtual
   router the packet was sent to when selecting the redirect source
   address.  A method to deduce the virtual router used is to examine
@@ -1468,7 +1466,7 @@ case.</t>
 <section anchor="sect-8.2.3">
 <name>Router Advertisements</name>
 <t>
-  When a Backup VRRP router has become Active for a virtual router, it
+  When a Backup VRRP router has become Active router for a virtual router, it
   is responsible for sending Router Advertisements for the virtual
   router as specified in <xref target="sect-6.4.3"/>.  The Backup routers must be
   configured to send the same Router Advertisement options as the
@@ -1487,15 +1485,17 @@ synchronized database for this service.</t>
 <name>Potential Forwarding Loop</name>
 <t>
   If it is not the address owner, a VRRP router SHOULD NOT forward
-  packets addressed to the IPvX address for which it becomes Active.
+  packets addressed to the IPvX address for which it becomes Active router.
   Forwarding these packets would result in unnecessary traffic.  Also,
   in the case of LANs that receive packets they transmit (e.g., Token
   Ring), this can result in a forwarding loop that is only terminated
-when the IPvX TTL expires.</t>
+  when the IPvX TTL expires.
+</t>
 <t>
   One such mechanism for VRRP routers is to add/delete a reject host
   route for each adopted IPvX address when transitioning to/from Active
-state.</t>
+  state.
+</t>
 </section>
 <section anchor="sect-8.3.2">
 <name>Recommendations Regarding Setting Priority Values</name>
@@ -1535,31 +1535,33 @@ and is NOT recommended for permanent deployments.</t>
   An implementation MAY implement a configuration flag that tells it to
 listen for and send both VRRPv2 and VRRPv3 advertisements.</t>
 <t>
-  When a virtual router is configured this way and is the Active, it
+  When a virtual router is configured this way and is the Active router, it
 MUST send both types at the configured rate, even if sub-second.</t>
 <t>
-  When a virtual router is configured this way and is the Backup, it
-  should time out based on the rate advertised by the Active; in the
-  case of a VRRPv2 Active, this means it must translate the timeout
+  When a virtual router is configured this way and is the Backup router, it
+  should time out based on the rate advertised by the Active router; in the
+  case of a VRRPv2 Active router, this means it must translate the timeout
   value it receives (in seconds) into centiseconds.  Also, a Backup
-  should ignore VRRPv2 advertisements from the current Active if it is
-  also receiving VRRPv3 packets from it.  It MAY report when a VRRPv3
-  Active is *not* sending VRRPv2 packets: that suggests they don't
-agree on whether they're supporting VRRPv2 routers.</t>
+  router should ignore VRRPv2 advertisements from the current Active router
+  if it is also receiving VRRPv3 packets from it.  It MAY report when a VRRPv3
+  Active router is *not* sending VRRPv2 packets: that suggests they don't
+  agree on whether they're supporting VRRPv2 routers.</t>
 </section>
 <section anchor="sect-8.4.3">
   <name>VRRPv3 Support of VRRPv2 Considerations</name>
   <section anchor="sect-8.4.3.1">
-    <name>Slow, High-Priority Actives</name>
+    <name>Slow, High-Priority Active Routers</name>
     <t>
     See also <xref target="sect-5.2.7"/>, "Maximum Advertisement Interval (Max Adver Int)".</t>
     <t>
       The VRRPv2 Active router interacting with a sub-second VRRPv3 Backup
-    router is the most important example of this.</t>
+      router is the most important example of this.
+    </t>
     <t>
       A VRRPv2 implementation should not be given a higher priority than a
       VRRPv2/VRRPv3 implementation it is interacting with if the VRRPv2/
-    VRRPv3 rate is sub-second.</t>
+      VRRPv3 rate is sub-second.
+    </t>
   </section>
   <section anchor="sect-8.4.3.2">
     <name>Overwhelming VRRPv2 Backups</name>
@@ -1598,6 +1600,10 @@ agree on whether they're supporting VRRPv2 routers.</t>
     Radia Perlman, Russ Housley, Harald Alvestrand, Steve Bellovin, Ned
     Freed, Ted Hardie, Russ Housley, Bert Wijnen, Bill Fenner, and Alex
     Zinin for their comments and suggestions.
+  </t>
+  <t>
+    Thanks to Stewart Bryant and Sasha Vainshtein for comments on the
+    curret document (RFC 5798 BIS).
   </t>
 </section>
 <section anchor="IANA" numbered="true" toc="default">
@@ -1690,7 +1696,7 @@ agree on whether they're supporting VRRPv2 routers.</t>
 	    transport protocol.  Within a VRRP router, the virtual routers in
 	    each of the IPv4 and IPv6 address families are a domain unto
 	    themselves and do not overlap.  The election process provides dynamic
-	    failover in the forwarding responsibility should the Active become
+	    failover in the forwarding responsibility should the Active router become
 	    unavailable.  For IPv4, the advantage gained from using VRRP is a
 	    higher-availability default path without requiring configuration of
 	    dynamic routing or router discovery protocols on every end-host.  For
@@ -1708,7 +1714,7 @@ agree on whether they're supporting VRRPv2 routers.</t>
       </reference>
       <reference anchor="ISO.10038.1993">
 	<front>
-<title>Information technology - Telecommunications and information exchange between systems - Local area networks - Media access control (MAC) bridges</title>
+<title>Information technology - Telecommunications and information exchange between systems - Local area networks - Media ac control (MAC) bridges</title>
 <author>
 <organization>International Organization for Standardization</organization>
 </author>
@@ -1988,15 +1994,15 @@ agree on whether they're supporting VRRPv2 routers.</t>
   MAC address matching the device's hardware address.  Under some
   conditions, such as router isolations, ring failures, protocol
   transitions, etc., VRRP may cause there to be more than one Active
-  router.  If a Active router installs the virtual router MAC address
-  as the hardware address on a FDDI device, then other Actives'
-  ADVERTISEMENTS will be removed from the ring during the Active
-convergence, and convergence will fail.</t>
+  router.  If an Active router installs the virtual router MAC address
+  as the hardware address on a FDDI device, then other Active routers'
+  ADVERTISEMENTS will be removed from the ring during the Active router
+  convergence, and convergence will fail.</t>
 <t>
   To avoid this, an implementation SHOULD configure the virtual router
   MAC address by adding a unicast MAC filter in the FDDI device, rather
-  than changing its hardware MAC address.  This will prevent a Active
-router from removing any ADVERTISEMENTS it did not originate.</t>
+  than changing its hardware MAC address.  This will prevent an Active
+  router from removing any ADVERTISEMENTS it did not originate.</t>
 </section>
 <section anchor="sect-a.2">
   <name>Operation over Token Ring</name>
@@ -2004,7 +2010,7 @@ router from removing any ADVERTISEMENTS it did not originate.</t>
     Token Ring has several characteristics that make running VRRP
   difficult.  These include the following:</t>
   <ul spacing="normal">
-    <li>In order to switch to a new Active located on a different bridge
+    <li>In order to switch to a new Active router located on a different bridge
     Token-Ring segment from the previous Active when using source-
     route bridges, a mechanism is required to update cached source-
     route information.</li>
