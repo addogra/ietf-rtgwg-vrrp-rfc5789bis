@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-04"
+    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-05"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -91,7 +91,7 @@ please see http://xml.resource.org/authoring/README.html. -->
         election protocol that dynamically assigns responsibility for a
         virtual router to one of the VRRP routers on a LAN.  The VRRP router
         controlling the IPv4 or IPv6 address(es) associated with a virtual
-        router is called the Active router, and it forwards packets sent to these
+        router is called the VRRP Active router, and it forwards packets sent to these
         IPv4 or IPv6 addresses.  VRRP Active routers are configured with
         virtual IPv4 or IPv6 addresses, and VRRP Backup routers infer the
         address family of the virtual addresses being carried based on the
@@ -107,8 +107,8 @@ please see http://xml.resource.org/authoring/README.html. -->
         Neighbor Discovery mechanisms.
       </t>
       <t>
-	The VRRP terminology has been updated be in line with inclusive language
-        used in the industry. This document obsoletes VRRP Version 3
+	The VRRP terminology has been updated conform to inclusive language
+        guidelines for IETF technologies. This document obsoletes VRRP Version 3
         <xref target="RFC5798"/>.
       </t>
     </abstract>
@@ -123,7 +123,7 @@ please see http://xml.resource.org/authoring/README.html. -->
         <xref target="VRRP-IPv6"/>.  VRRP specifies an election protocol that dynamically
         assigns responsibility for a virtual router to one of the VRRP
         routers on a LAN.  The VRRP router controlling the IPv4 or IPv6
-        address(es) associated with a virtual router is called the Active router,
+        address(es) associated with a virtual router is called the VRRP Active router,
         and it forwards packets sent to these IPv4 or IPv6 addresses.  VRRP
         Active routers are configured with virtual IPv4 or IPv6 addresses,
         and VRRP Backup routers infer the address family of the virtual
@@ -132,6 +132,11 @@ please see http://xml.resource.org/authoring/README.html. -->
         families are a domain unto themselves and do not overlap.  The
         election process provides dynamic failover in the forwarding
         responsibility should the Active router become unavailable.
+      </t>
+      <t>
+	The VRRP terminology has been updated conform to inclusive language
+        guidelines for IETF technologies. This document obsoletes VRRP Version 3
+        <xref target="RFC5798"/>.
       </t>
       <t>
         VRRP provides a function similar to the proprietary protocols "Hot Standby Router Protocol (HSRP)"
@@ -156,21 +161,21 @@ please see http://xml.resource.org/authoring/README.html. -->
       <name>IPv4</name>
       <t>
 	There are a number of methods that an IPv4 end-host can use to
-        determine its first-hop router towards a particular IPv4 destination.
+        determine its first-hop router for a particular IPv4 destination.
         These include running (or snooping) a dynamic routing protocol such
-        as Routing Information Protocol <xref target="RFC2453"/> or OSPF version 2
-	<xref target="RFC2328"/>, running an ICMP router discovery client <xref target="RFC1256"/>, or
-      using a statically configured default route.</t>
+        as Routing Information Protocol (RIP) <xref target="RFC2453"/> or OSPF version 2
+	<xref target="RFC2328"/>, running an ICMP router discovery client
+        <xref target="RFC1256"/>, or using a statically configured default route.</t>
       <t>
 	Running a dynamic routing protocol on every end-host may be
         infeasible for a number of reasons, including administrative
-        overhead, processing overhead, security issues, or lack of a protocol
-        implementation for some platforms.  Neighbor or router discovery
+        overhead, processing overhead, security issues, or the lack of an
+        implementation for a particular platform.  Neighbor or router discovery
         protocols may require active participation by all hosts on a network,
-        leading to large timer values to reduce protocol overhead in the face
-        of large numbers of hosts.  This can result in a significant delay in
-        the detection of a lost (i.e., dead) neighbor; such a delay may
-      introduce unacceptably long "black hole" periods.</t>
+        requiring large timer values to reduce protocol overhead associated
+        with the associated protocol packets processing for each host.  This can result in
+        a significant delay in  the detection of a lost (i.e., dead) neighbor; such a delay may
+        introduce unacceptably long "black hole" periods.</t>
       <t>
 	The use of a statically configured default route is quite popular; it
         minimizes configuration and processing overhead on the end-host and
@@ -180,22 +185,21 @@ please see http://xml.resource.org/authoring/README.html. -->
         configuration for an end-host IPv4 address and default gateway.
         However, this creates a single point of failure.  Loss of the default
         router results in a catastrophic event, isolating all end-hosts that
-      are unable to detect any alternate path that may be available.</t>
+        are unable to detect an available alternate path.</t>
       <t>
 	The Virtual Router Redundancy Protocol (VRRP) is designed to
-        eliminate the single point of failure inherent in the static default-
-        routed environment.  VRRP specifies an election protocol that
+        eliminate the single point of failure inherent in an network utilizing
+        static default routing.  VRRP specifies an election protocol that
         dynamically assigns responsibility for a virtual router to one of the
         VRRP routers on a LAN.  The VRRP router controlling the IPv4
         address(es) associated with a virtual router is called the Active router and
         forwards packets sent to these IPv4 addresses.  The election process
         provides dynamic failover in the forwarding responsibility should the
         Active router become unavailable.  Any of the virtual router's IPv4
-      addresses on a LAN can then be used as the default first hop</t>
-      <t>
+        addresses on a LAN can then be used as the default first hop
 	router by end-hosts.  The advantage gained from using VRRP is a
         higher availability default path without requiring configuration of
-      dynamic routing or router discovery protocols on every end-host.</t>
+        dynamic routing or router discovery protocols on every end-host.</t>
     </section>
     <section anchor="sect-1.3">
       <name>IPv6</name>
@@ -203,10 +207,10 @@ please see http://xml.resource.org/authoring/README.html. -->
 	IPv6 hosts on a LAN will usually learn about one or more default
         routers by receiving Router Advertisements sent using the IPv6
         Neighbor Discovery (ND) protocol <xref target="RFC4861"/>.  The Router
-        Advertisements are multicast periodically at a rate that the hosts
+        Advertisements are multicast periodically at a rate at which the hosts
         will learn about the default routers in a few minutes.  They are not
         sent frequently enough to rely on the absence of the Router
-      Advertisement to detect router failures.</t>
+        Advertisement to detect router failures.</t>
       <t>
 	Neighbor Discovery (ND) includes a mechanism called Neighbor
         Unreachability Detection to detect the failure of a neighbor node
@@ -219,39 +223,43 @@ please see http://xml.resource.org/authoring/README.html. -->
         ND, it will take a host about 38 seconds to learn that a router is
         unreachable before it will switch to another default router.  This
         delay would be very noticeable to users and cause some transport
-      protocol implementations to time out.</t>
+        protocol implementations to time out.</t>
       <t>
 	While the ND unreachability detection could be made quicker by
         changing the parameters to be more aggressive (note that the current
         lower limit for this is 5 seconds), this would have the downside of
         significantly increasing the overhead of ND traffic, especially when
         there are many hosts all trying to determine the reachability of one
-      of more routers.</t>
+        or more routers.</t>
       <t>
 	The Virtual Router Redundancy Protocol for IPv6 provides a much
         faster switchover to an alternate default router than can be obtained
         using standard ND procedures.  Using VRRP, a Backup router can take
         over for a failed default router in around three seconds (using VRRP
         default parameters).  This is done without any interaction with the
-      hosts and a minimum amount of VRRP traffic.</t>
+        hosts and a minimum amount of VRRP traffic.</t>
     </section>
     <section anchor="sect-1.4">
       <name>Requirements Language</name>
       <t>
-	The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-      document are to be interpreted as described in <xref target="RFC2119"/>.</t>
-    </section>
+        The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+        NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+        "MAY", and "OPTIONAL" in this document are to be interpreted as
+        described in BCP 14 <xref target="RFC2119"/> <xref
+        target="RFC8174"/> when, and only when, they appear in all capitals,
+        as shown here.
+      </t>
+     </section>
     <section anchor="sect-1.5">
       <name>Scope</name>
       <t>
 	The remainder of this document describes the features, design goals,
         and theory of operation of VRRP.  The message formats, protocol
         processing rules, and state machine that guarantee convergence to a
-        single Virtual Router Active are presented.  Finally, operational
+        single Active Router are presented.  Finally, operational
         issues related to MAC address mapping, handling of ARP requests,
         generation of ICMP redirect messages, and security issues are
-      addressed.</t>
+        addressed.</t>
     </section>
     <section anchor="sect-1.6">
       <name>Definitions</name>
@@ -284,7 +292,7 @@ please see http://xml.resource.org/authoring/README.html. -->
             address(es).  This is the router that, when
             up, will respond to packets addressed to one
             of these IPvX addresses for ICMP pings, TCP
-            connections, etc.
+            connection requests, etc.
 	  </t>
 	</dd>
 	<dt>Primary IP Address</dt>
@@ -301,7 +309,7 @@ please see http://xml.resource.org/authoring/README.html. -->
             transmitted is used.
 	  </t>
 	</dd>
-	<dt>Virtual Router Active</dt>
+	<dt>Active Router</dt>
 	<dd>
 	  <t>
 	    The VRRP router that is assuming the
@@ -314,7 +322,7 @@ please see http://xml.resource.org/authoring/README.html. -->
             it will always become the Active router.
 	  </t>
 	</dd>
-	<dt>Virtual Router Backup</dt>
+	<dt>Backup Router(s)</dt>
 	<dd>
 	  <t>
 	    The set of VRRP routers available to assume
@@ -333,7 +341,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 	<name>IPvX Address Backup</name>
 	<t>
 	  Backup of an IPvX address or addresses is the active function of
-          VRRP.  While providing election of a Virtual Router Active and the
+          VRRP.  While providing election of a Active Router and the
           additional functionality described below, the protocol should
         strive to:</t>
 	<ul spacing="normal">
@@ -1371,11 +1379,11 @@ symmetric topology.</t>
 <name>Host ARP Requests</name>
 <t>
   When a host sends an ARP request for one of the virtual router IPv4
-  addresses, the Virtual Router Active MUST respond to the ARP request
+  addresses, the Active Router MUST respond to the ARP request
   with an ARP response that indicates the virtual MAC address for the
   virtual router.  Note that the source address of the Ethernet frame
   of this ARP response is the physical MAC address of the physical
-  router.  The Virtual Router Active MUST NOT respond with its physical
+  router.  The Active Router MUST NOT respond with its physical
   MAC address in the ARP response.  This allows the client to always
 use the same MAC address regardless of the current Active router.</t>
 <t>
@@ -1385,15 +1393,15 @@ it should only send ARP messages that include virtual MAC addresses.</t>
 <t>
 This may entail the following:</t>
 <ul spacing="normal">
-  <li>When configuring an interface, Virtual Router Active routers
+  <li>When configuring an interface, Active Routers
   should broadcast a gratuitous ARP request containing the virtual
-router MAC address for each IPv4 address on that interface.</li>
-<li>At system boot, when initializing interfaces for VRRP operation,
-delay gratuitous ARP requests and ARP responses until both the
-IPv4 address and the virtual router MAC address are configured.</li>
-<li>When, for example, ssh access to a particular VRRP router is
-required, an IP address known to belong to that router must be
-used.</li>
+  router MAC address for each IPv4 address on that interface.</li>
+  <li>At system boot, when initializing interfaces for VRRP operation,
+  delay gratuitous ARP requests and ARP responses until both the
+  IPv4 address and the virtual router MAC address are configured.</li>
+  <li>When, for example, ssh access to a particular VRRP router is
+  required, an IP address known to belong to that router must be
+  used.</li>
 </ul>
 </section>
 <section anchor="sect-8.1.3">
@@ -1428,14 +1436,14 @@ redirect.</t>
 <name>ND Neighbor Solicitation</name>
 <t>
   When a host sends an ND Neighbor Solicitation message for the virtual
-  router IPv6 address, the Virtual Router Active MUST respond to the ND
+  router IPv6 address, the Active Router MUST respond to the ND
   Neighbor Solicitation message with the virtual MAC address for the
-  virtual router.  The Virtual Router Active MUST NOT respond with its
+  virtual router.  The Active Router MUST NOT respond with its
   physical MAC address.  This allows the client to always use the same
 MAC address regardless of the current Active router.</t>
 <t>
-  When a Virtual Router Active sends an ND Neighbor Solicitation
-  message for a host's IPv6 address, the Virtual Router Active MUST
+  When a Active Router sends an ND Neighbor Solicitation
+  message for a host's IPv6 address, the Active Router MUST
   include the virtual MAC address for the virtual router if it sends a
   source link-layer address option in the neighbor solicitation
   message.  It MUST NOT use its physical MAC address in the source
@@ -1447,7 +1455,7 @@ it should only send ND messages that include virtual MAC addresses.</t>
 <t>
 This may entail the following:</t>
 <ul spacing="normal">
-  <li>When configuring an interface, Virtual Router Active routers
+  <li>When configuring an interface, Active Routers
   should send an unsolicited ND Neighbor Advertisement message
   containing the virtual router MAC address for the IPv6 address on
 that interface.</li>
@@ -1603,7 +1611,7 @@ MUST send both types at the configured rate, even if sub-second.</t>
   </t>
   <t>
     Thanks to Stewart Bryant and Sasha Vainshtein for comments on the
-    curret document (RFC 5798 BIS).
+    current document (RFC 5798 BIS).
   </t>
 </section>
 <section anchor="IANA" numbered="true" toc="default">
@@ -1971,6 +1979,15 @@ MUST send both types at the configured rate, even if sub-second.</t>
 <organization>Ericsson</organization>
 </author>
 <date month="March" year="2005"/>
+</front>
+</reference>
+<reference anchor="RFC8174">
+  <front>
+<title>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</title>
+<author initials="B." surname="Leiba" fullname="Barr Leiba">
+<organization>Huawei Technologies</organization>
+</author>
+<date month="May" year="2017"/>
 </front>
 </reference>
 
