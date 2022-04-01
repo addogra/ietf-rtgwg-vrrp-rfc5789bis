@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-05"
+    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-06"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -1781,6 +1781,9 @@ This may entail the following:</t>
 </section>
 <section anchor="IANA" numbered="true" toc="default">
   <name>IANA Considerations</name>
+  <t>
+    IANA has assigned the IPv4 multicast address 224.0.0.18 for VRRP.
+  </t>
   <t>
     IANA has assigned an IPv6 link-local scope multicast address for VRRP
     for IPv6.  The IPv6 multicast address is FF02:0:0:0:0:0:0:12.
