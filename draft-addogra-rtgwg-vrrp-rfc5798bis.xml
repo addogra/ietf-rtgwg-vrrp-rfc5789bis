@@ -174,10 +174,12 @@ please see http://xml.resource.org/authoring/README.html. -->
         protocols may require active participation by all hosts on a network,
         requiring large timer values to reduce protocol overhead associated
         with the associated protocol packets processing for each host.  This can result in
-        a significant delay in  the detection of a lost (i.e., dead) neighbor; such a delay may
-        introduce unacceptably long "black hole" periods.</t>
+        a significant delay in the detection of an unreachable router and,
+        such a delay may introduce unacceptably long periods of unreachability for the
+        default route.
+       </t>
       <t>
-	The use of a statically configured default route is quite popular; it
+	The use of a statically configured default route is quite popular since it
         minimizes configuration and processing overhead on the end-host and
         is supported by virtually every IPv4 implementation.  This mode of
         operation is likely to persist as dynamic host configuration
@@ -346,7 +348,7 @@ please see http://xml.resource.org/authoring/README.html. -->
           additional functionality described below, the protocol should
           strive to:</t>
 	  <ul spacing="normal">
-	    <li>Minimize the duration of black holes.</li>
+	    <li>Minimize the duration of unreachability.</li>
 	    <li>Minimize the steady-state bandwidth overhead and processing
             complexity.</li>
 	    <li>Function over a wide variety of multiaccess LAN technologies
@@ -397,21 +399,31 @@ please see http://xml.resource.org/authoring/README.html. -->
           virtual router MAC address is never used as the source address in a
           link-level frame, then the MAC address location is never learned,
           resulting in flooding of all packets sent to the virtual router.  To
-          improve the efficiency in this environment, the protocol should:
-          1) use the virtual router MAC address as the source in a packet sent
-          by the Active Router to trigger MAC learning; 2) trigger a message
-          immediately after transitioning to the Active Router to update the MAC
-          learning; and 3) trigger periodic messages from the Active Router to
-          maintain the MAC address cache.
+          improve the efficiency in this environment, the protocol should do the
+          following:
         </t>
+        <ol spacing="normal" type="1">
+          <li>
+            Use the virtual router MAC address as the source in a packet sent
+            by the Active Router to trigger MAC learning.
+          </li>
+          <li>
+            Trigger a message immediately after transitioning to the
+            Active Router to update the MAC learning.
+          </li>
+          <li>
+            Trigger periodic messages from the Active Router to
+            maintain the MAC address cache.
+          </li>
+        </ol>
       </section>
       <section anchor="sect-2.5">
 	<name>Sub-Second Operation for IPv4 and IPv6</name>
 	<t>
 	  Sub-second detection of Active Router failure is needed in both
           IPv4 and IPv6 environments.  Earlier work proposed that sub-second
-          operation was for IPv6; this specification leverages that earlier
-          approach for IPv4 and IPv6.
+          operation was for IPv6 and this specification leverages that earlier
+          approach for both IPv4 and IPv6.
         </t>
 	<t>
 	  One possible problematic scenario when using small
@@ -436,7 +448,7 @@ please see http://xml.resource.org/authoring/README.html. -->
       <t>
 	VRRP specifies an election protocol to provide the virtual router
         function described earlier.  All protocol messaging is performed
-        using either IPv4 or IPv6 multicast datagrams; thus, the protocol can
+        using either IPv4 or IPv6 multicast datagrams. Thus, the protocol can
         operate over a variety of multiaccess LAN technologies supporting
         IPvX multicast.  Each link of a VRRP virtual router has a single
         well-known MAC address allocated to it.  This document currently only
@@ -458,7 +470,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 	There is no restriction against reusing a VRID with a different
         address mapping on different LANs, nor is there a restriction against
         using the same VRID number for a set of IPv4 addresses and a set of
-        IPv6 addresses; however, these are two different virtual routers.
+        IPv6 addresses. However, these are two different virtual routers.
       </t>
       <t>
 	To minimize network traffic, only the Active Router for each virtual router
@@ -512,8 +524,8 @@ IPvX A------>*            *<---------IPvX B
 -------------+------------+--+-----------+-----------+-----------+
                              ^           ^           ^           ^
                              |           |           |           |
-      Default Router         |           |           |           |
-      IPvX addreses ---> (IPvX A)    (IPvX A)    (IPvX A)    (IPvX A)
+     Default Router          |           |           |           |
+     IPvX addresses ---> (IPvX A)    (IPvX A)    (IPvX A)    (IPvX A)
                              |           |           |           |
                     IPvX H1->* IPvX  H2->* IPvX  H3->*  IPvX H4->*
                           +--+--+     +--+--+     +--+--+     +--+--+
@@ -524,7 +536,7 @@ Legend:
                   H = Host computer
                  AR = Active Router
                  BR = Backup Router
-                 *  =  IPvX Address; X is 4 everywhere in IPv4 case
+                 *  =  IPvX Address: X is 4 everywhere in IPv4 case
                                      X is 6 everywhere in IPv6 case
                  (IPvX) = Default Router for hosts
 
@@ -532,14 +544,14 @@ Legend:
 
 ]]></artwork>
 	<t>
-	  In the IPv4 case (that is, IPvX is IPv4 everywhere in the figure),
+	  In the IPv4 case, i.e., IPvX is IPv4 everywhere in the figure,
           each router is permanently assigned an IPv4 address on the LAN
           interface (Router-1 is assigned IPv4 A and Router-2 is assigned IPv4 B), and
           each host installs a static default route through one of the routers
           (in this example, they all use Router-1's IPv4 A).
         </t>
 	<t>
-	  In the IPv6 case (that is, IPvX is IPv6 everywhere in the figure),
+	  In the IPv6 case, i.e., IPvX is IPv6 everywhere in the figure,
           each router has a link-local IPv6 address on the LAN interface (Router-1
           is assigned IPv6 Link-Local A and Router-2 is assigned IPv6 Link-Local B),
           and each host learns a default route from Router
@@ -589,7 +601,7 @@ Legend:
           provide uninterrupted service to the IPv6 hosts.
         </t>
 	<t>
-	  Note that in both cases, in this example IPvX B is not backed up; it
+	  Note that in both cases in this example, IPvX B is not backed up and it
           is only used by Router-2 as its interface address.  In order to back up
           IPvX B, a second virtual router must be configured.  This is shown in
           the next section.</t>
@@ -612,8 +624,8 @@ IPvX A ----->*             *<---------- IPvX B
    ----------+-------------+-+-----------+-----------+-----------+
                              ^           ^           ^           ^
                              |           |           |           |
-      Default Router         |           |           |           |
-      IPvX addreses ---> (IPvX A)    (IPvX A)    (IPvX A)    (IPvX A)
+     Default Router          |           |           |           |
+     IPvX addresses ---> (IPvX A)    (IPvX A)    (IPvX A)    (IPvX A)
                              |           |           |           |
                     IPvX H1->* IPvX  H2->* IPvX  H3->*  IPvX H4->*
                           +--+--+     +--+--+     +--+--+     +--+--+
@@ -625,15 +637,15 @@ IPvX A ----->*             *<---------- IPvX B
                    H  =  Host computer
                   AR  =  Active Router
                   BR  =  Backup Router
-                   *  =  IPvX Address; X is 4 everywhere in IPv4 case
+                   *  =  IPvX Address: X is 4 everywhere in IPv4 case
                                        X is 6 everywhere in IPv6 case
               (IPvX)  =  Default Router for hosts
 
 
 ]]></artwork>
 	<t>
-	  In the IPv4 example above (that is, IPvX is IPv4 everywhere in the
-          figure), half of the hosts have configured a static default route through
+	  In the IPv4 example above, i.e., IPvX is IPv4 everywhere in the
+          figure, half of the hosts have configured a static default route through
           Router-1's IPv4 A, and half are using Router-2's IPv4 B.  The configuration
           of virtual router VRID=1 is exactly the same as in the first example
           (see <xref target="sect-4.1"/>), and a second virtual router has been added to
@@ -644,8 +656,8 @@ IPvX A ----->*             *<---------- IPvX B
           providing full redundancy for robustness.
         </t>
 	<t>
-	  In the IPv6 example above (that is, IPvX is IPv6 everywhere in the
-          figure), half of the hosts have learned a default route through
+	  In the IPv6 example above, i.e., IPvX is IPv6 everywhere in the
+          figure, half of the hosts have learned a default route through
           Router-1's IPv6 A, and half are using Router-2's IPv6 B.  The configuration
           of virtual router VRID=1 is exactly the same as in the first example
           (see <xref target="sect-4.1"/>), and a second virtual router has been added to
@@ -862,7 +874,7 @@ IPvX A ----->*             *<---------- IPvX B
           </t>
 	  <t>
 	    Note that higher-priority Active Routers with slower transmission
-            rates than their Backup Routers are unstable.  This is becausel low-
+            rates than their Backup Routers are unstable.  This is because
             lower-priority nodes configured to faster rates could come online and
             decide they should be Active Routers before they have heard anything from
             the higher-priority Active Router with a slower rate.  When this happens, it
@@ -1104,8 +1116,8 @@ IPvX A ----->*             *<---------- IPvX B
 <artwork><![CDATA[
  (100) If a Startup event is received, then:
 
-      (105) - If the Priority = 255 (i.e., the router owns the IPvX
-              address associated with the virtual router), then:
+      (105) - If the Priority = 255, i.e., the router owns the IPvX
+              address associated with the virtual router, then:
 
          (110) + Send an ADVERTISEMENT
 
@@ -1128,7 +1140,7 @@ IPvX A ----->*             *<---------- IPvX B
                     of the virtual router, and the target link-layer
                     address set to the virtual router MAC address.
 
-         (135) +endif // was protected addr IPv4?
+         (135) +endif // was protected address IPv4?
 
          (140) + Set the Adver_Timer to Advertisement_Interval
 
@@ -1153,7 +1165,7 @@ IPvX A ----->*             *<---------- IPvX B
 <t>
   The purpose of the {Backup} state is to monitor the availability and
   state of the Active Router. The Solicited-Node multicast address
-  <xref target="RFC4291"/> is referenced in the psuedo-code below.
+  <xref target="RFC4291"/> is referenced in the pseudo-code below.
 </t>
 <artwork><![CDATA[
 (300) While in this state, a VRRP router MUST do the following:
@@ -1164,7 +1176,7 @@ IPvX A ----->*             *<---------- IPvX B
          (310) + MUST NOT respond to ARP requests for the IPv4
                  address(es) associated with the virtual router.
 
-      (315) - else // protected addr is IPv6
+      (315) - else // protected address is IPv6
 
          (320) + MUST NOT respond to ND Neighbor Solicitation
                  messages for the IPv6 address(es) associated with
@@ -1173,7 +1185,7 @@ IPvX A ----->*             *<---------- IPvX B
          (325) + MUST NOT send ND Router Advertisement messages
                  for the virtual router.
 
-      (330) -endif // was protected addr IPv4?
+      (330) -endif // was protected address IPv4?
 
       (335) - MUST discard packets with a destination link-layer
               MAC address equal to the virtual router MAC address.
@@ -1216,7 +1228,7 @@ IPvX A ----->*             *<---------- IPvX B
                     of the virtual router, and the target link-layer
                     address set to the virtual router MAC address.
 
-         (400) +endif // was protected addr ipv4?
+         (400) +endif // was protected address ipv4?
 
          (405) + Set the Adver_Timer to Advertisement_Interval
 
@@ -1252,7 +1264,7 @@ IPvX A ----->*             *<---------- IPvX B
 
          (480) +endif // was priority zero?
 
-      (485) -endif // was advertisement recv?
+      (485) -endif // was advertisement received?
 
    (490) endwhile // Backup state
    ]]></artwork>
@@ -1455,8 +1467,8 @@ IEEE 802 MAC Address in the following format:</t>
 </t>
 <t>
   When a VRRP router restarts or boots, it SHOULD NOT send any ARP
-  messages using its physical MAC address for the IPv4 address it owns;
-  it should only send ARP messages that include virtual MAC addresses.
+  messages using its physical MAC address for an IPv4 address it owns
+  and, it should only send ARP messages that include virtual MAC addresses.
 </t>
 <t>
   This may entail the following:
@@ -1473,7 +1485,7 @@ IEEE 802 MAC Address in the following format:</t>
     IPv4 address and the virtual router MAC address are configured.
   </li>
   <li>
-    When, for example, ssh access to a particular VRRP router is
+    When, for example, SSH access to a particular VRRP router is
     required, an IP address known to belong to that router must be
     used.
   </li>
@@ -1530,8 +1542,8 @@ IEEE 802 MAC Address in the following format:</t>
 </t>
 <t>
   When a VRRP router restarts or boots, it SHOULD NOT send any ND
-  messages with its physical MAC address for the IPv6 address it owns;
-  it should only send ND messages that include virtual MAC addresses.
+  messages with its physical MAC address for the IPv6 address it owns
+  and, it should only send ND messages that include virtual MAC addresses.
 </t>
 <t>
 This may entail the following:</t>
@@ -1647,7 +1659,7 @@ This may entail the following:</t>
 </t>
 <t>
   When a virtual router is configured this way and is the Backup Router, it
-  should time out based on the rate advertised by the Active Router; in the
+  should time out based on the rate advertised by the Active Router. In the
   case of a VRRPv2 Active Router, this means it must translate the timeout
   value it receives (in seconds) into centiseconds.  Also, a Backup
   Router should ignore VRRPv2 advertisements from the current Active Router
@@ -1695,7 +1707,7 @@ This may entail the following:</t>
   <name>Security Considerations</name>
   <t>
     VRRP for IPvX does not currently include any type of authentication.
-    Earlier versions of the VRRP (for IPv4) specification included
+    Earlier versions of the VRRP specification included
     several types of authentication ranging from none to strong.
     Operational experience and further analysis determined that these did
     not provide sufficient security to overcome the vulnerability of
@@ -1704,7 +1716,7 @@ This may entail the following:</t>
     cryptographically protected, it does not prevent hostile nodes from
     behaving as if they are a VRRP Active Routers, creating multiple
     Active Router.  Authentication of VRRP messages could have prevented
-    a hostile nodefrom causing all properly functioning routers from going
+    a hostile node from causing all properly functioning routers from going
     into Backup state.  However, having multiple Active Routers can cause
     as much disruption as no routers, which authentication cannot prevent.
     Also, even if a hostile node could not disrupt VRRP, it can disrupt ARP
@@ -1720,15 +1732,32 @@ This may entail the following:</t>
   <t>
     It should be noted that these attacks are not worse and are a subset
     of the attacks that any node attached to a LAN can do independently
-    of VRRP.  The kind of attacks a malicious node on a LAN can do
-    include promiscuously receiving packets for any router's MAC address;
-    sending packets with the router's MAC address as the source MAC
-    address in the L2 header to tell the L2 switches to send packets
-    addressed to the router to the malicious node instead of the router;
-    send redirects to tell the hosts to send their traffic somewhere
-    else; send unsolicited ND replies; answer ND requests; etc.  All of
-    this can be done independently of implementing VRRP.  VRRP does not
-    add to these vulnerabilities.
+    of VRRP.  The kind of attacks a malicious node on a LAN can perform
+    include:
+  </t>
+  <ul spacing="normal">
+    <li>
+      Promiscuously receiving packets for any router's MAC address.
+    </li>
+    <li>
+      Sending packets with the router's MAC address as the source MAC
+      address in the L2 header to tell the L2 switches to send packets
+      addressed to the router to the malicious node instead of the router.
+    </li>
+    <li>
+      Sending redirects to tell the hosts to send their traffic
+      somewhere else.
+    </li>
+    <li>
+      Sending unsolicited ND replies.
+    </li>
+    <li>
+      Answering ND requests, etc.
+    </li>
+  </ul>
+  <t>
+    All of these can be done independently of implementing VRRP.
+    VRRP does not add to these vulnerabilities.
   </t>
   <t>
     VRRP includes a mechanism
