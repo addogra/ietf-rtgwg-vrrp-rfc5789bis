@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-06"
+    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-07"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -142,6 +142,31 @@ please see http://xml.resource.org/authoring/README.html. -->
         VRRP provides a function similar to the proprietary protocols "Hot Standby Router Protocol (HSRP)"
         <xref target="RFC2281"/> and "IP Standby Protocol" <xref target="IPSTB"/>.
       </t>
+      <section anchor="sect-1.11">
+        <name>RFC 5798 Differences</name>
+        <t>
+          The following changes have been made from RFC 5798:
+        </t>
+        <ol spacing="normal" type="1">
+          <li>
+            The term for the VRRP router assuming forwarding responsibility has been changed
+            to "Active Router" to be consistent with IETF inclusive terminology. Additionally,
+            inconsistencies in RFC 5798 terminology for both "Active Router" and "Backup Router"
+            were corrected.
+          </li>
+          <li>
+            Errata pertaining to the state machines in <xref target="state-machine"/> were
+            corrected.
+          </li>
+          <li>
+            Appendicies describing operation over legacy technologies (FDDI, Token
+            Ring, and ATM LAN Emulation) were removed.
+          </li>
+          <li>
+            Miscellaneous editorial changes were made for readability.
+          </li>
+        </ol>
+      </section>
     </section>
     <section anchor="sect-1.1">
       <name>A Note on Terminology</name>
@@ -923,7 +948,7 @@ IPvX A ----->*             *<---------- IPvX B
 	</section>
       </section>
     </section>
-    <section anchor="sect-6">
+    <section anchor="state-machine">
       <name>Protocol State Machine</name>
       <section anchor="sect-6.1">
 	<name>Parameters Per Virtual Router</name>
@@ -1805,7 +1830,8 @@ This may entail the following:</t>
   </t>
   <t>
     Thanks to Stewart Bryant and Sasha Vainshtein for comments on the
-    current document (RFC 5798 BIS).
+    current document (RFC 5798 BIS). Thanks to Gyan Mishra, Paul Congdon, and
+    Jon Rosen for discussions related to the removal of legacy technology appendicies.
   </t>
 </section>
 <section anchor="IANA" numbered="true" toc="default">
@@ -1826,24 +1852,14 @@ This may entail the following:</t>
 </middle>
 <back>
   <references title="Normative References">
-    <reference anchor="ISO.10038.1993">
-      <front>
-        <title>Information technology - Telecommunications and information exchange between systems - Local area networks - Media ac control (MAC) bridges</title>
-        <author>
-          <organization>International Organization for Standardization</organization>
-        </author>
-        <date year="1993"/>
-      </front>
-      <seriesInfo name="ISO" value="Standard 10038"/>
-    </reference>
-    <reference anchor="RFC2119">
-      <front>
-        <title>Key words for use in RFCs to Indicate Requirement Levels</title>
-        <author initials="S." surname="Bradner" fullname="Scott Bradner">
-          <organization>Harvard University</organization>
-        </author>
-        <date year="1997" />
-      </front>
+     <reference anchor="RFC2119">
+       <front>
+         <title>Key words for use in RFCs to Indicate Requirement Levels</title>
+         <author initials="S." surname="Bradner" fullname="Scott Bradner">
+           <organization>Harvard University</organization>
+         </author>
+         <date year="1997" />
+       </front>
     </reference>
     <reference anchor="RFC2460">
       <front>
@@ -1954,16 +1970,6 @@ This may entail the following:</t>
 <date year="1997"/>
 </front>
 </reference>
-<reference anchor="IPX">
-  <front>
-<title>IPX Router Specification Version 1.10</title>
-<author>
-<organization>Novell Incorporated</organization>
-</author>
-<date month="October" year="1992"/>
-</front>
-</reference>
-
 <reference anchor="RFC1071">
   <front>
 <title>Computing the Internet Checksum</title>
@@ -1995,15 +2001,6 @@ This may entail the following:</t>
 <organization>Xerox PARC</organization>
 </author>
 <date month="September" year="1991"/>
-</front>
-</reference>
-<reference anchor="RFC1469">
-  <front>
-<title>IP Multicast over Token-Ring Local Area Networks</title>
-<author initials="T." surname="Pusateri" fullname="Thomas J. Pusateri">
-<organization>Consultant</organization>
-</author>
-<date month="June" year="1993"/>
 </front>
 </reference>
 <reference anchor="RFC2131">
@@ -2106,160 +2103,6 @@ This may entail the following:</t>
 </front>
 </reference>
 
-<reference anchor="TKARCH">
-  <front>
-<title>IBM Token-Ring Network, Architecture Specification, Publication SC30-3374-02, Third Edition</title>
-<author>
-<organization>IBM Incorporated</organization>
-</author>
-<date month="September" year="1989"/>
-</front>
-</reference>
 </references>
-
-<section anchor="sect-a">
-<name>Operation over FDDI, Token Ring, and ATM LANE</name>
-<section anchor="sect-a.1">
-<name>Operation over FDDI</name>
-<t>
-  FDDI interfaces remove from the FDDI ring frames that have a source
-  MAC address matching the device's hardware address.  Under some
-  conditions, such as router isolations, ring failures, protocol
-  transitions, etc., VRRP may cause there to be more than one Active
-  Router.  If an Active Router installs the virtual router MAC address
-  as the hardware address on an FDDI device, then other Active Routers'
-  ADVERTISEMENTS will be removed from the ring during the Active Router
-  convergence, and convergence will fail.
-</t>
-<t>
-  To avoid this, an implementation SHOULD configure the virtual router
-  MAC address by adding a unicast MAC filter in the FDDI device, rather
-  than changing its hardware MAC address.  This will prevent an Active
-  Router from removing any ADVERTISEMENTS it did not originate.
-</t>
-</section>
-<section anchor="sect-a.2">
-  <name>Operation over Token Ring</name>
-  <t>
-    Token Ring has several characteristics that make running VRRP
-    difficult.  These include the following:
-</t>
-  <ul spacing="normal">
-    <li>
-      In order to switch to a new Active Router located on a different bridge
-      Token-Ring segment from the previous Active Router when using
-      source-route bridges, a mechanism is required to update cached source-route
-      information.
-    </li>
-    <li>
-      No general multicast mechanism is supported across old and new
-      Token-Ring adapter implementations.  While many newer Token-Ring
-      adapters support group addresses, Token-Ring functional-address
-      support is the only generally available multicast mechanism.  Due
-      to the limited number of Token-Ring functional addresses, these
-      may collide with other usage of the same Token-Ring functional
-      addresses.
-    </li>
-  </ul>
-  <t>
-    Due to these difficulties, the preferred mode of operation over Token
-    Ring will be to use a Token-Ring functional address for the VRID
-    virtual MAC address.  Token-Ring functional addresses have the two
-    high-order bits in the first MAC address octet set to B'1'.  They
-    range from 03-00-00-00-00-80 to 03-00-02-00-00-00 (canonical format).
-    However, unlike multicast addresses, there is only one unique
-    functional address per bit position.  The functional addresses
-    03-00-00-10-00-00 through 03-00-02-00-00-00 are reserved by the
-    Token-Ring Architecture <xref target="TKARCH"/> for user-defined applications.
-    However, since there are only 12 user-defined Token-Ring functional
-    addresses, there may be other non-IPvX protocols using the same
-    functional address.  Since the Novell IPX <xref target="IPX"/> protocol uses the
-    03-00-00-10-00-00 functional address, operation of VRRP over Token
-    Ring will avoid using this functional address.  In general, Token-Ring
-    VRRP users will be responsible for resolution of other user-defined
-    Token-Ring functional address conflicts.
-  </t>
-  <t>
-    VRIDs are mapped directly to Token-Ring functional addresses.  In
-    order to decrease the likelihood of functional-address conflicts,
-    allocation will begin with the largest functional address.  Most
-    non-IPvX protocols use the first or first couple user-defined functional
-    addresses, and it is expected that VRRP users will choose VRIDs
-    sequentially, starting with 1.
-</t>
-<artwork><![CDATA[
-  VRID      Token-Ring Functional Address
-  ----      -----------------------------
-  1             03-00-02-00-00-00
-  2             03-00-04-00-00-00
-  3             03-00-08-00-00-00
-  4             03-00-10-00-00-00
-  5             03-00-20-00-00-00
-  6             03-00-40-00-00-00
-  7             03-00-80-00-00-00
-  8             03-00-00-01-00-00
-  9             03-00-00-02-00-00
-  10            03-00-00-04-00-00
-  11            03-00-00-08-00-00
-]]></artwork>
-  <t>
-    Or, more succinctly, octets 3 and 4 of the functional address are
-    equal to (0x4000 >> (VRID - 1)) in non-canonical format.
-  </t>
-  <t>
-    Since a functional address cannot be used as a MAC-level source
-    address, the real MAC address is used as the MAC source address in
-    VRRP advertisements.  This is not a problem for bridges, since
-    packets addressed to functional addresses will be sent on the
-    spanning-tree explorer path <xref target="ISO.10038.1993"/>.
-  </t>
-  <t>
-    The functional-address mode of operation MUST be implemented by
-    routers supporting VRRP on Token Ring.
-  </t>
-  <t>
-    Additionally, VRRP routers MAY support the unicast mode of operation to
-    take advantage of newer Token-Ring adapter implementations that
-    support non-promiscuous reception for multiple unicast MAC addresses
-    and to avoid both the multicast traffic and usage conflicts
-    associated with the use of Token-Ring functional addresses.  Unicast
-    mode uses the same mapping of VRIDs to virtual MAC addresses as
-    Ethernet.  However, one important difference exists.  ND
-    request/reply packets contain the virtual MAC address as the source
-    MAC address.  The reason for this is that some Token-Ring driver
-    implementations keep a cache of MAC address/source-routing
-    information independent of the ND cache.
-  </t>
-  <t>
-    Hence, these implementations have to receive a packet with the
-    virtual MAC address as the source address in order to transmit to
-    that MAC address on a source-route-bridged network.
-  </t>
-  <t>
-    Unicast mode on Token Ring has one limitation that should be
-    considered.  If there are VRID routers on different
-    source-route-bridged segments, and there are host implementations
-    that keep their source-route information in the ND cache and do
-    not listen to gratuitous NDs, these hosts will not update their ND source-route
-    information correctly when a switchover occurs.  The only possible
-    solution is to put all routers with the same VRID on the same source-route-bridged
-    segment and use techniques to prevent that bridge segment from being a single point
-    of failure.  These techniques are beyond the scope of this document.
-  </t>
-  <t>
-    For both the multicast and unicast mode of operation, VRRP
-    advertisements sent to 224.0.0.18 should be encapsulated as described
-    in <xref target="RFC1469"/>.
-  </t>
-</section>
-<section anchor="sect-a.3">
-  <name>Operation over ATM LANE</name>
-  <t>
-    Operation of VRRP over ATM LANE on routers with ATM LANE interfaces
-    and/or routers behind proxy LAN Emulation Clients (LECs) are beyond
-    the scope of this document.
-  </t>
-</section>
-</section>
 </back>
 </rfc>
