@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-07"
+    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-08"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -164,6 +164,9 @@ please see http://xml.resource.org/authoring/README.html. -->
           </li>
           <li>
             Miscellaneous editorial changes were made for readability.
+          </li>
+          <li>
+            The allocation of 224.0.0.18 was added to the IANA considerations section.
           </li>
         </ol>
       </section>
@@ -576,23 +579,26 @@ Legend:
           (in this example, they all use Router-1's IPv4 A).
         </t>
 	<t>
-	  In the IPv6 case, i.e., IPvX is IPv6 everywhere in the figure,
-          each router has a link-local IPv6 address on the LAN interface (Router-1
-          is assigned IPv6 Link-Local A and Router-2 is assigned IPv6 Link-Local B),
-          and each host learns a default route from Router
+          In the IPv6 case, i.e., IPvX is IPv6 everywhere in the figure, each router has its own
+          Link-Local IPv6 address on the LAN interface for the VRRP protocol and a link-local
+          IPv6 address per VRID that is shared with the other routers that serve the same VRID.
+          Each host learns a default route from Router
           Advertisements through one of the routers (in this example, they all
           use Router-1's IPv6 Link-Local A).</t>
 	<t>
-	  In an IPv4 VRRP environment, each router has the exact same
-          permanently assigned IPv4 address.  Router-1 is said to be the IPv4
+	  In an IPv4 VRRP environment, each router supports reception and transmission for
+          the exact same IPv4 address.  Router-1 is said to be the IPv4
           address owner of IPv4 A, and Router-2 is the IPv4 address owner of
           IPv4 B.  A virtual router is then defined by associating a unique
           identifier (the virtual router ID) with the address owned by a
           router.
         </t>
 	<t>
-	  In an IPv6 VRRP environment, each router has the exact same
-          Link-Local IPv6 address.  Router-1 is said to be the IPv6 address owner
+          In an IPv6 VRRP environment, each router supports reception and transmission with
+          the exact same Link-Local IPv6 address.  
+	  In an IPv6 VRRP environment, each router will support transmission and
+          reception for the Link-Local IPv6 addresses associated with both VRIDs. 
+          Router-1 is said to be the IPv6 address owner
           of IPv6 A, and Router-2 is the IPv6 address owner of IPv6 B.  A virtual
           router is then defined by associating a unique identifier (the
           virtual router ID) with the address owned by a router.
@@ -1829,7 +1835,7 @@ This may entail the following:</t>
     Zinin for their comments and suggestions.
   </t>
   <t>
-    Thanks to Stewart Bryant and Sasha Vainshtein for comments on the
+    Thanks to Stewart Bryant, Sasha Vainshtein, and Pascal Thubert for comments on the
     current document (RFC 5798 BIS). Thanks to Gyan Mishra, Paul Congdon, and
     Jon Rosen for discussions related to the removal of legacy technology appendicies.
   </t>
