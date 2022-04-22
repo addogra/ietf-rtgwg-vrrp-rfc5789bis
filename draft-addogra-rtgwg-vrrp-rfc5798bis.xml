@@ -890,7 +890,7 @@ IPvX A ----->*             *<---------- IPvX B
           </t>
 	</section>
 	<section anchor="sect-5.2.6">
-	  <name>0</name>
+	  <name>0 - Reserved</name>
 	  <t>
 	    This reserved field MUST be set to zero on transmission and ignored on
             reception.
@@ -1617,6 +1617,20 @@ This may entail the following:</t>
   synchronized database for this service.
 </t>
 </section>
+<section anchor="sect-8.2.4">
+<name>Unsolicited Neighbor Advertisements</name>
+<t>
+  A VRRP router acting as either an IPv6 Active Router or Backup Router, SHOULD
+  accept Unsolicited Neighbor Advertisements and update the corresponding
+  neighbor cache <xref target="RFC4861"/>. Since these are sent to the
+  IPv6 all-nodes multicast address (FF02:1) <xref target="RFC4861"/> or the
+  IPv6 all-routers multicast address (FF02:2), they will be received. Unsolicited
+  Neighbor Advertisements are sent both in the case where the link-level addresses
+  changes <xref target="RFC4861"/> and for gratuitous neighbor discovery by first hop
+  routers <xref target="RFC9131"/>. Additional configuration MAY be required in order
+  for Unsolicited Neighbor Advertisements to update the corresponding neighbor cache.
+</t>  
+</section>
 </section>
 <section anchor="sect-8.3">
 <name>IPvX</name>
@@ -2107,6 +2121,16 @@ This may entail the following:</t>
 </author>
 <date month="March" year="2005"/>
 </front>
+</reference>
+<reference anchor="RFC9131">
+  <front>
+    <title>Gratuitous Neighbor Discovery: Creating Neighbor Cache Entries on
+    First-Hop Routers</title>
+    <author initials="J." surname="Linkova" fullname="Jen Linkova">
+      <organization>Google</organization>
+    </author>
+    <date month="October" year="2021"/>
+  </front>
 </reference>
 
 </references>
