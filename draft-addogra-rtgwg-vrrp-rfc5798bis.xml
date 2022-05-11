@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-09"
+    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-10"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -63,6 +63,19 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <country>India</country>
 	</postal>
 	<email>addogra@cisco.com</email>
+      </address>
+    </author>
+    <author initials="S." surname="Nadas" fullname="Stephen Nadas">
+      <organization>Computer Science, Boston University</organization>
+      <address>
+	<postal>
+	  <street>111 Cummington Mall</street>
+	  <city>Boston</city>
+	  <region>MA</region>
+	  <code>02215</code>
+	  <country>USA</country>
+	</postal>
+	<email>nadas@bu.edu</email>
       </address>
     </author>
     <date/>
@@ -1834,11 +1847,6 @@ This may entail the following:</t>
     Radia Perlman, Russ Housley, Harald Alvestrand, Steve Bellovin, Ned
     Freed, Ted Hardie, Russ Housley, Bert Wijnen, Bill Fenner, and Alex
     Zinin for their comments and suggestions.
-  </t>
-  <t>
-    Thanks to Steve Nadas for his work merging/editting <xref target="RFC3768"/>
-    and <xref target="VRRP-IPv6"/> into the draft that eventually became RFC 5798
-    <xref target="RFC5798"/>.
   </t>
   <t>
     Thanks to Stewart Bryant, Sasha Vainshtein, and Pascal Thubert for comments on the
