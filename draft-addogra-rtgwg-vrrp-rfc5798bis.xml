@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-11"
+    docName="draft-addogra-rtgwg-vrrp-rfc5798bis-12"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -95,7 +95,11 @@ please see http://xml.resource.org/authoring/README.html. -->
       </t>
       <t>
 	The VRRP terminology has been updated conform to inclusive language
-        guidelines for IETF technologies. This document obsoletes VRRP Version 3
+        guidelines for IETF technologies.
+        The IETF has designated National Institute of Standards and Technology (NIST)
+        "Guidance for NIST Staff on Using Inclusive Language in Documentary Standards"
+        for its inclusive language guidelines.
+        This document obsoletes VRRP Version 3
         <xref target="RFC5798"/>.
       </t>
     </abstract>
@@ -122,8 +126,11 @@ please see http://xml.resource.org/authoring/README.html. -->
       </t>
       <t>
 	The VRRP terminology has been updated conform to inclusive language
-        guidelines for IETF technologies. This document obsoletes VRRP Version 3
-        <xref target="RFC5798"/>.
+        guidelines for IETF technologies.
+        The IETF has designated National Institute of Standards and Technology (NIST)
+        "Guidance for NIST Staff on Using Inclusive Language in Documentary Standards"
+        <xref target="NISTIR8366"/> for its inclusive language guidelines.
+        This document obsoletes VRRP Version 3 <xref target="RFC5798"/>.
       </t>
       <t>
         VRRP provides a function similar to the proprietary protocols "Hot Standby Router Protocol (HSRP)"
@@ -582,9 +589,9 @@ Legend:
         </t>
 	<t>
           In an IPv6 VRRP environment, each router supports reception and transmission with
-          the exact same Link-Local IPv6 address.  
+          the exact same Link-Local IPv6 address.
 	  In an IPv6 VRRP environment, each router will support transmission and
-          reception for the Link-Local IPv6 addresses associated with both VRIDs. 
+          reception for the Link-Local IPv6 addresses associated with both VRIDs.
           Router-1 is said to be the IPv6 address owner
           of IPv6 A, and Router-2 is the IPv6 address owner of IPv6 B.  A virtual
           router is then defined by associating a unique identifier (the
@@ -1616,7 +1623,7 @@ This may entail the following:</t>
   changes <xref target="RFC4861"/> and for gratuitous neighbor discovery by first hop
   routers <xref target="RFC9131"/>. Additional configuration MAY be required in order
   for Unsolicited Neighbor Advertisements to update the corresponding neighbor cache.
-</t>  
+</t>
 </section>
 </section>
 <section anchor="sect-8.3">
@@ -1864,267 +1871,58 @@ This may entail the following:</t>
 </middle>
 <back>
   <references title="Normative References">
-     <reference anchor="RFC2119">
-       <front>
-         <title>Key words for use in RFCs to Indicate Requirement Levels</title>
-         <author initials="S." surname="Bradner" fullname="Scott Bradner">
-           <organization>Harvard University</organization>
-         </author>
-         <date year="1997" />
-       </front>
-    </reference>
-    <reference anchor="RFC2460">
-      <front>
-        <title>Internet Protocol, Version 6 (IPv6) Specification</title>
-        <author initials="S." surname="Deering" fullname="Stephen E. Deering">
-          <organization>Cisco</organization>
-        </author>
-        <author initials="R" surname="Hinden" fullname="Robert M. Hinden">
-          <organization>Nokia</organization>
-        </author>
-        <date year="1998" />
-      </front>
-    </reference>
-    <reference anchor="RFC3768">
-      <front>
-        <title>Virtual Router Redundancy Protocol</title>
-        <author initials="R" surname="Hinden" fullname="Robert M. Hinden">
-          <organization>Nokia</organization>
-        </author>
-        <date year="2004" />
-      </front>
-    </reference>
-    <reference anchor="RFC4291">
-      <front>
-        <title>IP Version 6 Addressing Architecture</title>
-        <author initials="S." surname="Deering" fullname="Stephen E. Deering">
-          <organization>Cisco</organization>
-        </author>
-        <author initials="R" surname="Hinden" fullname="Robert M. Hinden">
-          <organization>Nokia</organization>
-        </author>
-        <date year="2006" />
-      </front>
-    </reference>
-    <reference anchor="RFC4443">
-      <front>
-        <title>Internet Control Message Protocol (ICMPv6) for the Internet Protocol Version 6 (IPv6) Specification</title>
-        <author initials="S." surname="Deering" fullname="Stephen E. Deering">
-          <organization>Cisco</organization>
-        </author>
-        <author initials="A" surname="Conta" fullname="Alex Conta">
-          <organization>Transwitch</organization>
-        </author>
-        <author initials="M" surname="Gupta" fullname="Mukesh Gupta">
-          <organization> Tropos Networks</organization>
-        </author>
-        <date year="2006" />
-      </front>
-    </reference>
-    <reference anchor="RFC4861">
-      <front>
-        <title>Neighbor Discovery for IP version 6</title>
-        <author initials="T." surname="Narten" fullname="Thomas Narten">
-          <organization>IBM</organization>
-        </author>
-        <author initials="E" surname="Nordmark" fullname="Erik Nordmark">
-          <organization>Sun Microsystems</organization>
-        </author>
-        <author initials="M" surname="Simpson" fullname="William Allen Simpson">
-          <organization> Daydreamer</organization>
-        </author>
-        <author initials="H" surname="Soliman" fullname="Hesham Soliman">
-          <organization> Elevate Technologies</organization>
-        </author>
-        <date year="2007" />
-      </front>
-    </reference>
-    <reference anchor="RFC5798">
-      <front>
-        <title>Virtual Router Redundancy Protocol (VRRP) Version 3 for IPv4 and IPv6</title>
-        <author initials="S." surname="Nadas" fullname="Stephen Nadas">
-          <organization>Ericsson</organization>
-        </author>
-        <date month="March" year="2010"/>
-      </front>
-    </reference>
-    <reference anchor="RFC8174">
-      <front>
-        <title>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</title>
-        <author initials="B." surname="Leiba" fullname="Barr Leiba">
-          <organization>Huawei Technologies</organization>
-        </author>
-        <date month="May" year="2017"/>
-      </front>
-    </reference>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2460.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.3768.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.4291.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.4443.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.4861.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.5798.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8174.xml"/>
   </references>
-<references>
-<name>Informative References</name>
-<reference anchor="VRRP-IPv6">
-  <front>
-<title>Virtual Router Redundancy Protocol for IPv6</title>
-<author initials="R." surname="Hinden" fullname="R. Hinden">
-</author>
-<author initials="J." surname="Cruz" fullname="J. Cruz">
-</author>
-<date month="March" year="2007"/>
-</front>
-<seriesInfo name="Work" value="in Progress"/>
-</reference>
-<reference anchor="IPSTB">
-  <front>
-    <title>Development of Router Clusters to Provide Fast Failover in IP Networks",
-    Digital Technical Journal, Volume 9 Number 3
-</title>
-<author>
-<organization>Higginson, P. and M. Shand</organization>
-</author>
-<date year="1997"/>
-</front>
-</reference>
-<reference anchor="RFC1071">
-  <front>
-<title>Computing the Internet Checksum</title>
-<author initials="R." surname="Braden" fullname="R.Braden">
-<organization>ISI</organization>
-</author>
-<author initials="D." surname="Borman" fullname="D.Borman">
-<organization>Cray Research</organization>
-</author>
-<author initials="C." surname="Partridge" fullname="C.Partridge">
-<organization>BBN Laboratories</organization>
-</author>
-<date month="September" year="1988"/>
-</front>
-</reference>
-<reference anchor="RFC2328">
-  <front>
-<title>OSPF Version 2</title>
-<author initials="J." surname="Moy" fullname="John Moy">
-<organization>Ascend Communications, Inc.</organization>
-</author>
-<date month="April" year="1998"/>
-</front>
-</reference>
-<reference anchor="RFC1256">
-  <front>
-<title>ICMP Router Discovery Messages</title>
-<author initials="S." surname="Deering" fullname="Stephen E. Deering">
-<organization>Xerox PARC</organization>
-</author>
-<date month="September" year="1991"/>
-</front>
-</reference>
-<reference anchor="RFC2131">
-  <front>
-<title>Dynamic Host Configuration Protocol</title>
-<author initials="T." surname="Droms" fullname="Ralph Droms">
-<organization>Bucknell University</organization>
-</author>
-<date month="March" year="1997"/>
-</front>
-</reference>
-<reference anchor="RFC2281">
-  <front>
-<title>Cisco Hot Standby Router Protocol (HSRP)</title>
-<author initials="T." surname="Li" fullname="Toni Li">
-<organization>Juniper Networks</organization>
-</author>
-<author initials="B." surname="Cole" fullname="Bruce Cole">
-<organization>Juniper Networks</organization>
-</author>
-<author initials="P." surname="Morton" fullname="Phil Morton">
-<organization>Cisco Systems</organization>
-</author>
-<author initials="D." surname="Lo" fullname="Dawn LI">
-<organization>Cisco Systems</organization>
-</author>
-<date month="March" year="1998"/>
-</front>
-</reference>
-<reference anchor="RFC2338">
-  <front>
-<title>Virtual Router Redundancy Protocol</title>
-<author initials="S." surname="Knight" fullname="S. Knight">
-<organization>BAscend Communications</organization>
-</author>
-<author initials="D." surname="Weaver" fullname="D. Weaver">
-<organization>Ascend Communications</organization>
-</author>
-<author initials="D." surname="Whipple" fullname="D. Whipple">
-<organization>Microsoft</organization>
-</author>
-<author initials="R." surname="Hinden" fullname="R. Hinden">
-<organization>Nokia</organization>
-</author>
-<author initials="D." surname="Mitzel" fullname="D. Mitzel">
-<organization>Nokia</organization>
-</author>
-<author initials="P." surname="Hunt" fullname="P. Hunt">
-<organization>Nokia</organization>
-</author>
-<author initials="P." surname="Higginson" fullname="P. Higginson">
-<organization>Digital Equipment Corp</organization>
-</author>
-<author initials="M." surname="Shand" fullname="M. Shand">
-<organization>Digital Equipment Corp</organization>
-</author>
-<author initials="A." surname="Lindem" fullname="A. Lindem">
-<organization>IBM Corporation</organization>
-</author>
-<author initials="G." surname="Malkin" fullname="Gary Scott Malkin">
-<organization>Bay Networks</organization>
-</author>
-<date month="April" year="1998"/>
-</front>
-</reference>
-<reference anchor="RFC2453">
-  <front>
-<title>RIP Version 2</title>
-<author initials="G." surname="Malkin" fullname="Gary Scott Malkin">
-<organization>Bay Networks</organization>
-</author>
-<date month="November" year="1998"/>
-</front>
-</reference>
-<reference anchor="RFC2464">
-  <front>
-<title>Transmission of IPv6 Packets over Ethernet Networks</title>
-<author initials="M." surname="Crawford" fullname="Matt Crawford">
-<organization>Fermilab</organization>
-</author>
-<date month="December" year="1998"/>
-</front>
-</reference>
-<reference anchor="RFC3971">
-  <front>
-<title>SEcure Neighbor Discovery (SEND)</title>
-<author initials="J." surname="Arkko" fullname="J. Arkko">
-<organization>Ericsson</organization>
-</author>
-<author initials="J." surname="Kempf" fullname="J. Kempf">
-<organization>DoCoMo Communications Labs USA</organization>
-</author>
-<author initials="B." surname="Zill" fullname="B. Zill">
-<organization>Microsoft</organization>
-</author>
-<author initials="P." surname="Nikander" fullname="P. Nikander">
-<organization>Ericsson</organization>
-</author>
-<date month="March" year="2005"/>
-</front>
-</reference>
-<reference anchor="RFC9131">
-  <front>
-    <title>Gratuitous Neighbor Discovery: Creating Neighbor Cache Entries on
-    First-Hop Routers</title>
-    <author initials="J." surname="Linkova" fullname="Jen Linkova">
-      <organization>Google</organization>
-    </author>
-    <date month="October" year="2021"/>
-  </front>
-</reference>
-
+  <references>
+    <name>Informative References</name>
+    <reference anchor="VRRP-IPv6">
+      <front>
+        <title>Virtual Router Redundancy Protocol for IPv6</title>
+        <author initials="R." surname="Hinden" fullname="R. Hinden">
+        </author>
+        <author initials="J." surname="Cruz" fullname="J. Cruz">
+        </author>
+        <date month="March" year="2007"/>
+      </front>
+      <seriesInfo name="Work" value="in Progress"/>
+    </reference>
+    <reference anchor="IPSTB">
+      <front>
+        <title>Development of Router Clusters to Provide Fast Failover in IP Networks",
+        Digital Technical Journal, Volume 9 Number 3
+        </title>
+        <author>
+          <organization>Higginson, P. and M. Shand</organization>
+        </author>
+        <date year="1997"/>
+      </front>
+    </reference>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.1071.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2328.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.1256.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2131.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2281.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2338.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2453.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2464.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.3971.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.9131.xml"/>
+    <reference anchor="NISTIR8366" target="https://doi.org/10.6028/NIST.IR.8366">
+      <front>
+        <title>Guidance for NIST Staff on Using Inclusive Language in Documentary Standards,
+        National Institute of Standards and Technology (NIST) Interagency or Internal Report 8366</title>
+        <author surname="NIST"/>
+        <date year="2021" month="April"/>
+      </front>
+      <seriesInfo name="NISTIR" value="8366"/>
+    </reference>
 </references>
 </back>
 </rfc>
