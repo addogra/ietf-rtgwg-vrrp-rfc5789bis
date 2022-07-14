@@ -81,8 +81,8 @@ please see http://xml.resource.org/authoring/README.html. -->
         router is called the VRRP Active Router, and it forwards packets sent to these
         IPv4 or IPv6 addresses.  VRRP Active Routers are configured with
         virtual IPv4 or IPv6 addresses, and VRRP Backup Routers infer the
-        address family of the virtual addresses being carried based on the
-        transport protocol.  Within a VRRP router, the virtual routers in
+        address family of the virtual addresses being advertised based on the
+        IP protocol version.  Within a VRRP router, the virtual routers in
         each of the IPv4 and IPv6 address families are a domain unto
         themselves and do not overlap.  The election process provides dynamic
         failover in the forwarding responsibility should the Active Router become
@@ -99,8 +99,7 @@ please see http://xml.resource.org/authoring/README.html. -->
         The IETF has designated National Institute of Standards and Technology (NIST)
         "Guidance for NIST Staff on Using Inclusive Language in Documentary Standards"
         for its inclusive language guidelines.
-        This document obsoletes VRRP Version 3
-        <xref target="RFC5798"/>.
+        This document obsoletes VRRP Version 3 <xref target="RFC5798"/>.
       </t>
     </abstract>
   </front>
@@ -118,7 +117,7 @@ please see http://xml.resource.org/authoring/README.html. -->
         and it forwards packets sent to these IPv4 or IPv6 addresses.  VRRP
         Active Routers are configured with virtual IPv4 or IPv6 addresses,
         and VRRP Backup Routers infer the address family of the virtual
-        addresses being carried based on the transport protocol.  Within a
+        addresses being advertised based on the IP protocol version.  Within a
         VRRP router, the virtual routers in each of the IPv4 and IPv6 address
         families are a domain unto themselves and do not overlap.  The
         election process provides dynamic failover in the forwarding
@@ -733,7 +732,7 @@ IPvX A ----->*             *<---------- IPvX B
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  |Version| Type  | Virtual Rtr ID|   Priority    |IPvX Addr Count|
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- |   0   |    Max Adver Interval |          Checksum             |
+ |Reserve|    Max Adver Interval |          Checksum             |
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  |                                                               |
  +                                                               +
@@ -884,7 +883,7 @@ IPvX A ----->*             *<---------- IPvX B
           </t>
 	</section>
 	<section anchor="sect-5.2.6">
-	  <name>0 - Reserved</name>
+	  <name>Reserve</name>
 	  <t>
 	    This reserved field MUST be set to zero on transmission and ignored on
             reception.
@@ -1851,21 +1850,31 @@ This may entail the following:</t>
     Thanks to Stewart Bryant, Sasha Vainshtein, and Pascal Thubert for comments on the
     current document (RFC 5798 BIS). Thanks to Gyan Mishra, Paul Congdon, and
     Jon Rosen for discussions related to the removal of legacy technology appendicies.
+    Thanks to Dhruv Dhody and Donald Eastlake for comments and suggestions for improving
+    the IANA section.
   </t>
 </section>
 <section anchor="IANA" numbered="true" toc="default">
   <name>IANA Considerations</name>
   <t>
-    IANA has assigned the IPv4 multicast address 224.0.0.18 for VRRP.
+    In the "Local Network Control Block (224.0.0.0 - 224.0.0.255 (224.0.0/24))" of the
+    "IPv4 Multicast Address Space Registry" <xref target="RFC5771"/>, IANA has assigned
+    the IPv4 multicast address 224.0.0.18 for VRRP.
   </t>
   <t>
-    IANA has assigned an IPv6 link-local scope multicast address for VRRP
-    for IPv6.  The IPv6 multicast address is FF02:0:0:0:0:0:0:12.
+   In the "Link-Local Scope Multicast Addresses" block of the "IPv6 Multicast Address
+    Space Registry" <xref target="RFC3307"/>, IANA has assigned the IPv6 link-local
+    scope multicast address FF02:0:0:0:0:0:0:12 for VRRP for IPv6. 
   </t>
   <t>
-    IANA has reserved a block of IANA Ethernet unicast addresses for
-    VRRP for IPv6 in the range 00-00-5E-00-02-00 to 00-00-5E-00-02-FF (in hex).
+    In the "IANA Unicast 48-bit MAC Addresses" registry <xref target="RFC7042"/>,
+    IANA has assigned blocks of Ethernet unicast addresses as
+    follows (in hexadecimal):
   </t>
+  <artwork><![CDATA[
+    IPv4 VRRP   00-00-5E-00-01-00 to 00-00-5E-00-01-FF
+    IPv6 VRRP   00-00-5E-00-02-00 to 00-00-5E-00-02-FF
+  ]]></artwork>
 </section>
 
 </middle>
@@ -1873,11 +1882,14 @@ This may entail the following:</t>
   <references title="Normative References">
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml"/>
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2460.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.3307.xml"/>
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.3768.xml"/>
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.4291.xml"/>
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.4443.xml"/>
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.4861.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.5771.xml"/>
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.5798.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.7042.xml"/>
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8174.xml"/>
   </references>
   <references>
