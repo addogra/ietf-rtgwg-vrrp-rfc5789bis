@@ -1,0 +1,2044 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs),
+please see http://xml.resource.org/authoring/README.html. -->
+<rfc
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    category="std"
+    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-00"
+    ipr="trust200902"
+    obsoletes="5798"
+    updates=""
+    submissionType="IETF"
+    xml:lang="en"
+    tocInclude="true"
+    tocDepth="4"
+    symRefs="true"
+    sortRefs="true"
+    consensus="true"
+    version="3">
+  <!-- xml2rfc v2v3 conversion 2.38.1 -->
+  <!-- category values: std, bcp, info, exp, and historic
+       ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
+       or pre5378Trust200902
+       you can add the attributes updates="NNNN" and obsoletes="NNNN"
+       they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the
+	 full title is longer than 39 characters -->
+
+
+    <title abbrev="VRRP Version 3">Virtual Router Redundancy Protocol (VRRP) Version 3 for IPv4 and IPv6</title>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-rtgwg-vrrp-rfc5798bis.xml"/>
+
+    <!-- Another author who claims to be an editor -->
+
+    <author initials="A" surname="Lindem" fullname="Acee Lindem">
+      <organization>Cisco Systems</organization>
+      <address>
+	<postal>
+	  <street>301 Midenhall Way</street>
+	  <city>Cary</city>
+	  <region>NC</region>
+	  <code>27513</code>
+	  <country>USA</country>
+	</postal>
+	<email>acee@cisco.com</email>
+      </address>
+    </author>
+    <author initials="A" surname="Dogra" fullname="Aditya Dogra">
+      <organization>Cisco Systems</organization>
+      <address>
+	<postal>
+	  <street>Sarjapur Outer Ring Road</street>
+	  <city>Bangalore</city>
+	  <region>Karnataka</region>
+	  <code>560103</code>
+	  <country>India</country>
+	</postal>
+	<email>addogra@cisco.com</email>
+      </address>
+    </author>
+    <date/>
+    <area>General</area>
+    <keyword>RFC</keyword>
+    <keyword>VRRP</keyword>
+    <abstract>
+      <t>
+        This document defines the Virtual Router Redundancy Protocol (VRRP) for
+        IPv4 and IPv6.  It is version three (3) of the protocol, and it is
+        based on VRRP (version 2) for IPv4 that is defined in RFC 3768 and in
+        "Virtual Router Redundancy Protocol for IPv6".  VRRP specifies an
+        election protocol that dynamically assigns responsibility for a
+        virtual router to one of the VRRP routers on a LAN.  The VRRP router
+        controlling the IPv4 or IPv6 address(es) associated with a virtual
+        router is called the VRRP Active Router, and it forwards packets sent to these
+        IPv4 or IPv6 addresses.  VRRP Active Routers are configured with
+        virtual IPv4 or IPv6 addresses, and VRRP Backup Routers infer the
+        address family of the virtual addresses being advertised based on the
+        IP protocol version.  Within a VRRP router, the virtual routers in
+        each of the IPv4 and IPv6 address families are a domain unto
+        themselves and do not overlap.  The election process provides dynamic
+        failover in the forwarding responsibility should the Active Router become
+        unavailable.  For IPv4, the advantage gained from using VRRP is a
+        higher-availability default path without requiring configuration of
+        dynamic routing or router discovery protocols on every end-host.  For
+        IPv6, the advantage gained from using VRRP for IPv6 is a quicker
+        switchover to Backup Routers than can be obtained with standard IPv6
+        Neighbor Discovery mechanisms.
+      </t>
+      <t>
+	The VRRP terminology has been updated conform to inclusive language
+        guidelines for IETF technologies.
+        The IETF has designated National Institute of Standards and Technology (NIST)
+        "Guidance for NIST Staff on Using Inclusive Language in Documentary Standards"
+        for its inclusive language guidelines.
+        This document obsoletes VRRP Version 3 <xref target="RFC5798"/>.
+      </t>
+    </abstract>
+  </front>
+  <middle>
+    <section anchor="sect-1">
+      <name>Introduction</name>
+      <t>
+        This document defines the Virtual Router Redundancy Protocol (VRRP) for
+        IPv4 and IPv6.  It is version three (3) of the protocol.  It is based
+        on VRRP (version 2) for IPv4 that is defined in [RFC3768] and in
+        <xref target="VRRP-IPv6"/>.  VRRP specifies an election protocol that dynamically
+        assigns responsibility for a virtual router to one of the VRRP
+        routers on a LAN.  The VRRP router controlling the IPv4 or IPv6
+        address(es) associated with a virtual router is called the VRRP Active Router,
+        and it forwards packets sent to these IPv4 or IPv6 addresses.  VRRP
+        Active Routers are configured with virtual IPv4 or IPv6 addresses,
+        and VRRP Backup Routers infer the address family of the virtual
+        addresses being advertised based on the IP protocol version.  Within a
+        VRRP router, the virtual routers in each of the IPv4 and IPv6 address
+        families are a domain unto themselves and do not overlap.  The
+        election process provides dynamic failover in the forwarding
+        responsibility should the Active Router become unavailable.
+      </t>
+      <t>
+	The VRRP terminology has been updated conform to inclusive language
+        guidelines for IETF technologies.
+        The IETF has designated National Institute of Standards and Technology (NIST)
+        "Guidance for NIST Staff on Using Inclusive Language in Documentary Standards"
+        <xref target="NISTIR8366"/> for its inclusive language guidelines.
+        This document obsoletes VRRP Version 3 <xref target="RFC5798"/>.
+      </t>
+      <t>
+        VRRP provides a function similar to the proprietary protocols "Hot Standby Router Protocol (HSRP)"
+        <xref target="RFC2281"/> and "IP Standby Protocol" <xref target="IPSTB"/>.
+      </t>
+      <section anchor="sect-1.1">
+        <name>RFC 5798 Differences</name>
+        <t>
+          The following changes have been made from RFC 5798:
+        </t>
+        <ol spacing="normal" type="1">
+          <li>
+            The term for the VRRP router assuming forwarding responsibility has been changed
+            to "Active Router" to be consistent with IETF inclusive terminology. Additionally,
+            inconsistencies in RFC 5798 terminology for both "Active Router" and "Backup Router"
+            were corrected. Additionally, the undesirable term for attracting and dropping
+            unreachable packets was changed.
+          </li>
+          <li>
+            Errata pertaining to the state machines in <xref target="state-machine"/> were
+            corrected.
+          </li>
+          <li>
+            Appendices describing operation over legacy technologies (FDDI, Token
+            Ring, and ATM LAN Emulation) were removed.
+          </li>
+          <li>
+            A recommendation was added indicating that IPv6 Unsolicited Neighbor Advertisements
+            SHOULD be accepted by the Active and Backup Routers <xref target="sect-8.2.4"/>.
+          </li>
+          <li>
+            Checking that the Maximum Adverisement Intervals match is recommended although this will
+            not result in the VRRP packet being dropped <xref target="sect-7.1"/>. 
+          </li>
+          <li>
+            Miscellaneous editorial changes were made for readability.
+          </li>
+          <li>
+            The IANA considerations section was augmented include all the IPv4/IPv6
+            multicast address allocations and ethernet MAC address allocations.
+          </li>
+          <li>
+            Additional "Security Considerations" were added.
+          </li>
+        </ol>
+      </section>
+      <section anchor="sect-1.2">
+        <name>A Note on Terminology</name>
+        <t>
+	  This document discusses both IPv4 and IPv6 operations, and with
+          respect to the VRRP protocol, many of the descriptions and procedures
+          are common.  In this document, it would be less verbose to be able to
+          refer to "IP" to mean either "IPv4 or IPv6".  However, historically,
+          the term "IP" usually refers to IPv4.  For this reason, in this
+          specification, the term "IPvX" (where X is 4 or 6) is introduced to
+          mean either "IPv4" or "IPv6".  In this text, where the IP version
+          matters, the appropriate term is used and the use of the term "IP" is
+          avoided.
+        </t>
+      </section>
+      <section anchor="sect-1.3">
+        <name>IPv4</name>
+        <t>
+	  There are a number of methods that an IPv4 end-host can use to
+          determine its first-hop router for a particular IPv4 destination.
+          These include running (or snooping) a dynamic routing protocol such
+          as Routing Information Protocol (RIP) <xref target="RFC2453"/> or OSPF version 2
+	  <xref target="RFC2328"/>, running an ICMP router discovery client
+        <xref target="RFC1256"/>, or using a statically configured default route.</t>
+        <t>
+	  Running a dynamic routing protocol on every end-host may be
+          infeasible for a number of reasons, including administrative
+          overhead, processing overhead, security issues, or the lack of an
+          implementation for a particular platform.  Neighbor or router discovery
+          protocols may require active participation by all hosts on a network,
+          requiring large timer values to reduce protocol overhead associated
+          with the associated protocol packets processing for each host.  This can result in
+          a significant delay in the detection of an unreachable router and,
+          such a delay may introduce unacceptably long periods of unreachability for the
+          default route.
+        </t>
+        <t>
+	  The use of a statically configured default route is quite popular since it
+          minimizes configuration and processing overhead on the end-host and
+          is supported by virtually every IPv4 implementation.  This mode of
+          operation is likely to persist as dynamic host configuration
+          protocols <xref target="RFC2131"/> are deployed, which typically provide
+          configuration for an end-host IPv4 address and default gateway.
+          However, this creates a single point of failure.  Loss of the default
+          router results in a catastrophic event, isolating all end-hosts that
+        are unable to detect an available alternate path.</t>
+        <t>
+	  The Virtual Router Redundancy Protocol (VRRP) is designed to
+          eliminate the single point of failure inherent in an network utilizing
+          static default routing.  VRRP specifies an election protocol that
+          dynamically assigns responsibility for a virtual router to one of the
+          VRRP routers on a LAN.  The VRRP router controlling the IPv4
+          address(es) associated with a virtual router is called the Active Router and
+          forwards packets sent to these IPv4 addresses.  The election process
+          provides dynamic failover in the forwarding responsibility should the
+          Active Router become unavailable.  Any of the virtual router's IPv4
+          addresses on a LAN can then be used as the default first hop
+	  router by end-hosts.  The advantage gained from using VRRP is a
+          higher availability default path without requiring configuration of
+        dynamic routing or router discovery protocols on every end-host.</t>
+      </section>
+      <section anchor="sect-1.4">
+        <name>IPv6</name>
+        <t>
+	  IPv6 hosts on a LAN will usually learn about one or more default
+          routers by receiving Router Advertisements sent using the IPv6
+          Neighbor Discovery (ND) protocol <xref target="RFC4861"/>.  The Router
+          Advertisements are multicast periodically at a rate at which the hosts
+          will learn about the default routers in a few minutes.  They are not
+          sent frequently enough to rely on the absence of the Router
+        Advertisement to detect router failures.</t>
+        <t>
+	  Neighbor Discovery (ND) includes a mechanism called Neighbor
+          Unreachability Detection to detect the failure of a neighbor node
+          (router or host) or the forwarding path to a neighbor.  This is done
+          by sending unicast ND Neighbor Solicitation messages to the neighbor
+          node.  To reduce the overhead of sending Neighbor Solicitations, they
+          are only sent to neighbors to which the node is actively sending
+          traffic and only after there has been no positive indication that the
+          router is up for a period of time.  Using the default parameters in
+          ND, it will take a host about 38 seconds to learn that a router is
+          unreachable before it will switch to another default router.  This
+          delay would be very noticeable to users and cause some transport
+        protocol implementations to time out.</t>
+        <t>
+	  While the ND unreachability detection could be made quicker by
+          changing the parameters to be more aggressive (note that the current
+          lower limit for this is 5 seconds), this would have the downside of
+          significantly increasing the overhead of ND traffic, especially when
+          there are many hosts all trying to determine the reachability of one
+        or more routers.</t>
+        <t>
+	  The Virtual Router Redundancy Protocol for IPv6 provides a much
+          faster switchover to an alternate default router than can be obtained
+          using standard ND procedures.  Using VRRP, a Backup Router can take
+          over for a failed default router in around three seconds (using VRRP
+          default parameters).  This is done without any interaction with the
+        hosts and a minimum amount of VRRP traffic.</t>
+      </section>
+      <section anchor="sect-1.5">
+        <name>Requirements Language</name>
+        <t>
+          The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+          NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+          "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in BCP 14 <xref target="RFC2119"/> <xref
+          target="RFC8174"/> when, and only when, they appear in all capitals,
+          as shown here.
+        </t>
+      </section>
+      <section anchor="sect-1.6">
+        <name>Scope</name>
+        <t>
+	  The remainder of this document describes the features, design goals,
+          and theory of operation of VRRP.  The message formats, protocol
+          processing rules, and state machine that guarantee convergence to a
+          single Active Router are presented.  Finally, operational
+          issues related to MAC address mapping, handling of ARP requests,
+          generation of ICMP redirect messages, and security issues are
+        addressed.</t>
+      </section>
+      <section anchor="sect-1.7">
+        <name>Definitions</name>
+        <dl newline="false" spacing="normal" indent="24">
+	  <dt>VRRP Router</dt>
+	  <dd>
+	    <t>
+	      A router running the Virtual Router
+	      Redundancy Protocol.  It may participate as
+              one or more virtual routers.
+	    </t>
+	  </dd>
+	  <dt>Virtual Router</dt>
+	  <dd>
+	    <t>
+	      An abstract object managed by VRRP that acts
+	      as a default router for hosts on a shared
+              LAN.  It consists of a Virtual Router
+              Identifier and either a set of associated
+              IPv4 addresses or a set of associated IPv6
+              addresses across a common LAN.  A VRRP Router
+              may back up one or more virtual routers.
+	    </t>
+	  </dd>
+	  <dt>IP Address Owner</dt>
+	  <dd>
+	    <t>
+	      The VRRP router that has the virtual router's
+	      IPvX address(es) as real interface
+              address(es).  This is the router that, when
+              up, will respond to packets addressed to one
+              of these IPvX addresses for ICMP pings, TCP
+              connection requests, etc.
+	    </t>
+	  </dd>
+	  <dt>Primary IP Address</dt>
+	  <dd>
+	    <t>
+	      In IPv4, an IPv4 address selected from the
+	      set of real interface addresses.  One
+              possible selection algorithm is to always
+              select the first address.  In IPv4 mode, VRRP
+              advertisements are always sent using the
+              primary IPv4 address as the source of the
+              IPv4 packet.  In IPv6, the link-local address
+              of the interface over which the packet is
+              transmitted is used.
+	    </t>
+	  </dd>
+	  <dt>Active Router</dt>
+	  <dd>
+	    <t>
+	      The VRRP router that is assuming the
+	      responsibility of forwarding packets sent to
+              the IPvX address(es) associated with the
+              virtual router, answering ARP requests
+	      for the IPv4 address(es), and answering ND
+              requests for the IPv6 address(es).  Note that
+              if the IPvX address owner is available, then
+              it will always become the Active Router.
+	    </t>
+	  </dd>
+	  <dt>Backup Router(s)</dt>
+	  <dd>
+	    <t>
+	      The set of VRRP routers available to assume
+	      forwarding responsibility for a virtual
+              router should the current Active Router fail.
+	    </t>
+	  </dd>
+        </dl>
+      </section>
+    </section>
+    <section anchor="sect-2">
+      <name>Required Features</name>
+      <t>
+	This section describes the set of features that were considered
+        mandatory and that guided the design of VRRP.
+      </t>
+      <section anchor="sect-2.1">
+	<name>IPvX Address Backup</name>
+	<t>
+	  Backup of an IPvX address or addresses is the primary function of
+          VRRP.  When providing election of a Active Router and the
+          additional functionality described below, the protocol should
+        strive to:</t>
+	<ul spacing="normal">
+	  <li>Minimize the duration of unreachability.</li>
+	  <li>Minimize the steady-state bandwidth overhead and processing
+          complexity.</li>
+	  <li>Function over a wide variety of multiaccess LAN technologies
+          capable of supporting IPvX traffic.</li>
+	  <li>Allow multiple virtual routers on a network for load-balancing.</li>
+	  <li>Support multiple logical IPvX subnets on a single LAN segment.</li>
+	</ul>
+      </section>
+      <section anchor="sect-2.2">
+	<name>Preferred Path Indication</name>
+	<t>
+	  A simple model of Active Router election among a set of redundant routers is
+          to treat each router with equal preference and claim victory after
+          converging to any router as Active Router.  However, there are likely to be
+          many environments where there is a distinct preference (or range of
+          preferences) among the set of redundant routers.  For example, this
+          preference may be based upon access link cost or speed, router
+          performance or reliability, or other policy considerations.  The
+          protocol should allow the expression of this relative path preference
+          in an intuitive manner and guarantee Active Router convergence to the most
+          preferential router currently available.
+        </t>
+      </section>
+      <section anchor="sect-2.3">
+	<name>Minimization of Unnecessary Service Disruptions</name>
+	<t>
+	  Once Active Router election has been performed, any unnecessary transitions
+          between Active and Backup Routers can result in a disruption in
+          service.  The protocol should ensure that, after Active Router election, no
+          state transition is triggered by any Backup Router of equal or lower
+          preference as long as the Active Router continues to function properly.
+        </t>
+	<t>
+	  Some environments may find it beneficial to avoid the state
+          transition triggered when a router that is preferred over the current
+          Active Router becomes available.  It may be useful to support an override of
+          the immediate restoration to the preferred path.
+        </t>
+      </section>
+      <section anchor="sect-2.4">
+	<name>Efficient Operation over Extended LANs</name>
+	<t>
+	  Sending IPvX packets, i.e., sending either IPv4 or IPv6, on a
+          multiaccess LAN requires mapping from an IPvX address to a MAC
+          address.  The use of the virtual router MAC address in an extended
+          LAN employing learning bridges can have a significant effect on the
+          bandwidth overhead of packets sent to the virtual router.  If the
+          virtual router MAC address is never used as the source address in a
+          link-level frame, then the MAC address location is never learned,
+          resulting in flooding of all packets sent to the virtual router.  To
+          improve the efficiency in this environment, the protocol should do the
+          following:
+        </t>
+        <ol spacing="normal" type="1">
+          <li>
+            Use the virtual router MAC address as the source in a packet sent
+            by the Active Router to trigger MAC learning.
+          </li>
+          <li>
+            Trigger a message immediately after transitioning to the
+            Active Router to update the MAC learning.
+          </li>
+          <li>
+            Trigger periodic messages from the Active Router to
+            maintain the MAC address cache.
+          </li>
+        </ol>
+      </section>
+      <section anchor="sect-2.5">
+	<name>Sub-Second Operation for IPv4 and IPv6</name>
+	<t>
+	  Sub-second detection of Active Router failure is needed in both
+          IPv4 and IPv6 environments.  Earlier work proposed that sub-second
+          operation was for IPv6 and this specification leverages that earlier
+          approach for both IPv4 and IPv6.
+        </t>
+	<t>
+	  One possible problematic scenario when using small
+          VRRP_Advertisement_Intervals may occur when a router is generating
+          more packets on a LAN than it can transmit, and a queue
+          builds up on the router.  When this occurs, it is possible that packets being
+          transmitted onto the VRRP-protected LAN could see larger queueing
+          delay than the smallest VRRP Advertisement_Interval.  In this case,
+          the Active_Down_Interval may be small enough that normal queuing
+          delays might cause a Backup Router to conclude that the Active Router is down,
+          and, hence, promote itself to Active Router.  Very shortly afterwards, the
+          delayed VRRP packets from the Active Router cause a switch back to Backup
+          Router.  Furthermore, this process can repeat many times per second,
+          causing significant disruption to traffic.  To mitigate this problem,
+          priority forwarding of VRRP packets should be considered.  The Active
+          Router SHOULD observe that this situation is occurring and log the problem.
+        </t>
+      </section>
+    </section>
+    <section anchor="sect-3">
+      <name>VRRP Overview</name>
+      <t>
+	VRRP specifies an election protocol to provide the virtual router
+        function described earlier.  All protocol messaging is performed
+        using either IPv4 or IPv6 multicast datagrams. Thus, the protocol can
+        operate over a variety of multiaccess LAN technologies supporting
+        IPvX multicast.  Each link of a VRRP virtual router has a single
+        well-known MAC address allocated to it.  This document currently only
+        details the mapping to networks using an IEEE 802 48-bit MAC
+        address.  The virtual router MAC address is used as the source in all
+        periodic VRRP messages sent by the Active Router to enable MAC
+      learning by layer-2 bridges in an extended LAN.</t>
+      <t>
+	A virtual router is defined by its virtual router identifier (VRID)
+        and a set of either IPv4 or IPv6 address(es).  A VRRP router may
+        associate a virtual router with its real address on an interface.
+        The scope of each virtual router is restricted to a single LAN.  A
+        VRRP router may be configured with additional virtual router mappings
+        and priority for virtual routers it is willing to back up.  The
+        mapping between the VRID and its IPvX address(es) must be coordinated
+        among all VRRP routers on a LAN.
+      </t>
+      <t>
+	There is no restriction against reusing a VRID with a different
+        address mapping on different LANs, nor is there a restriction against
+        using the same VRID number for a set of IPv4 addresses and a set of
+        IPv6 addresses. However, these are two different virtual routers.
+      </t>
+      <t>
+	To minimize network traffic, only the Active Router for each virtual router
+        sends periodic VRRP Advertisement messages.  A Backup Router will not
+        attempt to preempt the Active Router unless it has a higher priority.  This
+        eliminates service disruption unless a more preferred path becomes
+        available.  It's also possible to administratively prohibit Active Router
+        preemption attempts.  The only exception is that a VRRP router will
+        always become the Active Router for any virtual router associated with
+        address(es) it owns.  If the Active Router becomes unavailable, then the highest-
+        priority Backup Router will transition to Active Router after a short delay,
+        providing a controlled transition of virtual router
+        responsibility with minimal service interruption.
+      </t>
+      <t>
+	The VRRP protocol design provides rapid transition from Backup to
+        Active Router to minimize service interruption and incorporates
+        optimizations that reduce protocol complexity while guaranteeing
+        controlled Active Router transition for typical operational scenarios.  These
+        optimizations result in an election protocol with minimal runtime
+        state requirements, minimal active protocol states, and a single
+        message type and sender.  The typical operational scenarios are
+        defined to be two redundant routers and/or distinct path preferences
+        for each router.  A side effect when these assumptions are violated,
+        i.e., more than two redundant paths with equal preference, is
+        that duplicate packets may be forwarded for a brief period during
+        Active Router election.  However, the typical scenario assumptions are
+        likely to cover the vast majority of deployments, loss of the Active
+        Router is infrequent, and the expected duration for Active Router election
+        convergence is quite small (&lt; 1 second ).  Thus, the VRRP optimizations
+        represent significant simplifications in the protocol design while incurring
+      an insignificant probability of brief network disruption.</t>
+    </section>
+    <section anchor="sect-4">
+      <name>Sample Configurations</name>
+      <section anchor="sect-4.1">
+	<name>Sample Configuration 1</name>
+	<t>
+	  The following figure shows a simple network with two VRRP routers
+          implementing one virtual router.
+        </t>
+        <artwork><![CDATA[
+
+        +-----------+ +-----------+
+        | Router-1  | | Router-2  |
+        |(AR VRID=1)| |(BR VRID=1)|
+        |           | |           |
+VRID=1  +-----------+ +-----------+
+IPvX A------>*            *<---------IPvX B
+             |            |
+             |            |
+-------------+------------+--+-----------+-----------+-----------+
+                             ^           ^           ^           ^
+                             |           |           |           |
+     Default Router          |           |           |           |
+     IPvX addresses ---> (IPvX A)    (IPvX A)    (IPvX A)    (IPvX A)
+                             |           |           |           |
+                    IPvX H1->* IPvX  H2->* IPvX  H3->*  IPvX H4->*
+                          +--+--+     +--+--+     +--+--+     +--+--+
+                          |  H1 |     |  H2 |     |  H3 |     |  H4 |
+                          +-----+     +-----+     +--+--+     +--+--+
+Legend:
+      --+---+---+-- = Ethernet, Token Ring, or FDDI
+                  H = Host computer
+                 AR = Active Router
+                 BR = Backup Router
+                 *  =  IPvX Address: X is 4 everywhere in IPv4 case
+                                     X is 6 everywhere in IPv6 case
+                 (IPvX) = Default Router for hosts
+
+
+
+                 ]]></artwork>
+        <t>
+          In the IPv4 case, i.e., IPvX is IPv4 everywhere in the figure,
+          each router is permanently assigned an IPv4 address on the LAN
+          interface (Router-1 is assigned IPv4 A and Router-2 is assigned IPv4 B), and
+          each host installs a static default route through one of the routers
+          (in this example, they all use Router-1's IPv4 A).
+        </t>
+        <t>
+          In the IPv6 case, i.e., IPvX is IPv6 everywhere in the figure, each router has its own
+          Link-Local IPv6 address on the LAN interface for the VRRP protocol and a link-local
+          IPv6 address per VRID that is shared with the other routers that serve the same VRID.
+          Each host learns a default route from Router
+          Advertisements through one of the routers (in this example, they all
+        use Router-1's IPv6 Link-Local A).</t>
+        <t>
+          In an IPv4 VRRP environment, each router supports reception and transmission for
+          the exact same IPv4 address.  Router-1 is said to be the IPv4
+          address owner of IPv4 A, and Router-2 is the IPv4 address owner of
+          IPv4 B.  A virtual router is then defined by associating a unique
+          identifier (the virtual router ID) with the address owned by a
+          router.
+        </t>
+        <t>
+          In an IPv6 VRRP environment, each router supports reception and transmission with
+          the exact same Link-Local IPv6 address.
+          In an IPv6 VRRP environment, each router will support transmission and
+          reception for the Link-Local IPv6 addresses associated with both VRIDs.
+          Router-1 is said to be the IPv6 address owner
+          of IPv6 A, and Router-2 is the IPv6 address owner of IPv6 B.  A virtual
+          router is then defined by associating a unique identifier (the
+          virtual router ID) with the address owned by a router.
+        </t>
+        <t>
+          Finally, in both the IPv4 and IPv6 cases, the VRRP protocol manages
+          virtual router failover to a Backup Router.
+        </t>
+        <t>
+          The IPv4 example above shows a virtual router configured to cover the
+          IPv4 address owned by Router-1 (VRID=1, IPv4_Address=A).  When VRRP is
+          enabled on Router-1 for VRID=1, it will assert itself as Active Router, with
+          priority = 255, since it is the IP address owner for the virtual
+          router IP address.  When VRRP is enabled on Router-2 for VRID=1, it will
+          transition to Backup Router, with priority = 100 (the default priority is
+          100), since it is not the IPv4 address owner.  If Router-1 should fail,
+          then the VRRP protocol will transition Router-2 to Active Router, temporarily
+          taking over forwarding responsibility for IPv4 A to provide
+          uninterrupted service to the hosts.  When Router-1 returns to service, it
+        will re-assert itself as Active Router.</t>
+        <t>
+          The IPv6 example above shows a virtual router configured to cover the
+          IPv6 address owned by Router-1 (VRID=1, IPv6_Address=A).  When VRRP is
+          enabled on Router-1 for VRID=1, it will assert itself as Active Router, with
+          priority = 255, since it is the IPv6 address owner for the virtual
+          router IPv6 address.  When VRRP is enabled on Router-2 for VRID=1, it
+          will transition to Backup Router, with priority = 100 (the default priority
+          is 100), since it is not the IPv6 address owner.  If Router-1 should
+          fail, then the VRRP protocol will transition Router-2 to Active Router,
+          temporarily taking over forwarding responsibility for IPv6 A to
+          provide uninterrupted service to the IPv6 hosts.
+        </t>
+        <t>
+          Note that in both cases in this example, IPvX B is not backed up and it
+          is only used by Router-2 as its interface address.  In order to back up
+          IPvX B, a second virtual router must be configured.  This is shown in
+        the next section.</t>
+      </section>
+      <section anchor="sect-4.2">
+        <name>Sample Configuration 2</name>
+        <t>
+          The following figure shows a configuration with two virtual routers
+          with the hosts splitting their traffic between them.
+        </t>
+        <artwork><![CDATA[
+        +-----------+  +-----------+
+        |  Router-1 |  | Router-2  |
+        |(AR VRID=1)|  |(BR VRID=1)|
+        |(BR VRID=2)|  |(AR VRID=2)|
+VRID=1  +-----------+  +-----------+  VRID=2
+IPvX A ----->*             *<---------- IPvX B
+             |             |
+             |             |
+   ----------+-------------+-+-----------+-----------+-----------+
+                             ^           ^           ^           ^
+                             |           |           |           |
+     Default Router          |           |           |           |
+     IPvX addresses ---> (IPvX A)    (IPvX A)    (IPvX A)    (IPvX A)
+                             |           |           |           |
+                    IPvX H1->* IPvX  H2->* IPvX  H3->*  IPvX H4->*
+                          +--+--+     +--+--+     +--+--+     +--+--+
+                          |  H1 |     |  H2 |     |  H3 |     |  H4 |
+                          +-----+     +-----+     +--+--+     +--+--+
+
+ Legend:
+      ---+---+---+--  =  Ethernet, Token Ring, or FDDI
+                   H  =  Host computer
+                  AR  =  Active Router
+                  BR  =  Backup Router
+                   *  =  IPvX Address: X is 4 everywhere in IPv4 case
+                                       X is 6 everywhere in IPv6 case
+              (IPvX)  =  Default Router for hosts
+
+
+              ]]></artwork>
+        <t>
+          In the IPv4 example above, i.e., IPvX is IPv4 everywhere in the
+          figure, half of the hosts have configured a static default route through
+          Router-1's IPv4 A, and half are using Router-2's IPv4 B.  The configuration
+          of virtual router VRID=1 is exactly the same as in the first example
+          (see <xref target="sect-4.1"/>), and a second virtual router has been added to
+          cover the IPv4 address owned by Router-2 (VRID=2, IPv4_Address=B).  In
+          this case, Router-2 will assert itself as Active Router for VRID=2 while Router-1
+          will act as a Backup Router.  This scenario demonstrates a deployment
+          providing load splitting when both routers are available, while
+          providing full redundancy for robustness.
+        </t>
+        <t>
+          In the IPv6 example above, i.e., IPvX is IPv6 everywhere in the
+          figure, half of the hosts have learned a default route through
+          Router-1's IPv6 A, and half are using Router-2's IPv6 B.  The configuration
+          of virtual router VRID=1 is exactly the same as in the first example
+          (see <xref target="sect-4.1"/>), and a second virtual router has been added to
+          cover the IPv6 address owned by Router-2 (VRID=2, IPv6_Address=B).  In
+          this case, Router-2 will assert itself as Active Router for VRID=2 while Router-1
+          will act as a Backup Router.  This scenario demonstrates a deployment
+          providing load splitting when both routers are available, while
+          providing full redundancy for robustness.
+        </t>
+        <t>
+          Note that the details of load-balancing are out of scope of this
+          document.  However, in a case where the servers need different
+          weights, it may not make sense to rely on router advertisements alone
+          to balance the host traffic between the routers.
+        </t>
+      </section>
+    </section>
+    <section anchor="sect-5">
+      <name>Protocol</name>
+      <t>
+        The purpose of the VRRP packet is to communicate to all VRRP routers
+        the priority and the state of the Active Router associated with the
+        VRID.
+      </t>
+      <t>
+        When VRRP is protecting an IPv4 address, VRRP packets are sent
+        encapsulated in IPv4 packets.  They are sent to the IPv4 multicast
+        address assigned to VRRP.
+      </t>
+      <t>
+        When VRRP is protecting an IPv6 address, VRRP packets are sent
+        encapsulated in IPv6 packets.  They are sent to the IPv6 multicast
+        address assigned to VRRP.
+      </t>
+      <section anchor="sect-5.1">
+        <name>VRRP Packet Format</name>
+        <t>
+          This section defines the format of the VRRP packet and the relevant
+          fields in the IP header.
+        </t>
+        <artwork><![CDATA[
+  0                   1                   2                   3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |                    IPv4 Fields or IPv6 Fields                 |
+ ...                                                             ...
+ |                                                               |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |Version| Type  | Virtual Rtr ID|   Priority    |IPvX Addr Count|
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |Reserve|    Max Adver Interval |          Checksum             |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |                                                               |
+ +                                                               +
+ |                       IPvX Address(es)                        |
+ +                                                               +
+ +                                                               +
+ +                                                               +
+ +                                                               +
+ |                                                               |
+ +                                                               +
+ |                                                               |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ ]]></artwork>
+	<section anchor="sect-5.1.1">
+	  <name>IPv4 Field Descriptions</name>
+	  <section anchor="sect-5.1.1.1">
+	    <name>Source Address</name>
+	    <t>
+	      This is the primary IPv4 address of the interface from which the packet is being
+              sent.
+            </t>
+	  </section>
+	  <section anchor="sect-5.1.1.2">
+	    <name>Destination Address</name>
+	    <t>
+	      The IPv4 multicast address as assigned by the IANA for VRRP is:
+            </t>
+	    <t indent="4">
+	      224.0.0.18
+            </t>
+	    <t>
+	      This is a link-local scope multicast address.  Routers MUST NOT
+              forward a datagram with this destination address, regardless of its
+              TTL.
+            </t>
+	  </section>
+	  <section anchor="sect-5.1.1.3">
+	    <name>TTL</name>
+	    <t>
+	      The TTL MUST be set to 255.  A VRRP router receiving a packet with
+              the TTL not equal to 255 MUST discard the packet.
+            </t>
+	  </section>
+	  <section anchor="sect-5.1.1.4">
+	    <name>Protocol</name>
+	    <t>
+	      The IPv4 protocol number assigned by the IANA for VRRP is 112
+              (decimal).
+            </t>
+	  </section>
+	</section>
+	<section anchor="sect-5.1.2">
+	  <name>IPv6 Field Descriptions</name>
+	  <section anchor="sect-5.1.2.1">
+	    <name>Source Address</name>
+	    <t>
+	      This is the IPv6 link-local address of the interface from which the packet is
+              being sent.
+            </t>
+	  </section>
+	  <section anchor="sect-5.1.2.2">
+	    <name>Destination Address</name>
+	    <t>
+              The IPv6 multicast address assigned by the IANA for VRRP is:
+            </t>
+	    <t indent="4">
+	      FF02:0:0:0:0:0:0:12
+	    </t>
+	    <t>
+	      This is a link-local scope multicast address.  Routers MUST NOT
+              forward a datagram with this destination address, regardless of its
+              Hop Limit.
+            </t>
+	  </section>
+	  <section anchor="sect-5.1.2.3">
+	    <name>Hop Limit</name>
+	    <t>
+	      The Hop Limit MUST be set to 255.  A VRRP router receiving a packet
+              with the Hop Limit not equal to 255 MUST discard the packet.
+            </t>
+	  </section>
+	  <section anchor="sect-5.1.2.4">
+	    <name>Next Header</name>
+	    <t>
+	      The IPv6 Next Header protocol assigned by the IANA for VRRP is 112
+              (decimal).
+            </t>
+	  </section>
+	</section>
+      </section>
+      <section anchor="sect-5.2">
+	<name>VRRP Field Descriptions</name>
+	<section anchor="sect-5.2.1">
+	  <name>Version</name>
+	  <t>
+	    The version field specifies the VRRP protocol version of this packet.
+            This document defines version 3.
+          </t>
+	</section>
+	<section anchor="sect-5.2.2">
+	  <name>Type</name>
+	  <t>
+	    The type field specifies the type of this VRRP packet.  The only
+            packet type defined in this version of the protocol is:
+          </t>
+	  <t indent="4">
+	    1 - ADVERTISEMENT
+          </t>
+	  <t>
+	    A packet with unknown type MUST be discarded.
+          </t>
+	</section>
+	<section anchor="sect-5.2.3">
+	  <name>Virtual Rtr ID (VRID)</name>
+	  <t>
+	    The Virtual Rtr ID field identifies the virtual router for which this
+            packet is reporting status.
+          </t>
+	</section>
+	<section anchor="sect-5.2.4">
+	  <name>Priority</name>
+	  <t>
+	    The priority field specifies the sending VRRP router's priority for
+            the virtual router.  Higher values equal higher priority.  This field
+            is an 8-bit unsigned integer field.
+          </t>
+	  <t>
+	    The priority value for the VRRP router that owns the IPvX address
+            associated with the virtual router MUST be 255 (decimal).
+          </t>
+	  <t>
+	    VRRP routers backing up a virtual router MUST use priority values
+            between 1-254 (decimal).  The default priority value for VRRP routers
+            backing up a virtual router is 100 (decimal).
+          </t>
+	  <t>
+	    The priority value zero (0) has special meaning, indicating that the
+            current Active Router has stopped participating in VRRP.  This is used to
+            trigger Backup Routers to quickly transition to Active Router without having
+            to wait for the current Active Router to time out.
+          </t>
+	</section>
+	<section anchor="sect-5.2.5">
+	  <name>IPvX Addr Count</name>
+	  <t>
+	    This is the number of either IPv4 addresses or IPv6 addresses
+            contained in this VRRP advertisement.  The minimum value is 1.
+          </t>
+	</section>
+	<section anchor="sect-5.2.6">
+	  <name>Reserve</name>
+	  <t>
+	    This reserved field MUST be set to zero on transmission and ignored on
+            reception.
+          </t>
+	</section>
+	<section anchor="sect-5.2.7">
+	  <name>Maximum Advertisement Interval (Max Adver Int)</name>
+	  <t>
+	    The Maximum Advertisement Interval is a 12-bit field that indicates
+            the time interval (in centiseconds) between ADVERTISEMENTS.  The
+            default is 100 centiseconds (1 second).
+          </t>
+	  <t>
+	    Note that higher-priority Active Routers with slower transmission
+            rates than their Backup Routers are unstable.  This is because
+            lower-priority nodes configured to faster rates could come online and
+            decide they should be Active Routers before they have heard anything from
+            the higher-priority Active Router with a slower rate.  When this happens, it
+            is temporary: once the lower-priority node does hear from the higher-priority
+            Active Router, it will relinquish Active Router status.
+          </t>
+	</section>
+	<section anchor="sect-5.2.8">
+	  <name>Checksum</name>
+	  <t>
+	    The checksum field is used to detect data corruption in the VRRP
+            message.
+          </t>
+	  <t>
+	    The checksum is the 16-bit one's complement of the one's complement
+            sum of the entire VRRP message starting with the version field and a
+            "pseudo-header" as defined in Section 8.1 of <xref target="RFC2460"/>.  The next
+            header field in the "pseudo-header" should be set to 112 (decimal)
+            for VRRP.  For computing the checksum, the checksum field is set to
+            zero.  See RFC1071 for more detail <xref target="RFC1071"/>.
+          </t>
+	</section>
+	<section anchor="sect-5.2.9">
+	  <name>IPvX Address(es)</name>
+	  <t>
+	    This refers to one or more IPvX addresses associated with the virtual
+            router.  The number of addresses included is specified in the "IP Addr Count" field.
+            These fields are used for troubleshooting
+            misconfigured routers.  If more than one address is sent, it is
+            recommended that all routers be configured to send these addresses in
+            the same order to simplify comparisons.
+          </t>
+	  <t>
+	    For IPv4 addresses, this refers to one or more IPv4 addresses that
+            are backed up by the virtual router.
+          </t>
+	  <t>
+	    For IPv6, the first address must be the IPv6 link-local address
+            associated with the virtual router.
+          </t>
+	  <t>
+	    This field contains either one or more IPv4 addresses, or one or more
+            IPv6 addresses. The addresses, IPv4 or IPv6 but not both, MUST be the
+            same as the VRRP protocol packet address family.
+          </t>
+	</section>
+      </section>
+    </section>
+    <section anchor="state-machine">
+      <name>Protocol State Machine</name>
+      <section anchor="sect-6.1">
+	<name>Parameters Per Virtual Router</name>
+	<dl newline="false" spacing="normal" indent="28">
+	  <dt>VRID</dt>
+	  <dd>
+	    <t>
+	      Virtual Router Identifier.  Configurable
+	      value in the range 1-255 (decimal).  There
+              is no default.
+	    </t>
+	  </dd>
+	  <dt>Priority</dt>
+	  <dd>
+	    <t>
+	      Priority value to be used by this VRRP
+	      router in Active Router election for this
+              virtual router.  The value of 255
+              (decimal) is reserved for the router that
+              owns the IPvX address associated with the
+              virtual router.  The value of 0 (zero) is
+              reserved for the Active Router to
+              indicate it is releasing responsibility
+              for the virtual router.  The range 1-254
+              (decimal) is available for VRRP routers
+              backing up the virtual router.  Higher
+              values indicate higher priorities.  The
+              default value is 100 (decimal).
+	    </t>
+	  </dd>
+	  <dt>IPv4_Addresses</dt>
+	  <dd>
+	    <t>
+	      One or more IPv4 addresses associated
+	      with this virtual router.  Configured
+              list of addresses with no default.
+	    </t>
+	  </dd>
+	  <dt>IPv6_Addresses</dt>
+	  <dd>
+	    <t>
+	      One or more IPv6 addresses associated
+	      with this virtual router.  Configured
+              list of addresses with no default.  The first
+              address must be the Link-Local address
+              associated with the virtual router.
+	    </t>
+	  </dd>
+	  <dt>Advertisement_Interval</dt>
+	  <dd>
+	    <t>
+	      Time interval between ADVERTISEMENTS
+	      (centiseconds).  Default is 100
+              centiseconds (1 second).
+	    </t>
+	  </dd>
+	  <dt>Active_Adver_Interval</dt>
+	  <dd>
+	    <t>
+	      Advertisement interval contained in
+	      ADVERTISEMENTS received from the Active
+              Router (centiseconds).  This value is saved by
+              virtual routers in the Backup state and
+              used to compute Skew_Time and
+              Active_Down_Interval.  The initial value
+              is the same as Advertisement_Interval.
+	    </t>
+	  </dd>
+	  <dt>Skew_Time</dt>
+	  <dd>
+	    <t>
+	      Time to skew Active_Down_Interval in
+	      centiseconds.  Calculated as:
+            </t>
+            <t indent="4">
+	      (((256 - priority) * Active_Adver_Interval) / 256)
+	    </t>
+	  </dd>
+	  <dt>Active_Down_Interval</dt>
+	  <dd>
+	    <t>
+	      Time interval for the Backup Router to declare
+	      Active Router down (centiseconds).
+              Calculated as:
+            </t>
+            <t indent="4">
+	      (3 * Active_Adver_Interval) + Skew_time
+	    </t>
+	  </dd>
+	  <dt>Preempt_Mode</dt>
+	  <dd>
+	    <t>
+	      Controls whether a (starting or
+	      restarting) higher-priority Backup Router
+              preempts a lower-priority Active Router.
+              Values are True to allow preemption and
+              False to prohibit preemption.  Default is
+              True.
+	    </t>
+	    <t>
+	      Note: The exception is that the router
+              that owns the IPvX address associated
+              with the virtual router always preempts,
+              independent of the setting of this flag.
+	    </t>
+	  </dd>
+	  <dt>Accept_Mode</dt>
+	  <dd>
+	    <t>
+	      Controls whether a virtual router in
+	      Active state will accept packets
+              addressed to the address owner's IPvX
+              address as its own even if it is not the IPvX
+              address owner.  The default is False.
+              Deployments that rely on, for example,
+              pinging the address owner's IPvX address
+              may wish to configure Accept_Mode to
+              True.
+	    </t>
+	    <t>
+	      Note: IPv6 Neighbor Solicitations and
+              Neighbor Advertisements MUST NOT be
+              dropped when Accept_Mode is False.
+	    </t>
+	  </dd>
+	  <dt>Virtual_Router_MAC_Address</dt>
+	  <dd>
+	    <t>
+	      The MAC address used for the source MAC
+	      address in VRRP advertisements and
+              advertised in ARP responses as the MAC
+              address to use for IPvX Addresses.
+	    </t>
+	  </dd>
+	</dl>
+      </section>
+      <section anchor="sect-6.2">
+	<name>Timers</name>
+	<dl newline="false" spacing="normal" indent="25">
+	  <dt>Active_Down_Timer</dt>
+	  <dd>
+	    <t>
+	      Timer that fires when a VRRP Advertisement has not
+	      been received for Active_Down_Interval.
+	    </t>
+	  </dd>
+	  <dt>Adver_Timer</dt>
+	  <dd>
+	    <t>
+	      Timer that fires to trigger transmission of
+	      a VRRP Advertisement based on the Advertisement_Interval.
+	    </t>
+	  </dd>
+	</dl>
+      </section>
+      <section anchor="sect-6.3">
+	<name>State Transition Diagram</name>
+	<artwork><![CDATA[
+                   +---------------+
+        +--------->|               |<-------------+
+        |          |  Initialize   |              |
+        |   +------|               |----------+   |
+        |   |      +---------------+          |   |
+        |   |                                 |   |
+        |   V                                 V   |
+   +---------------+                       +---------------+
+   |               |---------------------->|               |
+   |    Active     |                       |    Backup     |
+   |               |<----------------------|               |
+   +---------------+                       +---------------+
+   ]]></artwork>
+      </section>
+      <section anchor="sect-6.4">
+	<name>State Descriptions</name>
+	<t>
+	  In the state descriptions below, the state names are identified by
+          {state-name}, and the packets are identified by all-uppercase
+        characters.</t>
+	<t>
+	  A VRRP router implements an instance of the state machine for each
+        virtual router election in which it is participating.</t>
+	<section anchor="sect-6.4.1">
+	  <name>Initialize</name>
+	  <t>
+	    The purpose of this state is to wait for a Startup event, that is, an
+            implementation-defined mechanism that initiates the protocol once it
+            has been configured.  The configuration mechanism is out of scope of
+            this specification.
+          </t>
+          <artwork><![CDATA[
+ (100) If a Startup event is received, then:
+
+      (105) - If the Priority = 255, i.e., the router owns the IPvX
+              address associated with the virtual router, then:
+
+         (110) + Send an ADVERTISEMENT
+
+         (115) + If the protected IPvX address is an IPv4 address,
+                 then:
+
+            (120) * For each IPv4 address associated with the virtual
+                    router, broadcast a gratuitous ARP request
+                    containing the virtual router MAC address and
+                    with the target link-layer address set to the
+                    virtual router MAC address.
+
+         (125) + else // IPv6
+
+            (130) * For each IPv6 address associated with the virtual
+                    router, send an unsolicited ND Neighbor
+                    Advertisement with the Router Flag (R) set, the
+                    Solicited Flag (S) clear, the Override flag (O)
+                    set, the target address set to the IPv6 address
+                    of the virtual router, and the target link-layer
+                    address set to the virtual router MAC address.
+
+         (135) +endif // was protected address IPv4?
+
+         (140) + Set the Adver_Timer to Advertisement_Interval
+
+         (145) + Transition to the {Active} state
+
+      (150) - else // Router does not own virtual address
+
+         (155) + Set Active_Adver_Interval to Advertisement_Interval
+
+         (160) + Set the Active_Down_Timer to Active_Down_Interval
+
+         (165) + Transition to the {Backup} state
+
+      (170) -endif // priority was not 255
+
+  (175) endif // startup event was received
+  ]]></artwork>
+        </section>
+      </section>
+      <section anchor="sect-6.4.2">
+        <name>Backup</name>
+        <t>
+          The purpose of the {Backup} state is to monitor the availability and
+          state of the Active Router. The Solicited-Node multicast address
+          <xref target="RFC4291"/> is referenced in the pseudo-code below.
+        </t>
+        <artwork><![CDATA[
+(300) While in this state, a VRRP router MUST do the following:
+
+      (305) - If the protected IPvX address is an IPv4 address,
+              then:
+
+         (310) + MUST NOT respond to ARP requests for the IPv4
+                 address(es) associated with the virtual router.
+
+      (315) - else // protected address is IPv6
+
+         (320) + MUST NOT respond to ND Neighbor Solicitation
+                 messages for the IPv6 address(es) associated with
+                 the virtual router.
+
+         (325) + MUST NOT send ND Router Advertisement messages
+                 for the virtual router.
+
+      (330) -endif // was protected address IPv4?
+
+      (335) - MUST discard packets with a destination link-layer
+              MAC address equal to the virtual router MAC address.
+
+      (340) - MUST NOT accept packets addressed to the IPvX
+              address(es) associated with the virtual router.
+
+      (345) - If a Shutdown event is received, then:
+
+         (350) + Cancel the Active_Down_Timer
+
+         (355) + Transition to the {Initialize} state
+
+      (360) -endif // shutdown received
+
+      (365) - If the Active_Down_Timer fires, then:
+
+         (370) + Send an ADVERTISEMENT
+
+         (375) + If the protected IPvX address is an IPv4 address,
+                 then:
+
+            (380) * For each IPv4 address associated with the virtual
+                    router, broadcast a gratuitous ARP request
+                    containing the virtual router MAC address and
+                    with the target link-layer address set to the
+                    virtual router MAC address.
+
+         (385) + else // ipv6
+
+            (390) * Compute and join the Solicited-Node multicast
+                    address [RFC4291] for the IPv6 address(es)
+                    associated with the virtual router.
+
+            (395) * For each IPv6 address associated with the
+                    virtual router, send an unsolicited ND Neighbor
+                    Advertisement with the Router Flag (R) set, the
+                    Solicited Flag (S) clear, the Override flag (O)
+                    set, the target address set to the IPv6 address
+                    of the virtual router, and the target link-layer
+                    address set to the virtual router MAC address.
+
+         (400) +endif // was protected address ipv4?
+
+         (405) + Set the Adver_Timer to Advertisement_Interval
+
+         (410) + Transition to the {Active} state
+
+      (415) -endif // Active_Down_Timer fired
+
+      (420) - If an ADVERTISEMENT is received, then:
+
+         (425) + If the Priority in the ADVERTISEMENT is zero, then:
+
+            (430) * Set the Active_Down_Timer to Skew_Time
+
+         (440) + else // priority non-zero
+
+            (445) * If Preempt_Mode is False, or if the Priority in
+                    the ADVERTISEMENT is greater than or equal to the
+                    local Priority, then:
+
+               (450) @ Set Active_Adver_Interval to Adver Interval
+                       contained in the ADVERTISEMENT
+
+               (455) @ Recompute the Active_Down_Interval
+
+               (460) @ Reset the Active_Down_Timer to
+                       Active_Down_Interval
+
+            (465) * else // preempt was true and priority was less
+
+               (470) @ Discard the ADVERTISEMENT
+
+            (475) *endif // preempt test
+
+         (480) +endif // was priority zero?
+
+      (485) -endif // was advertisement received?
+
+   (490) endwhile // Backup state
+   ]]></artwork>
+      </section>
+      <section anchor="sect-6.4.3">
+        <name>Active</name>
+        <t>
+          While in the {Active} state, the router functions as the forwarding
+          router for the IPvX address(es) associated with the virtual router.
+        </t>
+        <t>
+          Note that in the Active state, the Preempt_Mode Flag is not
+          considered.
+        </t>
+        <artwork><![CDATA[
+(600) While in this state, a VRRP router MUST do the following:
+
+      (605) - If the protected IPvX address is an IPv4 address, then:
+
+         (610) + MUST respond to ARP requests for the IPv4
+                 address(es) associated with the virtual router.
+
+      (615) - else // IPv6
+
+         (620) + MUST be a member of the Solicited-Node multicast
+                 address for the IPv6 address(es) associated with the
+                 virtual router.
+
+         (625) + MUST respond to ND Neighbor Solicitation message for
+                 the IPv6 address(es) associated with the virtual
+                 router.
+
+         (630) + MUST send ND Router Advertisements for the virtual
+                 router.
+
+         (635) + If Accept_Mode is False:  MUST NOT drop IPv6
+                 Neighbor Solicitations and Neighbor Advertisements.
+
+      (640) +-endif // ipv4?
+
+      (645) - MUST forward packets with a destination link-layer MAC
+              address equal to the virtual router MAC address.
+
+      (650) - MUST accept packets addressed to the IPvX address(es)
+              associated with the virtual router if it is the IPvX
+              address owner or if Accept_Mode is True.  Otherwise,
+              MUST NOT accept these packets.
+
+      (655) - If a Shutdown event is received, then:
+
+         (660) + Cancel the Adver_Timer
+
+         (665) + Send an ADVERTISEMENT with Priority = 0
+
+         (670) + Transition to the {Initialize} state
+
+      (675) -endif // shutdown received
+
+      (680) - If the Adver_Timer fires, then:
+
+         (685) + Send an ADVERTISEMENT
+
+         (690) + Reset the Adver_Timer to Advertisement_Interval
+
+      (695) -endif // advertisement timer fired
+
+      (700) - If an ADVERTISEMENT is received, then:
+
+         (705) + If the Priority in the ADVERTISEMENT is zero, then:
+
+            (710) * Send an ADVERTISEMENT
+
+            (715) * Reset the Adver_Timer to Advertisement_Interval
+
+         (720) + else // priority was non-zero
+
+            (725) * If the Priority in the ADVERTISEMENT is greater
+                    than the local Priority,
+
+            (730) * or
+
+            (735) * If the Priority in the ADVERTISEMENT is equal to
+                    the local Priority and the primary IPvX Address
+                    of the sender is greater than the local primary
+                    IPvX Address, then:
+
+               (740) @ Cancel Adver_Timer
+
+               (745) @ Set Active_Adver_Interval to Adver Interval
+                       contained in the ADVERTISEMENT
+
+               (750) @ Recompute the Skew_Time
+
+               (755) @ Recompute the Active_Down_Interval
+
+               (760) @ Set Active_Down_Timer to Active_Down_Interval
+
+               (765) @ Transition to the {Backup} state
+
+            (770) * else // new Active Router logic
+
+               (775) @ Discard ADVERTISEMENT
+
+            (780) *endif // new Active Router detected
+
+         (785) +endif // was priority zero?
+
+      (790) -endif // advert received
+
+   (795) endwhile // in Active state
+   ]]></artwork>
+        <t>
+          Note: VRRP packets are transmitted with the virtual router MAC
+          address as the source MAC address to ensure that learning bridges
+          correctly determine the LAN segment the virtual router is
+        attached to.</t>
+      </section>
+    </section>
+    <section anchor="sect-7">
+      <name>Sending and Receiving VRRP Packets</name>
+      <section anchor="sect-7.1">
+        <name>Receiving VRRP Packets</name>
+        <t>
+          The following functions must be performed when a VRRP packet is received:
+        </t>
+        <artwork><![CDATA[
+- If the received packet is an IPv4 packet, then:
+
+   + MUST verify that the IPv4 TTL is 255.
+
+- else // IPv6 VRRP packet received
+
+  + MUST verify that the IPv6 Hop Limit is 255.
+
+-endif
+
+- MUST verify that the VRRP version is 3.
+
+- MUST verify that the received packet contains the complete
+  VRRP packet (including fixed fields, and IPvX address).
+
+- MUST verify the VRRP checksum.
+
+- MUST verify that the VRID is configured on the receiving
+  interface and the local router is not the IPvX address
+  owner (Priority = 255 (decimal)).
+
+If any one of the above checks fails, the receiver MUST discard
+the packet, SHOULD log the event (subject to rate-limiting), and
+ MAY indicate via networkmanagement that an error occurred.
+   ]]></artwork>
+        <t>
+          A receiver SHOULD also verify that the "Maximum Advertisement Interval"
+          in the received VRRP packet matches the "Maximum Advertisement Interval"
+          configured for the VRID. Instability can occur with differing intervals
+          (refer to <xref target="sect-5.2.7"/>).
+          If this check fails, the receiver SHOULD log the event (subject to
+          rate-limiting) and MAY indicate via network management that a
+          misconfiguration was detected.
+        </t>
+        <t>
+          A receiver MAY also verify that "Count IPvX Addrs" and the list
+          of IPvX address(es) match the IPvX Address(es) configured for the VRID.
+          If this check fails, the receiver SHOULD log (subject to rate-limiting) the event
+          and MAY indicate via network management that a misconfiguration was detected.
+        </t>
+      </section>
+      <section anchor="sect-7.2">
+        <name>Transmitting VRRP Packets</name>
+        <t>
+          The following operations MUST be performed when transmitting a VRRP
+          packet:
+        </t>
+        <artwork><![CDATA[
+- Fill in the VRRP packet fields with the appropriate virtual
+  router configuration state
+
+- Compute the VRRP checksum
+
+- If the protected address is an IPv4 address, then:
+
+   + Set the source MAC address to virtual router MAC Address
+
+   + Set the source IPv4 address to interface primary IPv4
+     address
+
+- else // ipv6
+
+   + Set the source MAC address to virtual router MAC Address
+
+   + Set the source IPv6 address to interface link-local IPv6
+     address
+
+- endif
+
+- Set the IPvX protocol to VRRP
+
+- Send the VRRP packet to the VRRP IPvX multicast group
+      ]]></artwork>
+        <t>
+          Note: VRRP packets are transmitted with the virtual router MAC
+          address as the source MAC address to ensure that learning bridges
+          correctly determine the LAN segment to which the virtual router is
+          attached.
+        </t>
+      </section>
+      <section anchor="sect-7.3">
+        <name>Virtual Router MAC Address</name>
+        <t>
+          The virtual router MAC address associated with a virtual router is an
+        IEEE 802 MAC Address in the following format:</t>
+        <t>
+          IPv4 case: 00-00-5E-00-01-{VRID} (in hex, in Internet-standard bit-
+          order)
+        </t>
+        <t>
+          The first three octets are derived from the IANA's Organizational
+          Unique Identifier (OUI).  The next two octets (00-01) indicate the
+          address block assigned to the VRRP for IPv4 protocol. {VRID} is the
+          VRRP Virtual Router Identifier.  This mapping provides for up to 255
+          IPv4 VRRP routers on a network.
+        </t>
+        <t>
+          IPv6 case: 00-00-5E-00-02-{VRID} (in hex, in Internet-standard bit-
+          order)
+        </t>
+        <t>
+          The first three octets are derived from the IANA's OUI.  The next two
+          octets (00-02) indicate the address block assigned to the VRRP protocol for
+          the IPv6 protocol. {VRID} is the VRRP Virtual Router Identifier.  This
+          mapping provides for up to 255 IPv6 VRRP routers on a network.
+        </t>
+      </section>
+      <section anchor="sect-7.4">
+        <name>IPv6 Interface Identifiers</name>
+        <t>
+          IPv6 routers running VRRP MUST create their Interface Identifiers in
+          the normal manner. e.g., "Transmission of IPv6 Packets over Ethernet Networks"
+          <xref target="RFC2464"/>.
+          They MUST NOT use the virtual router MAC
+          address to create the Modified Extended Unique Identifier (EUI)-64
+          identifiers.
+        </t>
+        <t>
+          This VRRP specification describes how to advertise and resolve the
+          VRRP router's IPv6 link-local address and other associated IPv6
+          addresses into the virtual router MAC address.
+        </t>
+      </section>
+    </section>
+    <section anchor="sect-8">
+      <name>Operational Issues</name>
+      <section anchor="sect-8.1">
+        <name>IPv4</name>
+        <section anchor="sect-8.1.1">
+          <name>ICMP Redirects</name>
+          <t>
+            ICMP redirects may be used normally when VRRP is running between a
+            group of routers.  This allows VRRP to be used in environments where
+            the topology is not symmetric.
+          </t>
+          <t>
+            The IPv4 source address of an ICMP redirect should be the address
+            that the end-host used when making its next-hop routing decision.  If
+            a VRRP router is acting as Active Router for virtual router(s) containing
+            addresses it does not own, then it must determine to which virtual
+            router the packet was sent when selecting the redirect source
+            address.  One method to deduce the virtual router used is to examine
+            the destination MAC address in the packet that triggered the
+            redirect.
+          </t>
+          <t>
+            It may be useful to disable redirects for specific cases where VRRP
+            is being used to load-share traffic between a number of routers in a
+            symmetric topology.
+          </t>
+        </section>
+        <section anchor="sect-8.1.2">
+          <name>Host ARP Requests</name>
+          <t>
+            When a host sends an ARP request for one of the virtual router IPv4
+            addresses, the Active Router MUST respond to the ARP request
+            with an ARP response that indicates the virtual MAC address for the
+            virtual router.  Note that the source address of the Ethernet frame
+            of this ARP response is the physical MAC address of the physical
+            router.  The Active Router MUST NOT respond with its physical
+            MAC address in the ARP response.  This allows the client to always
+            use the same MAC address regardless of the current Active Router.
+          </t>
+          <t>
+            When a VRRP router restarts or boots, it SHOULD NOT send any ARP
+            messages using its physical MAC address for an IPv4 address it owns
+            and, it should only send ARP messages that include virtual MAC addresses.
+          </t>
+          <t>
+            This may entail the following:
+          </t>
+          <ul spacing="normal">
+            <li>
+              When configuring an interface, Active Routers
+              should broadcast a gratuitous ARP request containing the virtual
+              router MAC address for each IPv4 address on that interface.
+            </li>
+            <li>
+              At system boot, when initializing interfaces for VRRP operation,
+              delay gratuitous ARP requests and ARP responses until both the
+              IPv4 address and the virtual router MAC address are configured.
+            </li>
+            <li>
+              When, for example, SSH access to a particular VRRP router is
+              required, an IP address known to belong to that router must be
+              used.
+            </li>
+          </ul>
+        </section>
+        <section anchor="sect-8.1.3">
+          <name>Proxy ARP</name>
+          <t>
+            If Proxy ARP is to be used on a VRRP router, then the VRRP router
+            must advertise the virtual router MAC address in the Proxy ARP
+            message.  Doing otherwise could cause hosts to learn the real MAC
+            address of the VRRP router.
+          </t>
+        </section>
+      </section>
+      <section anchor="sect-8.2">
+        <name>IPv6</name>
+        <section anchor="sect-8.2.1">
+          <name>ICMPv6 Redirects</name>
+          <t>
+            ICMPv6 redirects may be used normally when VRRP is running between a
+            group of routers <xref target="RFC4443"/>.  This allows VRRP to be used in
+            environments where the topology is not symmetric, e.g., the VRRP
+            routers do not connect to the same destinations.
+          </t>
+          <t>
+            The IPv6 source address of an ICMPv6 redirect should be the address
+            that the end-host used when making its next-hop routing decision.  If
+            a VRRP router is acting as Active Router for virtual router(s) containing
+            addresses it does not own, then it must determine to which virtual
+            router the packet was sent when selecting the redirect source
+            address.  A method to deduce the virtual router used is to examine
+            the destination MAC address in the packet that triggered the
+            redirect.
+          </t>
+        </section>
+        <section anchor="sect-8.2.2">
+          <name>ND Neighbor Solicitation</name>
+          <t>
+            When a host sends an ND Neighbor Solicitation message for the virtual
+            router IPv6 address, the Active Router MUST respond to the ND
+            Neighbor Solicitation message with the virtual MAC address for the
+            virtual router.  The Active Router MUST NOT respond with its
+            physical MAC address.  This allows the client to always use the same
+            MAC address regardless of the current Active Router.
+          </t>
+          <t>
+            When an Active Router sends an ND Neighbor Solicitation
+            message for a host's IPv6 address, the Active Router MUST
+            include the virtual MAC address for the virtual router if it sends a
+            source link-layer address option in the neighbor solicitation
+            message.  It MUST NOT use its physical MAC address in the source
+            link-layer address option.
+          </t>
+          <t>
+            When a VRRP router restarts or boots, it SHOULD NOT send any ND
+            messages with its physical MAC address for the IPv6 address it owns
+            and, it should only send ND messages that include virtual MAC addresses.
+          </t>
+          <t>
+          This may entail the following:</t>
+          <ul spacing="normal">
+            <li>
+              When configuring an interface, Active Routers
+              should send an unsolicited ND Neighbor Advertisement message
+              containing the virtual router MAC address for the IPv6 address on
+              that interface.
+            </li>
+            <li>
+              At system boot, when initializing interfaces for VRRP operation,
+              all ND Router and Neighbor Advertisements and Solicitation
+              messages must be delayed until both the IPv6 address and the
+              virtual router MAC address are configured.
+            </li>
+          </ul>
+          <t>
+            Note that on a restarting Active Router where the VRRP protected
+            address is an interface address, i.e., the address owner, duplicate
+            address detection (DAD) may fail, as the Backup Router may answer
+            that it owns the address.  One solution is to not run DAD in this
+            case.
+          </t>
+        </section>
+        <section anchor="sect-8.2.3">
+          <name>Router Advertisements</name>
+          <t>
+            When a Backup VRRP router has become Active Router for a virtual router, it
+            is responsible for sending Router Advertisements for the virtual
+            router as specified in <xref target="sect-6.4.3"/>.  The Backup Routers must be
+            configured to send the same Router Advertisement options as the
+            address owner.
+          </t>
+          <t>
+            Router Advertisement options that advertise special services, e.g.,
+            Home Agent Information Option, that are present in the address owner
+            should not be sent by the address owner unless the Backup Routers are
+            prepared to assume these services in full and have a complete and
+            synchronized database for this service.
+          </t>
+        </section>
+        <section anchor="sect-8.2.4">
+          <name>Unsolicited Neighbor Advertisements</name>
+          <t>
+            A VRRP router acting as either an IPv6 Active Router or Backup Router, SHOULD
+            accept Unsolicited Neighbor Advertisements and update the corresponding
+            neighbor cache <xref target="RFC4861"/>. Since these are sent to the
+            IPv6 all-nodes multicast address (FF02:1) <xref target="RFC4861"/> or the
+            IPv6 all-routers multicast address (FF02:2), they will be received. Unsolicited
+            Neighbor Advertisements are sent both in the case where the link-level addresses
+            changes <xref target="RFC4861"/> and for gratuitous neighbor discovery by first hop
+            routers <xref target="RFC9131"/>. Additional configuration MAY be required in order
+            for Unsolicited Neighbor Advertisements to update the corresponding neighbor cache.
+          </t>
+        </section>
+      </section>
+      <section anchor="sect-8.3">
+        <name>IPvX</name>
+        <section anchor="sect-8.3.1">
+          <name>Potential Forwarding Loop</name>
+          <t>
+            If it is not the address owner, a VRRP router SHOULD NOT forward
+            packets addressed to the IPvX address for which it becomes Active Router.
+            Forwarding these packets would result in unnecessary traffic.  Also,
+            in the case of LANs that receive packets they transmit, e.g., Token
+            Ring, this can result in a forwarding loop that is only terminated
+            when the IPvX TTL expires.
+          </t>
+          <t>
+            One such mechanism for VRRP routers is to add/delete a reject host
+            route for each adopted IPvX address when transitioning to/from Active
+            state.
+          </t>
+        </section>
+        <section anchor="sect-8.3.2">
+          <name>Recommendations Regarding Setting Priority Values</name>
+          <t>
+            A priority value of 255 designates a particular router as the "IPvX address owner".
+            Care must be taken not to configure more than one
+            router on the link in this way for a single VRID.
+          </t>
+          <t>
+            Routers with priority 255 will, as soon as they start up, preempt all
+            lower-priority routers.  No more than one router on the link is to be
+            configured with priority 255, especially if preemption is set.  If no
+            router has this priority, and preemption is disabled, then no
+            preemption will occur.
+          </t>
+          <t>
+            When there are multiple Backup Routers, their priority values should
+            be uniformly distributed.  For example, if one Backup Router has the
+            default priority of 100 and another Backup Router is added, a
+            priority of 50 would be a better choice for it than 99 or 100, in
+            order to facilitate faster convergence.
+          </t>
+        </section>
+      </section>
+      <section anchor="sect-8.4">
+        <name>VRRPv3 and VRRPv2 Interoperation</name>
+        <section anchor="sect-8.4.1">
+          <name>Assumptions</name>
+          <ol spacing="normal" type="1">
+            <li>
+              VRRPv2 and VRRPv3 interoperation is optional.
+            </li>
+            <li>
+              Mixing VRRPv2 and VRRPv3 should only be done when transitioning
+              from VRRPv2 to VRRPv3.  Mixing the two versions should not be
+              considered a permanent solution.
+            </li>
+          </ol>
+        </section>
+        <section anchor="sect-8.4.2">
+          <name>VRRPv3 Support of VRRPv2</name>
+          <t>
+            As mentioned above, this support is intended for upgrade scenarios
+            and is NOT RECOMMENDED for permanent deployments.
+          </t>
+          <t>
+            An implementation MAY implement a configuration flag that tells it to
+            listen for and send both VRRPv2 and VRRPv3 advertisements.
+          </t>
+          <t>
+            When a virtual router is configured this way and is the Active Router, it
+            MUST send both types at the configured rate, even if sub-second.
+          </t>
+          <t>
+            When a virtual router is configured this way and is the Backup Router, it
+            should time out based on the rate advertised by the Active Router. In the
+            case of a VRRPv2 Active Router, this means it must translate the timeout
+            value it receives (in seconds) into centiseconds.  Also, a Backup
+            Router should ignore VRRPv2 advertisements from the current Active Router
+            if it is also receiving VRRPv3 packets from it.  It MAY report when a VRRPv3
+            Active Router is not sending VRRPv2 packets as this suggests they don't
+            agree on whether they're supporting VRRPv2 interoperation.
+          </t>
+        </section>
+        <section anchor="sect-8.4.3">
+          <name>VRRPv3 Support of VRRPv2 Considerations</name>
+          <section anchor="sect-8.4.3.1">
+            <name>Slow, High-Priority Active Routers</name>
+            <t>
+              See also <xref target="sect-5.2.7"/>, "Maximum Advertisement Interval (Max Adver Int)".
+            </t>
+            <t>
+              The VRRPv2 Active Router interacting with a sub-second VRRPv3 Backup
+              router is the most important example of this.
+            </t>
+            <t>
+              A VRRPv2 implementation should not be given a higher priority than a
+              VRRPv2/VRRPv3 implementation it is interoperating with a VRRPv2/VRRPv3 router's
+              advertisement rate is sub-second.
+            </t>
+          </section>
+          <section anchor="sect-8.4.3.2">
+            <name>Overwhelming VRRPv2 Backups</name>
+            <t>
+              It seems possible that a VRRPv3 Active Router sending at centisecond
+              rates could potentially overwhelm a VRRPv2 Backup Router with
+              potentially non-deterministic results.
+            </t>
+            <t>
+              In this upgrade case, a deployment should initially run the VRRPv3
+              Active Routers with lower frequencies, e.g., 100 centiseconds, until
+              the VRRPv2 routers are upgraded.  Then, once the deployment has
+              verified that VRRPv3 is working properly, the VRRPv2 support
+              may be disabled and then the desired sub-second rates may configured.
+            </t>
+          </section>
+        </section>
+      </section>
+    </section>
+    <section anchor="Security" numbered="true" toc="default">
+      <name>Security Considerations</name>
+      <t>
+        VRRP for IPvX does not currently include any type of authentication.
+        Earlier versions of the VRRP specification included
+        several types of authentication ranging from none to strong.
+        Operational experience and further analysis determined that these did
+        not provide sufficient security to overcome the vulnerability of
+        misconfigured secrets, causing multiple Active Routers to be elected.
+        Due to the nature of the VRRP protocol, even if VRRP messages are
+        cryptographically protected, it does not prevent hostile nodes from
+        behaving as if they are a VRRP Active Routers, creating multiple
+        Active Router.  Authentication of VRRP messages could have prevented
+        a hostile node from causing all properly functioning routers from going
+        into Backup state.  However, having multiple Active Routers can cause
+        as much disruption as no routers, which authentication cannot prevent.
+        Also, even if a hostile node could not disrupt VRRP, it can disrupt ARP
+        and create  the same effect as having all routers go into Backup state.
+      </t>
+      <t>
+        Some L2 switches provide the capability to filter out, for example,
+        ARP and/or ND messages from end-hosts on a switch-port basis.  This
+        mechanism could also filter VRRP messages from switch ports
+        associated with end-hosts and can be considered for deployments with
+        untrusted hosts.
+      </t>
+      <t>
+        It should be noted that these attacks are not worse and are a subset
+        of the attacks that any node attached to a LAN can do independently
+        of VRRP.  The kind of attacks a malicious node on a LAN can perform
+        include:
+      </t>
+      <ul spacing="normal">
+        <li>
+          Promiscuously receiving packets for any router's MAC address.
+        </li>
+        <li>
+          Sending packets with the router's MAC address as the source MAC
+          address in the L2 header to tell the L2 switches to send packets
+          addressed to the router to the malicious node instead of the router.
+        </li>
+        <li>
+          Sending redirects to tell the hosts to send their traffic
+          somewhere else.
+</li>
+<li>
+  Sending unsolicited ND replies.
+</li>
+<li>
+  Answering ND requests, etc.
+</li>
+</ul>
+<t>
+  All of these can be done independently of implementing VRRP.
+  VRRP does not add to these vulnerabilities.
+</t>
+<t>
+  VRRP includes a mechanism
+  (setting TTL = 255, checking on receipt) that protects against VRRP
+  packets being injected from another remote network.  This limits most
+  vulnerabilities to attacks on the local network.
+</t>
+<t>
+  VRRP does not provide any confidentiality.  Confidentiality is not
+  necessary for the correct operation of VRRP, and there is no
+  information in the VRRP messages that must be kept secret from other
+  nodes on the LAN.
+</t>
+<t>
+  In the context of IPv6 operation, if SEcure Neighbor Discovery (SEND)
+  is deployed, VRRP is compatible with the "trust anchor" and "trust
+  anchor or CGA" modes of SEND <xref target="RFC3971"/>.  The SEND
+  configuration needs to give the Active and Backup Routers the same prefix
+  delegation in the certificates so that Active and Backup Routers advertise
+  the same set of subnet prefixes.  However, the Active and Backup Routers
+  should have their own key pairs to avoid private key sharing.
+</t>
+</section>
+<section anchor="Acknowledgments" numbered="true" toc="default">
+<name>Contributors and Acknowledgments</name>
+<t>
+  The IPv6 text in this specification is based on <xref target="RFC2338"/>.  The
+  authors of RFC2338 are S. Knight, D. Weaver, D. Whipple, R. Hinden,
+  D. Mitzel, P. Hunt, P. Higginson, M. Shand, and A. Lindem.
+</t>
+<t>
+  The author of <xref target="VRRP-IPv6"/> would also like to thank Erik Nordmark,
+  Thomas Narten, Steve Deering, Radia Perlman, Danny Mitzel, Mukesh
+  Gupta, Don Provan, Mark Hollinger, John Cruz, and Melissa Johnson for
+  their helpful suggestions.
+</t>
+<t>
+  The IPv4 text in this specification is based on <xref target="RFC3768"/>.  The
+  authors of that specification would like to thank Glen Zorn, Michael
+  Lane, Clark Bremer, Hal Peterson, Tony Li, Barbara Denny, Joel
+  Halpern, Steve Bellovin, Thomas Narten, Rob Montgomery, Rob Coltun,
+  Radia Perlman, Russ Housley, Harald Alvestrand, Steve Bellovin, Ned
+  Freed, Ted Hardie, Russ Housley, Bert Wijnen, Bill Fenner, and Alex
+  Zinin for their comments and suggestions.
+</t>
+<t>
+  Thanks to Steve Nadas for his work merging/editting <xref target="RFC3768"/>
+  and <xref target="VRRP-IPv6"/> into the draft that eventually became RFC 5798
+  <xref target="RFC5798"/>.
+</t>
+<t>
+  Thanks to Stewart Bryant, Sasha Vainshtein, and Pascal Thubert for comments on the
+  current document (RFC 5798 BIS). Thanks to Gyan Mishra, Paul Congdon, and
+  Jon Rosen for discussions related to the removal of legacy technology appendicies.
+  Thanks to Dhruv Dhody and Donald Eastlake for comments and suggestions for improving
+  the IANA section. Thanks to Sasha Vainshtein for recommending "Maximum Advertisement
+  Interval" validation.
+</t>
+</section>
+<section anchor="IANA" numbered="true" toc="default">
+<name>IANA Considerations</name>
+<t>
+  In the "Local Network Control Block (224.0.0.0 - 224.0.0.255 (224.0.0/24))" of the
+  "IPv4 Multicast Address Space Registry" <xref target="RFC5771"/>, IANA has assigned
+  the IPv4 multicast address 224.0.0.18 for VRRP.
+</t>
+<t>
+  In the "Link-Local Scope Multicast Addresses" block of the "IPv6 Multicast Address
+  Space Registry" <xref target="RFC3307"/>, IANA has assigned the IPv6 link-local
+  scope multicast address FF02:0:0:0:0:0:0:12 for VRRP for IPv6.
+</t>
+<t>
+  In the "IANA Unicast 48-bit MAC Addresses" registry <xref target="RFC7042"/>,
+  IANA has assigned blocks of Ethernet unicast addresses as
+  follows (in hexadecimal):
+</t>
+<artwork><![CDATA[
+IPv4 VRRP   00-00-5E-00-01-00 to 00-00-5E-00-01-FF
+IPv6 VRRP   00-00-5E-00-02-00 to 00-00-5E-00-02-FF
+]]></artwork>
+</section>
+
+</middle>
+<back>
+  <references title="Normative References">
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2460.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.3307.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.3768.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.4291.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.4443.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.4861.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.5771.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.5798.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.7042.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8174.xml"/>
+</references>
+<references>
+<name>Informative References</name>
+<reference anchor="VRRP-IPv6">
+  <front>
+<title>Virtual Router Redundancy Protocol for IPv6</title>
+<author initials="R." surname="Hinden" fullname="R. Hinden">
+</author>
+<author initials="J." surname="Cruz" fullname="J. Cruz">
+</author>
+<date month="March" year="2007"/>
+</front>
+<seriesInfo name="Work" value="in Progress"/>
+</reference>
+<reference anchor="IPSTB">
+  <front>
+    <title>Development of Router Clusters to Provide Fast Failover in IP Networks",
+    Digital Technical Journal, Volume 9 Number 3
+</title>
+<author>
+<organization>Higginson, P. and M. Shand</organization>
+</author>
+<date year="1997"/>
+</front>
+</reference>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.1071.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2328.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.1256.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2131.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2281.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2338.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2453.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2464.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.3971.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.9131.xml"/>
+<reference anchor="NISTIR8366" target="https://doi.org/10.6028/NIST.IR.8366">
+  <front>
+    <title>Guidance for NIST Staff on Using Inclusive Language in Documentary Standards,
+National Institute of Standards and Technology (NIST) Interagency or Internal Report 8366</title>
+<author surname="NIST"/>
+<date year="2021" month="April"/>
+</front>
+<seriesInfo name="NISTIR" value="8366"/>
+</reference>
+</references>
+</back>
+</rfc>
