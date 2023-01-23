@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-01"
+    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-02"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -934,12 +934,22 @@ IPvX A ----->*             *<---------- IPvX B
             message.
           </t>
 	  <t>
-	    The checksum is the 16-bit one's complement of the one's complement
-            sum of the entire VRRP message starting with the version field and a
-            "pseudo-header" as defined in Section 8.1 of <xref target="RFC2460"/>.  The next
-            header field in the "pseudo-header" should be set to 112 (decimal)
-            for VRRP.  For computing the checksum, the checksum field is set to
-            zero.  See RFC1071 for more detail <xref target="RFC1071"/>.
+	    For both the IPv4 and IPv6 address families, the checksum is the
+            16-bit one's complement of the one's complement sum of the entire VRRP
+            message starting with the version field. For computing the checksum,
+            the checksum field is set to zero.  See RFC1071 for more detail
+            <xref target="RFC1071"/>.
+          </t>
+          <t>
+            For the IPv4 address family, the checksum calculation is only includes the
+            VRRP message starting with the Version field and ending after the last
+            IPv4 address (refer to <xref target="sect-5"/>.
+          </t>
+          <t>
+            For the IPv6 address family, the checksum calculation also includes
+            a prepended "pseudo-header" as defined in Section 8.1 of <xref target="RFC8200"/>.
+            The next header field in the "pseudo-header" should be set to 112 (decimal)
+            for VRRP.
           </t>
 	</section>
 	<section anchor="sect-5.2.9">
@@ -1959,12 +1969,12 @@ MAY indicate via network management that an error occurred.
         <xref target="RFC5798"/>.
       </t>
       <t>
-        Thanks to Stewart Bryant, Sasha Vainshtein, and Pascal Thubert for comments on the
-        current document (RFC 5798 BIS). Thanks to Gyan Mishra, Paul Congdon, and
-        Jon Rosen for discussions related to the removal of legacy technology appendicies.
-        Thanks to Dhruv Dhody and Donald Eastlake for comments and suggestions for improving
-        the IANA section. Thanks to Sasha Vainshtein for recommending "Maximum Advertisement
-        Interval" validation.
+        Thanks to Stewart Bryant, Sasha Vainshtein, Pascal Thubert, and Alexander Okonnikov
+        for comments on the current document (RFC 5798 BIS). Thanks to Gyan Mishra,
+        Paul Congdon, and Jon Rosen for discussions related to the removal of legacy technology
+        appendicies. Thanks to Dhruv Dhody and Donald Eastlake for comments and suggestions
+        for improving the IANA section. Thanks to Sasha Vainshtein for recommending
+        "Maximum Advertisement Interval" validation.
       </t>
     </section>
     <section anchor="IANA" numbered="true" toc="default">
@@ -1993,7 +2003,6 @@ MAY indicate via network management that an error occurred.
 <back>
   <references title="Normative References">
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml"/>
-    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2460.xml"/>
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.3307.xml"/>
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.3768.xml"/>
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.4291.xml"/>
@@ -2003,6 +2012,7 @@ MAY indicate via network management that an error occurred.
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.5798.xml"/>
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.7042.xml"/>
     <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8174.xml"/>
+    <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8200.xml"/>
 </references>
 <references>
 <name>Informative References</name>
