@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-02"
+    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-03"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -40,7 +40,7 @@ please see http://xml.resource.org/authoring/README.html. -->
     <!-- Another author who claims to be an editor -->
 
     <author initials="A" surname="Lindem" fullname="Acee Lindem">
-      <organization>Cisco Systems</organization>
+      <organization></organization>
       <address>
 	<postal>
 	  <street>301 Midenhall Way</street>
@@ -71,10 +71,10 @@ please see http://xml.resource.org/authoring/README.html. -->
     <keyword>VRRP</keyword>
     <abstract>
       <t>
-        This document defines the Virtual Router Redundancy Protocol (VRRP) for
-        IPv4 and IPv6.  It is version three (3) of the protocol, and it is
-        based on VRRP (version 2) for IPv4 that is defined in RFC 3768 and in
-        "Virtual Router Redundancy Protocol for IPv6".  VRRP specifies an
+        This document defines version 3 of the Virtual Router Redundancy Protocol (VRRP)
+        for IPv4 and IPv6. It is based on VRRP (version 2) for IPv4 that is defined in
+        RFC 3768 and in "Virtual Router Redundancy Protocol for IPv6”, and obsoletes the prevision
+        specification of this version documented in RFC 5798.  VRRP specifies an
         election protocol that dynamically assigns responsibility for a
         virtual router to one of the VRRP routers on a LAN.  The VRRP router
         controlling the IPv4 or IPv6 address(es) associated with a virtual
@@ -83,7 +83,8 @@ please see http://xml.resource.org/authoring/README.html. -->
         virtual IPv4 or IPv6 addresses, and VRRP Backup Routers infer the
         address family of the virtual addresses being advertised based on the
         IP protocol version.  Within a VRRP router, the virtual routers in
-        each of the IPv4 and IPv6 address families are independent of one another.
+        each of the IPv4 and IPv6 address families are independent of one another
+        and always treated as separate virtual router instances.
         The election process provides dynamic
         failover in the forwarding responsibility should the Active Router become
         unavailable.  For IPv4, the advantage gained from using VRRP is a
@@ -99,7 +100,6 @@ please see http://xml.resource.org/authoring/README.html. -->
         The IETF has designated National Institute of Standards and Technology (NIST)
         "Guidance for NIST Staff on Using Inclusive Language in Documentary Standards"
         for its inclusive language guidelines.
-        This document obsoletes VRRP Version 3 <xref target="RFC5798"/>.
       </t>
     </abstract>
   </front>
@@ -107,9 +107,10 @@ please see http://xml.resource.org/authoring/README.html. -->
     <section anchor="sect-1">
       <name>Introduction</name>
       <t>
-        This document defines the Virtual Router Redundancy Protocol (VRRP) for
-        IPv4 and IPv6.  It is version three (3) of the protocol.  It is based
-        on VRRP (version 2) for IPv4 that is defined in [RFC3768] and in
+        This document defines version 3 of the Virtual Router Redundancy Protocol (VRRP)
+        for IPv4 and IPv6. It is based on VRRP (version 2) for IPv4 that is defined in
+        <xref target="RFC3768"/> and in "Virtual Router Redundancy Protocol for IPv6”,
+        and obsoletes the prevision  specification of this version documented in
         <xref target="VRRP-IPv6"/>.  VRRP specifies an election protocol that dynamically
         assigns responsibility for a virtual router to one of the VRRP
         routers on a LAN.  The VRRP router controlling the IPv4 or IPv6
@@ -119,7 +120,8 @@ please see http://xml.resource.org/authoring/README.html. -->
         and VRRP Backup Routers infer the address family of the virtual
         addresses being advertised based on the IP protocol version.  Within a
         VRRP router, the virtual routers in each of the IPv4 and IPv6 address
-        families are independent of one another.  The
+        families are independent of one another
+        and always treated as separate virtual router instances. The
         election process provides dynamic failover in the forwarding
         responsibility should the Active Router become unavailable.
       </t>
@@ -162,7 +164,7 @@ please see http://xml.resource.org/authoring/README.html. -->
           </li>
           <li>
             Checking that the Maximum Adverisement Intervals match is recommended although this will
-            not result in the VRRP packet being dropped <xref target="sect-7.1"/>. 
+            not result in the VRRP packet being dropped <xref target="sect-7.1"/>.
           </li>
           <li>
             Miscellaneous editorial changes were made for readability.
@@ -244,9 +246,9 @@ please see http://xml.resource.org/authoring/README.html. -->
           routers by receiving Router Advertisements sent using the IPv6
           Neighbor Discovery (ND) protocol <xref target="RFC4861"/>.  The Router
           Advertisements are multicast periodically at a rate at which the hosts
-          will learn the default routers on a LAN in a few minutes.  They are not
-          sent frequently enough to rely on the absence of the Router
-          Advertisement to detect router failures.
+          will learn the default routers on a LAN normally takes more than 10 seconds.
+          They are not sent frequently enough to rely on the absence
+          of the Router Advertisement to detect router failures.
         </t>
         <t>
 	  Neighbor Discovery (ND) includes a mechanism called Neighbor
@@ -257,7 +259,7 @@ please see http://xml.resource.org/authoring/README.html. -->
           are only sent to neighbors to which the node is actively sending
           traffic and only after there has been no positive indication that the
           router is up for a period of time.  Using the default parameters in
-          ND, it will take a host about 38 seconds to learn that a router is
+          ND, it can take a host more than 10 seconds to learn that a router is
           unreachable before it will switch to another default router.  This
           delay would be very noticeable to users and cause some transport
           protocol implementations to time out.
@@ -323,6 +325,13 @@ please see http://xml.resource.org/authoring/README.html. -->
               IPv4 addresses or a set of associated IPv6
               addresses across a common LAN.  A VRRP Router
               may back up one or more virtual routers.
+	    </t>
+	  </dd>
+	  <dt>Virtual Router Identifier</dt>
+	  <dd>
+	    <t>
+              An integer value (1-255) identifying an instance
+              of a Virtual Router on a LAN.
 	    </t>
 	  </dd>
 	  <dt>IP Address Owner</dt>
@@ -573,7 +582,7 @@ IPvX A------>*            *<---------IPvX B
                           |  H1 |     |  H2 |     |  H3 |     |  H4 |
                           +-----+     +-----+     +--+--+     +--+--+
 Legend:
-      --+---+---+-- = Ethernet, Token Ring, or FDDI
+      --+---+---+-- = Ethernet
                   H = Host computer
                  AR = Active Router
                  BR = Backup Router
@@ -670,7 +679,7 @@ IPvX A ----->*             *<---------- IPvX B
                              ^           ^           ^           ^
                              |           |           |           |
      Default Router          |           |           |           |
-     IPvX addresses ---> (IPvX A)    (IPvX A)    (IPvX A)    (IPvX A)
+     IPvX addresses ---> (IPvX A)    (IPvX A)    (IPvX B)    (IPvX B)
                              |           |           |           |
                     IPvX H1->*  IPvX H2->*  IPvX H3->*  IPvX H4->*
                           +--+--+     +--+--+     +--+--+     +--+--+
@@ -678,7 +687,7 @@ IPvX A ----->*             *<---------- IPvX B
                           +-----+     +-----+     +--+--+     +--+--+
 
  Legend:
-      ---+---+---+--  =  Ethernet, Token Ring, or FDDI
+      ---+---+---+--  =  Ethernet
                    H  =  Host computer
                   AR  =  Active Router
                   BR  =  Backup Router
@@ -1557,12 +1566,17 @@ MAY indicate via network management that an error occurred.
       <section anchor="sect-7.4">
         <name>IPv6 Interface Identifiers</name>
         <t>
-          IPv6 routers running VRRP MUST create their Interface Identifiers in
-          the normal manner, i.e., "Transmission of IPv6 Packets over Ethernet Networks"
-          <xref target="RFC2464"/>.
-          They MUST NOT use the virtual router MAC
-          address to create the Modified Extended Unique Identifier (EUI)-64
-          identifiers.
+          <xref target="RFC8064"/> specifies that <xref target="RFC7217"/> be used
+          as the default scheme for generating stable address in IPv6 Stateless
+          Address Autoconfiguration (SLAAC) <xref target="RFC4862"/>.
+          The virtual router MAC MUST NOT be used for the Net_Iface parameter used
+          in the Interface Identifier (IID) derivation algorithms in
+          <xref target="RFC7217"/> and <xref target="RFC8981"/>.
+        </t>
+        <t>
+          Similarily, the virtual router MAC MUST not be used for the Net_Iface parameter
+          used for the Interface Identifier (IID) derivation alogorithms in
+          <xref target="RFC7217"/> and <xref target="RFC8981"/>.
         </t>
         <t>
           This VRRP specification describes how to advertise and resolve the
@@ -1754,9 +1768,8 @@ MAY indicate via network management that an error occurred.
             If it is not the address owner, a VRRP router SHOULD NOT forward
             packets addressed to the IPvX address for which it becomes Active Router.
             Forwarding these packets would result in unnecessary traffic.  Also,
-            in the case of LANs that receive packets they transmit, e.g., Token
-            Ring, this can result in a forwarding loop that is only terminated
-            when the IPvX TTL expires.
+            in the case of LANs that receive packets they transmit, this can result
+            in a forwarding loop that is only terminated when the IPvX TTL expires.
           </t>
           <t>
             One mechanism for VRRP routers to these forwarding loops is to add/delete
@@ -1969,16 +1982,20 @@ MAY indicate via network management that an error occurred.
         <xref target="RFC5798"/>.
       </t>
       <t>
-        Thanks to Stewart Bryant, Sasha Vainshtein, Pascal Thubert, and Alexander Okonnikov
-        for comments on the current document (RFC 5798 BIS). Thanks to Gyan Mishra,
-        Paul Congdon, and Jon Rosen for discussions related to the removal of legacy technology
-        appendicies. Thanks to Dhruv Dhody and Donald Eastlake for comments and suggestions
-        for improving the IANA section. Thanks to Sasha Vainshtein for recommending
-        "Maximum Advertisement Interval" validation.
+        Thanks to Stewart Bryant, Sasha Vainshtein, Pascal Thubert, Alexander Okonnikov,
+        Ben Niven-Jenkins, and Tim Chown for comments on the current document (RFC 5798 BIS).
+        Thanks to Gyan Mishra, Paul Congdon, and Jon Rosen for discussions related to the removal
+        of legacy technology appendicies. Thanks to Dhruv Dhody and Donald Eastlake for
+        comments and suggestions for improving the IANA section. Thanks to Sasha Vainshtein
+        for recommending "Maximum Advertisement Interval" validation. Thanks to Tim Chown and
+        Fernando Gont for discussions and updates related to IPv6 SLAAC.
       </t>
     </section>
     <section anchor="IANA" numbered="true" toc="default">
       <name>IANA Considerations</name>
+      <t>
+        The value 112 is assigned to VRRP in the Assigned Internet Protocol Numbers Registry.
+      </t>
       <t>
         In the "Local Network Control Block (224.0.0.0 - 224.0.0.255 (224.0.0/24))" of the
         "IPv4 Multicast Address Space Registry" <xref target="RFC5771"/>, IANA has assigned
@@ -2045,8 +2062,11 @@ MAY indicate via network management that an error occurred.
 <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2281.xml"/>
 <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2338.xml"/>
 <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2453.xml"/>
-<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2464.xml"/>
 <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.3971.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.4862.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.7217.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8064.xml"/>
+<xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8981.xml"/>
 <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.9131.xml"/>
 <reference anchor="NISTIR8366" target="https://doi.org/10.6028/NIST.IR.8366">
   <front>
