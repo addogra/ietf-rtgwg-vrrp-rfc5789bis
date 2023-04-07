@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-04"
+    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-05"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -73,7 +73,8 @@ please see http://xml.resource.org/authoring/README.html. -->
       <t>
         This document defines version 3 of the Virtual Router Redundancy Protocol (VRRP)
         for IPv4 and IPv6. It is based on VRRP (version 2) for IPv4 that is defined in
-        RFC 3768 and in "Virtual Router Redundancy Protocol for IPv6”, and obsoletes the prevision
+        RFC 3768 and in "Virtual Router Redundancy Protocol for IPv6",
+        and obsoletes the prevision
         specification of this version documented in RFC 5798.  VRRP specifies an
         election protocol that dynamically assigns responsibility for a
         virtual router to one of the VRRP routers on a LAN.  The VRRP router
@@ -109,7 +110,7 @@ please see http://xml.resource.org/authoring/README.html. -->
       <t>
         This document defines version 3 of the Virtual Router Redundancy Protocol (VRRP)
         for IPv4 and IPv6. It is based on VRRP (version 2) for IPv4 that is defined in
-        <xref target="RFC3768"/> and in "Virtual Router Redundancy Protocol for IPv6”,
+        <xref target="RFC3768"/> and in "Virtual Router Redundancy Protocol for IPv6",
         and obsoletes the prevision  specification of this version documented in
         <xref target="VRRP-IPv6"/>.  VRRP specifies an election protocol that dynamically
         assigns responsibility for a virtual router to one of the VRRP
@@ -1575,7 +1576,7 @@ MAY indicate via network management that an error occurred.
           <xref target="RFC7217"/> and <xref target="RFC8981"/>.
         </t>
         <t>
-          Similarily, the virtual router MAC MUST not be used for the Net_Iface parameter
+          Similarily, the virtual router MAC MUST NOT be used for the Net_Iface parameter
           used for the Interface Identifier (IID) derivation alogorithms in
           <xref target="RFC7217"/> and <xref target="RFC8981"/>.
         </t>
