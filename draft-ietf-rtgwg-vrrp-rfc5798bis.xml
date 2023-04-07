@@ -40,7 +40,7 @@ please see http://xml.resource.org/authoring/README.html. -->
     <!-- Another author who claims to be an editor -->
 
     <author initials="A" surname="Lindem" fullname="Acee Lindem">
-      <organization></organization>
+      <organization>LabN Consulting LLC</organization>
       <address>
 	<postal>
 	  <street>301 Midenhall Way</street>
@@ -176,9 +176,6 @@ please see http://xml.resource.org/authoring/README.html. -->
           <li>
             The IANA considerations section was augmented include all the IPv4/IPv6
             multicast address allocations and ethernet MAC address allocations.
-          </li>
-          <li>
-            Additional "Security Considerations" were added.
           </li>
         </ol>
       </section>
@@ -1987,7 +1984,8 @@ MAY indicate via network management that an error occurred.
       </t>
       <t>
         Thanks to Stewart Bryant, Sasha Vainshtein, Pascal Thubert, Alexander Okonnikov,
-        Ben Niven-Jenkins, and Tim Chown for comments on the current document (RFC 5798 BIS).
+        Ben Niven-Jenkins, Tim Chown, and Malisa Vucinic for comments on the
+        current document (RFC 5798 BIS).
         Thanks to Gyan Mishra, Paul Congdon, and Jon Rosen for discussions related to the removal
         of legacy technology appendicies. Thanks to Dhruv Dhody and Donald Eastlake for
         comments and suggestions for improving the IANA section. Thanks to Sasha Vainshtein
