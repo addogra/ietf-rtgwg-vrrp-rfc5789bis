@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-05"
+    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-06"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -301,7 +301,7 @@ please see http://xml.resource.org/authoring/README.html. -->
           and theory of operation of VRRP.  The message formats, protocol
           processing rules, and state machine that guarantees convergence to a
           single Active Router are presented.  Finally, operational
-          issues related to MAC address mapping, handling of ARP requests,
+          issues related to MAC address mapping, handling of ARP messages,
           generation of ICMP redirect messages, and security issues are
           addressed.
         </t>
@@ -1120,8 +1120,8 @@ IPvX A ----->*             *<---------- IPvX B
 	    <t>
 	      The MAC address used for the source MAC
 	      address in VRRP advertisements and
-              advertised in ARP responses as the MAC
-              address to use for IPvX Addresses.
+              advertised in ARP messages as
+              the MAC address to use for IPvX Addresses.
 	    </t>
 	  </dd>
 	</dl>
@@ -1628,7 +1628,8 @@ MAY indicate via network management that an error occurred.
           </t>
           <t>
             When a VRRP router restarts or boots, it SHOULD NOT send any ARP
-            messages using its physical MAC address for an IPv4 address it owns
+            messages using its physical MAC address for an IPv4 address for
+            which it is the IP Address Owner (as defined in <xref target="sect-1.7"/>)
             and, it should only send ARP messages that include virtual MAC addresses.
           </t>
           <t>
