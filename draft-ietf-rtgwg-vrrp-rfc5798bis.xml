@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-06"
+    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-07"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -952,9 +952,9 @@ IPvX A ----->*             *<---------- IPvX B
             <xref target="RFC1071"/>.
           </t>
           <t>
-            For the IPv4 address family, the checksum calculation is only includes the
+            For the IPv4 address family, the checksum calculation only includes the
             VRRP message starting with the Version field and ending after the last
-            IPv4 address (refer to <xref target="sect-5"/>.
+            IPv4 address (refer to <xref target="sect-5.2"/>).
           </t>
           <t>
             For the IPv6 address family, the checksum calculation also includes
@@ -1754,8 +1754,8 @@ MAY indicate via network management that an error occurred.
             A VRRP router acting as either an IPv6 Active Router or Backup Router, SHOULD
             accept Unsolicited Neighbor Advertisements and update the corresponding
             neighbor cache <xref target="RFC4861"/>. Since these are sent to the
-            IPv6 all-nodes multicast address (FF02:1) <xref target="RFC4861"/> or the
-            IPv6 all-routers multicast address (FF02:2), they will be received. Unsolicited
+            IPv6 all-nodes multicast address (FF02::1) <xref target="RFC4861"/> or the
+            IPv6 all-routers multicast address (FF02::2), they will be received. Unsolicited
             Neighbor Advertisements are sent both in the case where the link-level addresses
             change <xref target="RFC4861"/> and for gratuitous neighbor discovery by first hop
             routers <xref target="RFC9131"/>. Additional configuration MAY be required in order
@@ -1986,7 +1986,7 @@ MAY indicate via network management that an error occurred.
       </t>
       <t>
         Thanks to Stewart Bryant, Sasha Vainshtein, Pascal Thubert, Alexander Okonnikov,
-        Ben Niven-Jenkins, Tim Chown, and Malisa Vucinic for comments on the
+        Ben Niven-Jenkins, Tim Chown, Malisa Vucinic, and Quentin Armitage for comments on the
         current document (RFC 5798 BIS).
         Thanks to Gyan Mishra, Paul Congdon, and Jon Rosen for discussions related to the removal
         of legacy technology appendicies. Thanks to Dhruv Dhody and Donald Eastlake for
