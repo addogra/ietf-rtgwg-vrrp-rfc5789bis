@@ -168,7 +168,7 @@ please see http://xml.resource.org/authoring/README.html. -->
             SHOULD be accepted by the Active and Backup Routers <xref target="sect-8.2.4"/>.
           </li>
           <li>
-            Checking that the Maximum Adverisement Intervals match is recommended although this will
+            Checking that the Maximum Advertisement Intervals match is recommended although this will
             not result in the VRRP packet being dropped <xref target="sect-7.1"/>.
           </li>
           <li>
@@ -190,7 +190,7 @@ please see http://xml.resource.org/authoring/README.html. -->
           the term "IP" usually refers to IPv4.  For this reason, in this
           specification, the term "IPvX" (where X is 4 or 6) is introduced to
           mean either "IPv4" or "IPv6".  In this text, where the IP version
-          matters, the appropriate term is used and the use of the term "IP" is
+          matters, the appropriate term is used, and the use of the term "IP" is
           avoided.
         </t>
       </section>
@@ -396,8 +396,8 @@ please see http://xml.resource.org/authoring/README.html. -->
 	<name>IPvX Address Backup</name>
 	<t>
 	  Backup of an IPvX address or addresses is the primary function of
-          VRRP.  When providing election of a Active Router and the
-          additional functionality described below, the protocol should
+          VRRP.  When providing election of an Active Router and the
+          additional functionality described below; the protocol should
         strive to:</t>
 	<ul spacing="normal">
 	  <li>Minimize the duration of unreachability.</li>
@@ -479,8 +479,8 @@ please see http://xml.resource.org/authoring/README.html. -->
         </t>
 	<t>
 	  One possible problematic scenario may occur when using a small
-          Advertisement_Intervals (refer to <xref target="sect-6.1"/>) is
-          when a VRRP Router is generating more packets than it can transmit and a queue
+          Advertisement_Interval (refer to <xref target="sect-6.1"/>) is
+          when a VRRP Router is generating more packets than it can transmit, and a queue
           builds up on the VRRP Router.  When this occurs, it is possible that packets being
           transmitted onto the VRRP-protected LAN could see larger queueing
           delay than the smallest Advertisement_Interval.  In this case,
@@ -637,7 +637,7 @@ Legend:
           The IPvX example above shows a virtual router configured to cover the
           IPv4 address owned by Router-1 (VRID=1, IPvX_Address=A).  When VRRP is
           enabled on Router-1 for VRID=1, it will assert itself as Active Router, with
-          priority = 255, since it is the IP address owner for the virtual
+          priority = 255, since it is the IPvX address owner for the virtual
           router IPvX address.  When VRRP is enabled on Router-2 for VRID=1, it will
           transition to Backup Router, with priority = 100 (the default priority is
           100), since it is not the IPvX address owner.  If Router-1 should fail,
@@ -857,7 +857,7 @@ IPvX A ----->*             *<---------- IPvX B
 	<section anchor="sect-5.2.2">
 	  <name>Type</name>
 	  <t>
-	    The type field specifies the type of this VRRP packet.  The only
+	    The Type field specifies the type of this VRRP packet.  The only
             packet type defined in this version of the protocol is:
           </t>
 	  <t indent="4">
@@ -894,7 +894,7 @@ IPvX A ----->*             *<---------- IPvX B
 	    The priority value zero (0) has special meaning, indicating that the
             current Active Router has stopped participating in VRRP.  This is used to
             trigger Backup Routers to quickly transition to Active Router without having
-            to wait for the current Active_Down_interval (refer to <xref target="sect-6.1"/>).
+            to wait for the current Active_Down_Interval (refer to <xref target="sect-6.1"/>).
           </t>
 	</section>
 	<section anchor="sect-5.2.5">
@@ -924,7 +924,7 @@ IPvX A ----->*             *<---------- IPvX B
             lower-priority Backup Routers configured to faster rates could join the LAN and
             decide they should be Active Routers before they have heard anything from
             the higher-priority Active Router with a slower rate.  When this happens, it
-            is temporary; once the lower-priority node does hear from the higher-priority
+            is temporary, once the lower-priority node does hear from the higher-priority
             Active Router, it will relinquish Active Router status.
           </t>
 	</section>
@@ -1074,7 +1074,7 @@ IPvX A ----->*             *<---------- IPvX B
               Calculated as:
             </t>
             <t indent="4">
-	      (3 * Active_Adver_Interval) + Skew_time
+	      (3 * Active_Adver_Interval) + Skew_Time
 	    </t>
 	  </dd>
 	  <dt>Preempt_Mode</dt>
@@ -1581,8 +1581,8 @@ MAY indicate via network management that an error occurred.
           <xref target="RFC7217"/> and <xref target="RFC8981"/>.
         </t>
         <t>
-          Similarily, the virtual router MAC MUST NOT be used for the Net_Iface parameter
-          used for the Interface Identifier (IID) derivation alogorithms in
+          Similarly, the virtual router MAC MUST NOT be used for the Net_Iface parameter
+          used for the Interface Identifier (IID) derivation algorithms in
           <xref target="RFC7217"/> and <xref target="RFC8981"/>.
         </t>
         <t>
@@ -1607,7 +1607,7 @@ MAY indicate via network management that an error occurred.
             The IPv4 source address of an ICMP redirect should be the address
             that the end-host used when making its next-hop routing decision.  If
             a VRRP Router is acting as Active Router for virtual router(s) containing
-            addresses it does not own, then it must determine to which virtual
+            address(es) it does not own, then it must determine to which virtual
             router the packet was sent when selecting the redirect source
             address.  One method to deduce the virtual router used is to examine
             the destination MAC address in the packet that triggered the
@@ -1634,8 +1634,8 @@ MAY indicate via network management that an error occurred.
           <t>
             When a VRRP Router restarts or boots, it SHOULD NOT send any ARP
             messages using its physical MAC address for an IPv4 address for
-            which it is the IP Address Owner (as defined in <xref target="sect-1.7"/>)
-            and, it should only send ARP messages that include virtual MAC addresses.
+            which it is the IPv4 Address Owner (as defined in <xref target="sect-1.7"/>),
+            and it should only send ARP messages that include virtual MAC addresses.
           </t>
           <t>
             This may entail the following:
@@ -1653,7 +1653,7 @@ MAY indicate via network management that an error occurred.
             </li>
             <li>
               When, for example, SSH access to a particular VRRP Router is
-              required, an IP address known to belong to that router must be
+              required, an IPv4 address known to belong to that router must be
               used.
             </li>
           </ul>
@@ -1682,7 +1682,7 @@ MAY indicate via network management that an error occurred.
             The IPv6 source address of an ICMPv6 redirect should be the address
             that the end-host used when making its next-hop routing decision.  If
             a VRRP Router is acting as Active Router for virtual router(s) containing
-            addresses it does not own, then it must determine to which virtual
+            address(es) it does not own, then it must determine to which virtual
             router the packet was sent when selecting the redirect source
             address.  A method to deduce the virtual router used is to examine
             the destination MAC address in the packet that triggered the
@@ -1710,7 +1710,7 @@ MAY indicate via network management that an error occurred.
           <t>
             When a VRRP Router restarts or boots, it SHOULD NOT send any ND
             messages with its physical MAC address for the IPv6 address it owns
-            and, it should only send ND messages that include virtual MAC addresses.
+            and it should only send ND messages that include virtual MAC addresses.
           </t>
           <t>
           This may entail the following:</t>
@@ -1889,13 +1889,14 @@ MAY indicate via network management that an error occurred.
       <t>
         VRRP for IPvX does not currently include any type of authentication.
         Earlier versions of the VRRP specification included
-        several types of authentication ranging from none to strong.
+        several types of authentication ranging from no authentication to strong
+        authentication.
         Operational experience and further analysis determined that these did
         not provide sufficient security to overcome the vulnerability of
         misconfigured secrets, causing multiple Active Routers to be elected.
         Due to the nature of the VRRP protocol, even if VRRP messages are
         cryptographically protected, it does not prevent hostile nodes from
-        behaving as if they are a Active Router, creating multiple
+        behaving as if they are an Active Router, creating multiple
         Active Routers.  Authentication of VRRP messages could have prevented
         a hostile node from causing all properly functioning routers from going
         into Backup state.  However, having multiple Active Routers can cause
@@ -1985,7 +1986,7 @@ MAY indicate via network management that an error occurred.
         Zinin for their comments and suggestions.
       </t>
       <t>
-        Thanks to Steve Nadas for his work merging/editting <xref target="RFC3768"/>
+        Thanks to Steve Nadas for his work merging/editing <xref target="RFC3768"/>
         and <xref target="VRRP-IPv6"/> into the draft that eventually became RFC 5798
         <xref target="RFC5798"/>.
       </t>
@@ -1994,7 +1995,7 @@ MAY indicate via network management that an error occurred.
         Ben Niven-Jenkins, Tim Chown, and Malisa Vucinic for comments on the
         current document (RFC 5798 BIS).
         Thanks to Gyan Mishra, Paul Congdon, and Jon Rosen for discussions related to the removal
-        of legacy technology appendicies. Thanks to Dhruv Dhody and Donald Eastlake for
+        of legacy technology appendices. Thanks to Dhruv Dhody and Donald Eastlake for
         comments and suggestions for improving the IANA section. Thanks to Sasha Vainshtein
         for recommending "Maximum Advertisement Interval" validation. Thanks to Tim Chown and
         Fernando Gont for discussions and updates related to IPv6 SLAAC.
