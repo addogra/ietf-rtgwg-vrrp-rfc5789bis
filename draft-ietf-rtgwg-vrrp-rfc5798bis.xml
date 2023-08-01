@@ -900,7 +900,8 @@ IPvX A ----->*             *<---------- IPvX B
 	  <t>
 	    VRRP Routers backing up a Virtual Router MUST use priority values
             between 1-254 (decimal).  The default priority value for VRRP Routers
-            backing up a Virtual Router is 100 (decimal). (refer to <xref target="sect-8.3.2"/>).
+            backing up a Virtual Router is 100 (decimal). Refer to <xref target="sect-8.3.2"/>
+            for recommendations on setting the priority. 
           </t>
 	  <t>
 	    The priority value zero (0) has special meaning, indicating that the
@@ -1819,10 +1820,10 @@ MAY indicate via network management that an error occurred.
             from the highest priority Backup Router following it transitioning to Active Router.
           </t>
           <t>
-            Since the Skew_Time is a function is inversely proportional to the priority, faster
-            convergence can be obtained by reducing using a higher priority for the preferred
+            Since the Skew_Time is is inversely proportional to the priority, faster
+            convergence can be obtained by using a higher priority for the preferred
             Backup Router. However, with multiple Backup Routers, the priorities should have
-            sufficient differences as recommended above.
+            sufficient differences as previously recommended.
           </t>
         </section>
       </section>
