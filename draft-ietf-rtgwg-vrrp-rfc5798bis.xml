@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-09"
+    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-10"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -342,7 +342,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 	  <dt>Virtual Router MAC Address</dt>
 	  <dd>
 	    <t>
-              The multicast ethernet MAC address used for
+              The multicast Ethernet MAC address used for
               VRRP advertisements for a VRID. Refer to
               <xref target="sect-7.3"/>.
 	    </t>
@@ -565,9 +565,11 @@ please see http://xml.resource.org/authoring/README.html. -->
         likely to cover the vast majority of deployments, loss of the Active
         Router is infrequent, and the expected duration for Active Router election
         convergence is quite small (&lt; 4 seconds when using the default
-        Advertisement_Interval and configurable to &lt; 1 second).  Thus, the VRRP optimizations
-        represent significant simplifications in the protocol design while incurring
-      an insignificant probability of brief network disruption.</t>
+        Advertisement_Interval and configurable to &lt; 1/25 second).  Thus,
+        the VRRP optimizations represent significant simplifications in
+        the protocol design while incurring an insignificant probability of
+        brief network disruption.
+      </t>
     </section>
     <section anchor="sect-4">
       <name>Sample Configurations</name>
@@ -898,7 +900,7 @@ IPvX A ----->*             *<---------- IPvX B
 	  <t>
 	    VRRP Routers backing up a Virtual Router MUST use priority values
             between 1-254 (decimal).  The default priority value for VRRP Routers
-            backing up a Virtual Router is 100 (decimal).
+            backing up a Virtual Router is 100 (decimal). (refer to <xref target="sect-8.3.2"/>).
           </t>
 	  <t>
 	    The priority value zero (0) has special meaning, indicating that the
@@ -1329,8 +1331,7 @@ IPvX A ----->*             *<---------- IPvX B
 
                (452) @ Recompute the Skew_Time
 
-               (455) @ Recompute the Active_Down_Interval and
-                     Skew_Time
+               (455) @ Recompute the Active_Down_Interval,
 
                (460) @ Set the Active_Down_Timer to
                        Active_Down_Interval
@@ -1360,7 +1361,7 @@ IPvX A ----->*             *<---------- IPvX B
           considered.
         </t>
         <artwork><![CDATA[
-(600) While in this state, a VRRP Router MUST do the following:
+(600) While in Active state, a VRRP Router MUST do the following:
 
       (605) - If the protected IPvX address is an IPv4 address, then:
 
@@ -1448,6 +1449,11 @@ IPvX A ----->*             *<---------- IPvX B
 
                (775) @ Discard ADVERTISEMENT
 
+               (778) @ Send an ADVERTISEMENT immediately to assert
+                     Active state to the sending VRRP Router and
+                     to update any learning bridges with the correct
+                     Active VRRP Router path.
+
             (780) *endif // new Active Router detected
 
          (785) +endif // was priority zero?
@@ -1500,8 +1506,8 @@ the packet, SHOULD log the event (subject to rate-limiting), and
 MAY indicate via network management that an error occurred.
    ]]></artwork>
         <t>
-          A receiver SHOULD also verify that the Max Advertisement Interval
-          in the received VRRP packet matches the Max Advertisement Interval
+          A receiver SHOULD also verify that the Max Advertise Interval
+          in the received VRRP packet matches the Advertisement_Interval
           configured for the VRID. Instability can occur with differing intervals
           (refer to <xref target="sect-5.2.7"/>).
           If this check fails, the receiver SHOULD log the event (subject to
@@ -1798,23 +1804,25 @@ MAY indicate via network management that an error occurred.
         <section anchor="sect-8.3.2">
           <name>Recommendations Regarding Setting Priority Values</name>
           <t>
-            A priority value of 255 designates a particular router as the "IPvX address owner".
-            Care must be taken not to configure more than one
-            router on the link in this way for a single VRID.
+            A priority value of 255 designates a particular router as the "IPvX address owner"
+            for the VRID. VRRP Routers with priority 255 will, as soon as they start up, preempt all
+            lower-priority routers.  For a VRID, only a single VRRP Router on the link SHOULD be
+            configured with priority 255. If multiple VRRP Routers advertising priority 255 are
+            detected, the condition SHOULD be logged (subject to rate-limiting). If no VRRP Router
+            has this priority, and preemption is disabled, then no preemption will occur.
           </t>
           <t>
-            Routers with priority 255 will, as soon as they start up, preempt all
-            lower-priority routers.  No more than one router on the link can be
-            configured with priority 255, especially if preemption is set.  If no
-            router has this priority, and preemption is disabled, then no
-            preemption will occur.
+            In order to avoid two or more Backup Routers simultaneously becoming Active Routers after
+            the previous Active Router fails or is shut down, all Virtual Routers SHOULD be configured
+            with different priorities, and with sufficient differences in priority so that lower
+            priority Backup Routers do not transition to Active state before receiving an advertisement
+            from the highest priority Backup Router following it transitioning to Active Router.
           </t>
           <t>
-            When there are multiple Backup Routers, their priority values should
-            be uniformly distributed.  For example, if one Backup Router has the
-            default priority of 100 and another Backup Router is added, a
-            priority of 50 would be a better choice for it than 99 or 100, in
-            order to facilitate faster convergence.
+            Since the Skew_Time is a function is inversely proportional to the priority, faster
+            convergence can be obtained by reducing using a higher priority for the preferred
+            Backup Router. However, with multiple Backup Routers, the priorities should have
+            sufficient differences as recommended above.
           </t>
         </section>
       </section>
