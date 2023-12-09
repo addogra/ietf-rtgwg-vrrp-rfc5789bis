@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-12"
+    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-13"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
@@ -40,7 +40,7 @@ please see http://xml.resource.org/authoring/README.html. -->
     <!-- Another author who claims to be an editor -->
 
     <author initials="A" surname="Lindem" fullname="Acee Lindem">
-      <organization>LabN Consulting, LLC</organization>
+      <organization>LabN Consulting, L.L.C.</organization>
       <address>
 	<postal>
 	  <street>301 Midenhall Way</street>
@@ -74,7 +74,7 @@ please see http://xml.resource.org/authoring/README.html. -->
         This document defines version 3 of the Virtual Router Redundancy Protocol (VRRP)
         for IPv4 and IPv6. It is based on VRRP (version 2) for IPv4 that is defined in
         RFC 3768 and in "Virtual Router Redundancy Protocol for IPv6",
-        and obsoletes the prevision
+        and obsoletes the previous
         specification of this version documented in RFC 5798.  VRRP specifies an
         election protocol that dynamically assigns responsibility for a
         Virtual Router to one of the VRRP Routers on a LAN.  The VRRP Router
@@ -111,7 +111,7 @@ please see http://xml.resource.org/authoring/README.html. -->
         This document defines version 3 of the Virtual Router Redundancy Protocol (VRRP)
         for IPv4 and IPv6. It is based on VRRP (version 2) for IPv4 that is defined in
         <xref target="RFC3768"/> and in "Virtual Router Redundancy Protocol for IPv6",
-        and obsoletes the prevision  specification of this version documented in
+        and obsoletes the previous specification of this version documented in
         <xref target="VRRP-IPv6"/>.  VRRP specifies an election protocol that dynamically
         assigns responsibility for a Virtual Router
         (refer to <xref target="sect-1.7"/>) to one of the VRRP
@@ -2045,13 +2045,13 @@ MAY indicate via network management that an error occurred.
         scope multicast address FF02:0:0:0:0:0:0:12 for VRRP for IPv6.
       </t>
       <t>
-        In the "IANA Unicast 48-bit MAC Addresses" registry <xref target="RFC7042"/>,
+        In the "IANA MAC ADDRESS BLOCK" registry <xref target="RFC7042"/>,
         IANA has assigned blocks of Ethernet unicast addresses as
         follows (in hexadecimal):
       </t>
       <artwork><![CDATA[
-      IPv4 VRRP   00-00-5E-00-01-00 to 00-00-5E-00-01-FF
-      IPv6 VRRP   00-00-5E-00-02-00 to 00-00-5E-00-02-FF
+      00-01-00 to 00-01-FF VRRP
+      00-02-00 to 00-02-FF VRRP IPv6
       ]]></artwork>
     </section>
 </middle>
