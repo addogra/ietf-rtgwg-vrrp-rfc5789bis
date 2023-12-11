@@ -2050,8 +2050,8 @@ MAY indicate via network management that an error occurred.
         follows (in hexadecimal):
       </t>
       <artwork><![CDATA[
-      00-01-00 to 00-01-FF VRRP
-      00-02-00 to 00-02-FF VRRP IPv6
+      00-00-5E-00-01-00 to 00-00-5E-00-01-FF VRRP
+      00-00-5E-00-02-00 to 00-00-5E-00-02-FF VRRP IPv6
       ]]></artwork>
     </section>
 </middle>
