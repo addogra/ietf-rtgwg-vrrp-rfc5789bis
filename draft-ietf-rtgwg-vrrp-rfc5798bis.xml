@@ -8,7 +8,7 @@ please see http://xml.resource.org/authoring/README.html. -->
 <rfc
     xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
-    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-13"
+    docName="draft-ietf-rtgwg-vrrp-rfc5798bis-14"
     ipr="trust200902"
     obsoletes="5798"
     updates=""
